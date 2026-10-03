@@ -1,0 +1,301 @@
+file_name,transcript,intent,voice,noise_type,sample_rate
+real_voice_dim_lights_000.wav,dim lights to 10 percent,dim_lights,real_user_dim_lights_000,real_mic,16000
+real_voice_get_time_000.wav,current time,get_time,real_user_get_time_000,real_mic,16000
+real_voice_get_weather_000.wav,how is the weather,get_weather,real_user_get_weather_000,real_mic,16000
+real_voice_light_off_000.wav,lights off,light_off,real_user_light_off_000,real_mic,16000
+real_voice_light_on_000.wav,lights on,light_on,real_user_light_on_000,real_mic,16000
+real_voice_dim_lights_001.wav,dim lights to 20 percent,dim_lights,real_user_dim_lights_001,real_mic,16000
+real_voice_get_time_001.wav,tell me the time,get_time,real_user_get_time_001,real_mic,16000
+real_voice_get_weather_001.wav,what is the weather today,get_weather,real_user_get_weather_001,real_mic,16000
+real_voice_light_off_001.wav,turn off light,light_off,real_user_light_off_001,real_mic,16000
+real_voice_light_on_001.wav,turn on light,light_on,real_user_light_on_001,real_mic,16000
+real_voice_make_call_000.wav,call Dad,make_call,real_user_make_call_000,real_mic,16000
+real_voice_manage_reminders_000.wav,remind me to check email,manage_reminders,real_user_manage_reminders_000,real_mic,16000
+real_voice_media_control_000.wav,louder,media_control,real_user_media_control_000,real_mic,16000
+real_voice_play_music_000.wav,play music,play_music,real_user_play_music_000,real_mic,16000
+real_voice_set_alarm_000.wav,alarm for 6 AM,set_alarm,real_user_set_alarm_000,real_mic,16000
+real_voice_set_temperature_000.wav,set AC to 18 degrees,set_temperature,real_user_set_temperature_000,real_mic,16000
+real_voice_set_timer_000.wav,set a timer for 5 minutes,set_timer,real_user_set_timer_000,real_mic,16000
+real_voice_dim_lights_002.wav,dim lights to 30 percent,dim_lights,real_user_dim_lights_002,real_mic,16000
+real_voice_get_time_002.wav,what time is it,get_time,real_user_get_time_002,real_mic,16000
+real_voice_get_weather_002.wav,what's the weather,get_weather,real_user_get_weather_002,real_mic,16000
+real_voice_light_off_002.wav,turn off lights,light_off,real_user_light_off_002,real_mic,16000
+real_voice_light_on_002.wav,turn on lights,light_on,real_user_light_on_002,real_mic,16000
+real_voice_make_call_001.wav,call John,make_call,real_user_make_call_001,real_mic,16000
+real_voice_manage_reminders_001.wav,show reminders,manage_reminders,real_user_manage_reminders_001,real_mic,16000
+real_voice_media_control_001.wav,mute,media_control,real_user_media_control_001,real_mic,16000
+real_voice_play_music_001.wav,play some music,play_music,real_user_play_music_001,real_mic,16000
+real_voice_set_alarm_001.wav,alarm for 6:30 AM,set_alarm,real_user_set_alarm_001,real_mic,16000
+real_voice_set_temperature_001.wav,set AC to 20 degrees,set_temperature,real_user_set_temperature_001,real_mic,16000
+real_voice_set_timer_001.wav,set a timer for 10 minutes,set_timer,real_user_set_timer_001,real_mic,16000
+real_voice_dim_lights_003.wav,dim lights to 50 percent,dim_lights,real_user_dim_lights_003,real_mic,16000
+real_voice_get_time_003.wav,current time,get_time,real_user_get_time_003,real_mic,16000
+real_voice_get_weather_003.wav,how is the weather,get_weather,real_user_get_weather_003,real_mic,16000
+real_voice_light_off_003.wav,turn off the lights,light_off,real_user_light_off_003,real_mic,16000
+real_voice_light_on_003.wav,turn on the lights,light_on,real_user_light_on_003,real_mic,16000
+real_voice_make_call_002.wav,call Mom,make_call,real_user_make_call_002,real_mic,16000
+real_voice_manage_reminders_002.wav,what are my reminders,manage_reminders,real_user_manage_reminders_002,real_mic,16000
+real_voice_media_control_002.wav,next song,media_control,real_user_media_control_002,real_mic,16000
+real_voice_play_music_002.wav,start playing music,play_music,real_user_play_music_002,real_mic,16000
+real_voice_set_alarm_002.wav,alarm for 7 AM,set_alarm,real_user_set_alarm_002,real_mic,16000
+real_voice_set_temperature_002.wav,set AC to 22 degrees,set_temperature,real_user_set_temperature_002,real_mic,16000
+real_voice_set_timer_002.wav,set a timer for 15 minutes,set_timer,real_user_set_timer_002,real_mic,16000
+real_voice_dim_lights_004.wav,dim lights to 75 percent,dim_lights,real_user_dim_lights_004,real_mic,16000
+real_voice_get_time_004.wav,tell me the time,get_time,real_user_get_time_004,real_mic,16000
+real_voice_get_weather_004.wav,what is the weather today,get_weather,real_user_get_weather_004,real_mic,16000
+real_voice_light_off_004.wav,lights off,light_off,real_user_light_off_004,real_mic,16000
+real_voice_light_on_004.wav,lights on,light_on,real_user_light_on_004,real_mic,16000
+real_voice_make_call_003.wav,call Wife,make_call,real_user_make_call_003,real_mic,16000
+real_voice_manage_reminders_003.wav,remind me to check email,manage_reminders,real_user_manage_reminders_003,real_mic,16000
+real_voice_media_control_003.wav,pause,media_control,real_user_media_control_003,real_mic,16000
+real_voice_play_music_003.wav,play music,play_music,real_user_play_music_003,real_mic,16000
+real_voice_set_alarm_003.wav,alarm for 7:30 AM,set_alarm,real_user_set_alarm_003,real_mic,16000
+real_voice_set_temperature_003.wav,set AC to 25 degrees,set_temperature,real_user_set_temperature_003,real_mic,16000
+real_voice_set_timer_003.wav,set a timer for 30 minutes,set_timer,real_user_set_timer_003,real_mic,16000
+real_voice_dim_lights_005.wav,dim lights to 100 percent,dim_lights,real_user_dim_lights_005,real_mic,16000
+real_voice_get_time_005.wav,what time is it,get_time,real_user_get_time_005,real_mic,16000
+real_voice_get_weather_005.wav,what's the weather,get_weather,real_user_get_weather_005,real_mic,16000
+real_voice_light_off_005.wav,turn off light,light_off,real_user_light_off_005,real_mic,16000
+real_voice_light_on_005.wav,turn on light,light_on,real_user_light_on_005,real_mic,16000
+real_voice_make_call_004.wav,phone Dad,make_call,real_user_make_call_004,real_mic,16000
+real_voice_manage_reminders_004.wav,show reminders,manage_reminders,real_user_manage_reminders_004,real_mic,16000
+real_voice_media_control_004.wav,skip,media_control,real_user_media_control_004,real_mic,16000
+real_voice_play_music_004.wav,play some music,play_music,real_user_play_music_004,real_mic,16000
+real_voice_set_alarm_004.wav,alarm for 8 AM,set_alarm,real_user_set_alarm_004,real_mic,16000
+real_voice_set_temperature_004.wav,set temperature to 18 degrees,set_temperature,real_user_set_temperature_004,real_mic,16000
+real_voice_set_timer_004.wav,set a timer for 45 minutes,set_timer,real_user_set_timer_004,real_mic,16000
+real_voice_dim_lights_006.wav,set brightness to 10 percent,dim_lights,real_user_dim_lights_006,real_mic,16000
+real_voice_dim_lights_007.wav,set brightness to 20 percent,dim_lights,real_user_dim_lights_007,real_mic,16000
+real_voice_dim_lights_008.wav,set brightness to 30 percent,dim_lights,real_user_dim_lights_008,real_mic,16000
+real_voice_dim_lights_009.wav,set brightness to 50 percent,dim_lights,real_user_dim_lights_009,real_mic,16000
+real_voice_dim_lights_010.wav,set brightness to 75 percent,dim_lights,real_user_dim_lights_010,real_mic,16000
+real_voice_dim_lights_011.wav,set brightness to 100 percent,dim_lights,real_user_dim_lights_011,real_mic,16000
+real_voice_dim_lights_012.wav,dim lights to 10 percent,dim_lights,real_user_dim_lights_012,real_mic,16000
+real_voice_dim_lights_013.wav,dim lights to 20 percent,dim_lights,real_user_dim_lights_013,real_mic,16000
+real_voice_dim_lights_014.wav,dim lights to 30 percent,dim_lights,real_user_dim_lights_014,real_mic,16000
+real_voice_dim_lights_015.wav,dim lights to 50 percent,dim_lights,real_user_dim_lights_015,real_mic,16000
+real_voice_dim_lights_016.wav,dim lights to 75 percent,dim_lights,real_user_dim_lights_016,real_mic,16000
+real_voice_dim_lights_017.wav,dim lights to 100 percent,dim_lights,real_user_dim_lights_017,real_mic,16000
+real_voice_dim_lights_018.wav,set brightness to 10 percent,dim_lights,real_user_dim_lights_018,real_mic,16000
+real_voice_dim_lights_019.wav,set brightness to 20 percent,dim_lights,real_user_dim_lights_019,real_mic,16000
+real_voice_dim_lights_020.wav,set brightness to 30 percent,dim_lights,real_user_dim_lights_020,real_mic,16000
+real_voice_dim_lights_021.wav,set brightness to 50 percent,dim_lights,real_user_dim_lights_021,real_mic,16000
+real_voice_dim_lights_022.wav,set brightness to 75 percent,dim_lights,real_user_dim_lights_022,real_mic,16000
+real_voice_dim_lights_023.wav,set brightness to 100 percent,dim_lights,real_user_dim_lights_023,real_mic,16000
+real_voice_dim_lights_024.wav,dim lights to 10 percent,dim_lights,real_user_dim_lights_024,real_mic,16000
+real_voice_dim_lights_025.wav,dim lights to 20 percent,dim_lights,real_user_dim_lights_025,real_mic,16000
+real_voice_get_time_006.wav,current time,get_time,real_user_get_time_006,real_mic,16000
+real_voice_get_time_007.wav,tell me the time,get_time,real_user_get_time_007,real_mic,16000
+real_voice_get_time_008.wav,what time is it,get_time,real_user_get_time_008,real_mic,16000
+real_voice_get_time_009.wav,current time,get_time,real_user_get_time_009,real_mic,16000
+real_voice_get_weather_006.wav,how is the weather,get_weather,real_user_get_weather_006,real_mic,16000
+real_voice_get_weather_007.wav,what is the weather today,get_weather,real_user_get_weather_007,real_mic,16000
+real_voice_get_weather_008.wav,what's the weather,get_weather,real_user_get_weather_008,real_mic,16000
+real_voice_get_weather_009.wav,how is the weather,get_weather,real_user_get_weather_009,real_mic,16000
+real_voice_light_off_006.wav,turn off lights,light_off,real_user_light_off_006,real_mic,16000
+real_voice_light_off_007.wav,turn off the lights,light_off,real_user_light_off_007,real_mic,16000
+real_voice_light_off_008.wav,lights off,light_off,real_user_light_off_008,real_mic,16000
+real_voice_light_off_009.wav,turn off light,light_off,real_user_light_off_009,real_mic,16000
+real_voice_light_on_006.wav,turn on lights,light_on,real_user_light_on_006,real_mic,16000
+real_voice_light_on_007.wav,turn on the lights,light_on,real_user_light_on_007,real_mic,16000
+real_voice_light_on_008.wav,lights on,light_on,real_user_light_on_008,real_mic,16000
+real_voice_light_on_009.wav,turn on light,light_on,real_user_light_on_009,real_mic,16000
+real_voice_make_call_005.wav,phone John,make_call,real_user_make_call_005,real_mic,16000
+real_voice_make_call_006.wav,phone Mom,make_call,real_user_make_call_006,real_mic,16000
+real_voice_make_call_007.wav,phone Wife,make_call,real_user_make_call_007,real_mic,16000
+real_voice_make_call_008.wav,call Dad,make_call,real_user_make_call_008,real_mic,16000
+real_voice_make_call_009.wav,call John,make_call,real_user_make_call_009,real_mic,16000
+real_voice_make_call_010.wav,call Mom,make_call,real_user_make_call_010,real_mic,16000
+real_voice_make_call_011.wav,call Wife,make_call,real_user_make_call_011,real_mic,16000
+real_voice_make_call_012.wav,phone Dad,make_call,real_user_make_call_012,real_mic,16000
+real_voice_manage_reminders_005.wav,what are my reminders,manage_reminders,real_user_manage_reminders_005,real_mic,16000
+real_voice_manage_reminders_006.wav,remind me to check email,manage_reminders,real_user_manage_reminders_006,real_mic,16000
+real_voice_manage_reminders_007.wav,show reminders,manage_reminders,real_user_manage_reminders_007,real_mic,16000
+real_voice_manage_reminders_008.wav,what are my reminders,manage_reminders,real_user_manage_reminders_008,real_mic,16000
+real_voice_manage_reminders_009.wav,remind me to check email,manage_reminders,real_user_manage_reminders_009,real_mic,16000
+real_voice_manage_reminders_010.wav,show reminders,manage_reminders,real_user_manage_reminders_010,real_mic,16000
+real_voice_media_control_005.wav,stop,media_control,real_user_media_control_005,real_mic,16000
+real_voice_media_control_006.wav,volume down,media_control,real_user_media_control_006,real_mic,16000
+real_voice_media_control_007.wav,volume up,media_control,real_user_media_control_007,real_mic,16000
+real_voice_media_control_008.wav,louder,media_control,real_user_media_control_008,real_mic,16000
+real_voice_media_control_009.wav,mute,media_control,real_user_media_control_009,real_mic,16000
+real_voice_media_control_010.wav,next song,media_control,real_user_media_control_010,real_mic,16000
+real_voice_media_control_011.wav,pause,media_control,real_user_media_control_011,real_mic,16000
+real_voice_media_control_012.wav,skip,media_control,real_user_media_control_012,real_mic,16000
+real_voice_play_music_005.wav,start playing music,play_music,real_user_play_music_005,real_mic,16000
+real_voice_play_music_006.wav,play music,play_music,real_user_play_music_006,real_mic,16000
+real_voice_play_music_007.wav,play some music,play_music,real_user_play_music_007,real_mic,16000
+real_voice_play_music_008.wav,start playing music,play_music,real_user_play_music_008,real_mic,16000
+real_voice_play_music_009.wav,play music,play_music,real_user_play_music_009,real_mic,16000
+real_voice_play_music_010.wav,play some music,play_music,real_user_play_music_010,real_mic,16000
+real_voice_set_alarm_005.wav,set an alarm for 6 AM,set_alarm,real_user_set_alarm_005,real_mic,16000
+real_voice_set_alarm_006.wav,set an alarm for 6:30 AM,set_alarm,real_user_set_alarm_006,real_mic,16000
+real_voice_set_alarm_007.wav,set an alarm for 7 AM,set_alarm,real_user_set_alarm_007,real_mic,16000
+real_voice_set_alarm_008.wav,set an alarm for 7:30 AM,set_alarm,real_user_set_alarm_008,real_mic,16000
+real_voice_set_alarm_009.wav,set an alarm for 8 AM,set_alarm,real_user_set_alarm_009,real_mic,16000
+real_voice_set_alarm_010.wav,alarm for 6 AM,set_alarm,real_user_set_alarm_010,real_mic,16000
+real_voice_set_alarm_011.wav,alarm for 6:30 AM,set_alarm,real_user_set_alarm_011,real_mic,16000
+real_voice_set_alarm_012.wav,alarm for 7 AM,set_alarm,real_user_set_alarm_012,real_mic,16000
+real_voice_set_alarm_013.wav,alarm for 7:30 AM,set_alarm,real_user_set_alarm_013,real_mic,16000
+real_voice_set_alarm_014.wav,alarm for 8 AM,set_alarm,real_user_set_alarm_014,real_mic,16000
+real_voice_set_temperature_005.wav,set temperature to 20 degrees,set_temperature,real_user_set_temperature_005,real_mic,16000
+real_voice_set_temperature_006.wav,set temperature to 22 degrees,set_temperature,real_user_set_temperature_006,real_mic,16000
+real_voice_set_temperature_007.wav,set temperature to 25 degrees,set_temperature,real_user_set_temperature_007,real_mic,16000
+real_voice_set_temperature_008.wav,set AC to 18 degrees,set_temperature,real_user_set_temperature_008,real_mic,16000
+real_voice_set_temperature_009.wav,set AC to 20 degrees,set_temperature,real_user_set_temperature_009,real_mic,16000
+real_voice_set_temperature_010.wav,set AC to 22 degrees,set_temperature,real_user_set_temperature_010,real_mic,16000
+real_voice_set_temperature_011.wav,set AC to 25 degrees,set_temperature,real_user_set_temperature_011,real_mic,16000
+real_voice_set_temperature_012.wav,set temperature to 18 degrees,set_temperature,real_user_set_temperature_012,real_mic,16000
+real_voice_set_timer_005.wav,timer for 5 minutes,set_timer,real_user_set_timer_005,real_mic,16000
+real_voice_set_timer_006.wav,timer for 10 minutes,set_timer,real_user_set_timer_006,real_mic,16000
+real_voice_set_timer_007.wav,timer for 15 minutes,set_timer,real_user_set_timer_007,real_mic,16000
+real_voice_set_timer_008.wav,timer for 30 minutes,set_timer,real_user_set_timer_008,real_mic,16000
+real_voice_set_timer_009.wav,timer for 45 minutes,set_timer,real_user_set_timer_009,real_mic,16000
+real_voice_set_timer_010.wav,set a timer for 5 minutes,set_timer,real_user_set_timer_010,real_mic,16000
+real_voice_set_timer_011.wav,set a timer for 10 minutes,set_timer,real_user_set_timer_011,real_mic,16000
+real_voice_set_timer_012.wav,set a timer for 15 minutes,set_timer,real_user_set_timer_012,real_mic,16000
+real_voice_set_timer_013.wav,set a timer for 30 minutes,set_timer,real_user_set_timer_013,real_mic,16000
+real_voice_set_timer_014.wav,set a timer for 45 minutes,set_timer,real_user_set_timer_014,real_mic,16000
+real_voice_manage_reminders_011.wav,remind me to check email,manage_reminders,real_user_manage_reminders_011,real_mic,16000
+real_voice_manage_reminders_012.wav,show reminders,manage_reminders,real_user_manage_reminders_012,real_mic,16000
+real_voice_manage_reminders_013.wav,what are my reminders,manage_reminders,real_user_manage_reminders_013,real_mic,16000
+real_voice_manage_reminders_014.wav,remind me to check email,manage_reminders,real_user_manage_reminders_014,real_mic,16000
+real_voice_manage_reminders_015.wav,show reminders,manage_reminders,real_user_manage_reminders_015,real_mic,16000
+real_voice_manage_reminders_016.wav,what are my reminders,manage_reminders,real_user_manage_reminders_016,real_mic,16000
+real_voice_get_time_010.wav,current time,get_time,real_user_get_time_010,real_mic,16000
+real_voice_get_time_011.wav,tell me the time,get_time,real_user_get_time_011,real_mic,16000
+real_voice_get_time_012.wav,what time is it,get_time,real_user_get_time_012,real_mic,16000
+real_voice_get_time_013.wav,current time,get_time,real_user_get_time_013,real_mic,16000
+real_voice_get_time_014.wav,tell me the time,get_time,real_user_get_time_014,real_mic,16000
+real_voice_get_time_015.wav,what time is it,get_time,real_user_get_time_015,real_mic,16000
+real_voice_light_on_010.wav,lights on,light_on,real_user_light_on_010,real_mic,16000
+real_voice_light_on_011.wav,turn on light,light_on,real_user_light_on_011,real_mic,16000
+real_voice_light_on_012.wav,turn on lights,light_on,real_user_light_on_012,real_mic,16000
+real_voice_light_on_013.wav,turn on the lights,light_on,real_user_light_on_013,real_mic,16000
+real_voice_light_on_014.wav,lights on,light_on,real_user_light_on_014,real_mic,16000
+real_voice_light_on_015.wav,turn on light,light_on,real_user_light_on_015,real_mic,16000
+real_voice_light_on_016.wav,turn on lights,light_on,real_user_light_on_016,real_mic,16000
+real_voice_light_on_017.wav,turn on the lights,light_on,real_user_light_on_017,real_mic,16000
+real_voice_light_off_010.wav,lights off,light_off,real_user_light_off_010,real_mic,16000
+real_voice_light_off_011.wav,turn off light,light_off,real_user_light_off_011,real_mic,16000
+real_voice_light_off_012.wav,turn off lights,light_off,real_user_light_off_012,real_mic,16000
+real_voice_light_off_013.wav,turn off the lights,light_off,real_user_light_off_013,real_mic,16000
+real_voice_light_off_014.wav,lights off,light_off,real_user_light_off_014,real_mic,16000
+real_voice_light_off_015.wav,turn off light,light_off,real_user_light_off_015,real_mic,16000
+real_voice_light_off_016.wav,turn off lights,light_off,real_user_light_off_016,real_mic,16000
+real_voice_light_off_017.wav,turn off the lights,light_off,real_user_light_off_017,real_mic,16000
+real_voice_play_music_011.wav,play music,play_music,real_user_play_music_011,real_mic,16000
+real_voice_play_music_012.wav,play some music,play_music,real_user_play_music_012,real_mic,16000
+real_voice_play_music_013.wav,start playing music,play_music,real_user_play_music_013,real_mic,16000
+real_voice_play_music_014.wav,play music,play_music,real_user_play_music_014,real_mic,16000
+real_voice_play_music_015.wav,play some music,play_music,real_user_play_music_015,real_mic,16000
+real_voice_play_music_016.wav,start playing music,play_music,real_user_play_music_016,real_mic,16000
+real_voice_make_call_013.wav,call Dad,make_call,real_user_make_call_013,real_mic,16000
+real_voice_make_call_014.wav,call John,make_call,real_user_make_call_014,real_mic,16000
+real_voice_make_call_015.wav,call Mom,make_call,real_user_make_call_015,real_mic,16000
+real_voice_make_call_016.wav,call Wife,make_call,real_user_make_call_016,real_mic,16000
+real_voice_make_call_017.wav,phone Dad,make_call,real_user_make_call_017,real_mic,16000
+real_voice_make_call_018.wav,phone John,make_call,real_user_make_call_018,real_mic,16000
+real_voice_make_call_019.wav,phone Mom,make_call,real_user_make_call_019,real_mic,16000
+real_voice_make_call_020.wav,phone Wife,make_call,real_user_make_call_020,real_mic,16000
+real_voice_dim_lights_026.wav,dim lights to 10 percent,dim_lights,real_user_dim_lights_026,real_mic,16000
+real_voice_dim_lights_027.wav,dim lights to 20 percent,dim_lights,real_user_dim_lights_027,real_mic,16000
+real_voice_dim_lights_028.wav,dim lights to 30 percent,dim_lights,real_user_dim_lights_028,real_mic,16000
+real_voice_dim_lights_029.wav,dim lights to 50 percent,dim_lights,real_user_dim_lights_029,real_mic,16000
+real_voice_dim_lights_030.wav,dim lights to 75 percent,dim_lights,real_user_dim_lights_030,real_mic,16000
+real_voice_dim_lights_031.wav,dim lights to 100 percent,dim_lights,real_user_dim_lights_031,real_mic,16000
+real_voice_dim_lights_032.wav,set brightness to 10 percent,dim_lights,real_user_dim_lights_032,real_mic,16000
+real_voice_dim_lights_033.wav,set brightness to 20 percent,dim_lights,real_user_dim_lights_033,real_mic,16000
+real_voice_dim_lights_034.wav,set brightness to 30 percent,dim_lights,real_user_dim_lights_034,real_mic,16000
+real_voice_dim_lights_035.wav,set brightness to 50 percent,dim_lights,real_user_dim_lights_035,real_mic,16000
+real_voice_dim_lights_036.wav,set brightness to 75 percent,dim_lights,real_user_dim_lights_036,real_mic,16000
+real_voice_dim_lights_037.wav,set brightness to 100 percent,dim_lights,real_user_dim_lights_037,real_mic,16000
+real_voice_dim_lights_038.wav,dim lights to 10 percent,dim_lights,real_user_dim_lights_038,real_mic,16000
+real_voice_dim_lights_039.wav,dim lights to 20 percent,dim_lights,real_user_dim_lights_039,real_mic,16000
+real_voice_dim_lights_040.wav,dim lights to 30 percent,dim_lights,real_user_dim_lights_040,real_mic,16000
+real_voice_dim_lights_041.wav,dim lights to 50 percent,dim_lights,real_user_dim_lights_041,real_mic,16000
+real_voice_dim_lights_042.wav,dim lights to 75 percent,dim_lights,real_user_dim_lights_042,real_mic,16000
+real_voice_dim_lights_043.wav,dim lights to 100 percent,dim_lights,real_user_dim_lights_043,real_mic,16000
+real_voice_dim_lights_044.wav,set brightness to 10 percent,dim_lights,real_user_dim_lights_044,real_mic,16000
+real_voice_dim_lights_045.wav,set brightness to 20 percent,dim_lights,real_user_dim_lights_045,real_mic,16000
+real_voice_dim_lights_046.wav,set brightness to 30 percent,dim_lights,real_user_dim_lights_046,real_mic,16000
+real_voice_dim_lights_047.wav,set brightness to 50 percent,dim_lights,real_user_dim_lights_047,real_mic,16000
+real_voice_dim_lights_048.wav,set brightness to 75 percent,dim_lights,real_user_dim_lights_048,real_mic,16000
+real_voice_dim_lights_049.wav,set brightness to 100 percent,dim_lights,real_user_dim_lights_049,real_mic,16000
+real_voice_play_music_017.wav,play music,play_music,real_user_play_music_017,real_mic,16000
+real_voice_play_music_018.wav,play some music,play_music,real_user_play_music_018,real_mic,16000
+real_voice_play_music_019.wav,start playing music,play_music,real_user_play_music_019,real_mic,16000
+real_voice_play_music_020.wav,play music,play_music,real_user_play_music_020,real_mic,16000
+real_voice_play_music_021.wav,play some music,play_music,real_user_play_music_021,real_mic,16000
+real_voice_play_music_022.wav,start playing music,play_music,real_user_play_music_022,real_mic,16000
+real_voice_play_music_023.wav,play music,play_music,real_user_play_music_023,real_mic,16000
+real_voice_play_music_024.wav,play some music,play_music,real_user_play_music_024,real_mic,16000
+real_voice_play_music_025.wav,start playing music,play_music,real_user_play_music_025,real_mic,16000
+real_voice_play_music_026.wav,play music,play_music,real_user_play_music_026,real_mic,16000
+real_voice_play_music_027.wav,play some music,play_music,real_user_play_music_027,real_mic,16000
+real_voice_play_music_028.wav,start playing music,play_music,real_user_play_music_028,real_mic,16000
+real_voice_get_weather_010.wav,how is the weather,get_weather,real_user_get_weather_010,real_mic,16000
+real_voice_get_weather_011.wav,what is the weather today,get_weather,real_user_get_weather_011,real_mic,16000
+real_voice_get_weather_012.wav,what's the weather,get_weather,real_user_get_weather_012,real_mic,16000
+real_voice_get_weather_013.wav,how is the weather,get_weather,real_user_get_weather_013,real_mic,16000
+real_voice_get_weather_014.wav,what is the weather today,get_weather,real_user_get_weather_014,real_mic,16000
+real_voice_get_weather_015.wav,what's the weather,get_weather,real_user_get_weather_015,real_mic,16000
+real_voice_get_weather_016.wav,how is the weather,get_weather,real_user_get_weather_016,real_mic,16000
+real_voice_get_weather_017.wav,what is the weather today,get_weather,real_user_get_weather_017,real_mic,16000
+real_voice_get_weather_018.wav,what's the weather,get_weather,real_user_get_weather_018,real_mic,16000
+real_voice_get_weather_019.wav,how is the weather,get_weather,real_user_get_weather_019,real_mic,16000
+real_voice_get_weather_020.wav,what is the weather today,get_weather,real_user_get_weather_020,real_mic,16000
+real_voice_get_weather_021.wav,what's the weather,get_weather,real_user_get_weather_021,real_mic,16000
+real_voice_light_off_018.wav,lights off,light_off,real_user_light_off_018,real_mic,16000
+real_voice_light_off_019.wav,turn off light,light_off,real_user_light_off_019,real_mic,16000
+real_voice_light_off_020.wav,turn off lights,light_off,real_user_light_off_020,real_mic,16000
+real_voice_light_off_021.wav,turn off the lights,light_off,real_user_light_off_021,real_mic,16000
+real_voice_light_on_018.wav,lights on,light_on,real_user_light_on_018,real_mic,16000
+real_voice_light_on_019.wav,turn on light,light_on,real_user_light_on_019,real_mic,16000
+real_voice_light_on_020.wav,turn on lights,light_on,real_user_light_on_020,real_mic,16000
+real_voice_light_on_021.wav,turn on the lights,light_on,real_user_light_on_021,real_mic,16000
+real_voice_media_control_013.wav,louder,media_control,real_user_media_control_013,real_mic,16000
+real_voice_media_control_014.wav,mute,media_control,real_user_media_control_014,real_mic,16000
+real_voice_media_control_015.wav,next song,media_control,real_user_media_control_015,real_mic,16000
+real_voice_media_control_016.wav,pause,media_control,real_user_media_control_016,real_mic,16000
+real_voice_media_control_017.wav,skip,media_control,real_user_media_control_017,real_mic,16000
+real_voice_media_control_018.wav,stop,media_control,real_user_media_control_018,real_mic,16000
+real_voice_media_control_019.wav,volume down,media_control,real_user_media_control_019,real_mic,16000
+real_voice_media_control_020.wav,volume up,media_control,real_user_media_control_020,real_mic,16000
+real_voice_set_temperature_013.wav,set AC to 18 degrees,set_temperature,real_user_set_temperature_013,real_mic,16000
+real_voice_set_temperature_014.wav,set AC to 20 degrees,set_temperature,real_user_set_temperature_014,real_mic,16000
+real_voice_set_temperature_015.wav,set AC to 22 degrees,set_temperature,real_user_set_temperature_015,real_mic,16000
+real_voice_set_temperature_016.wav,set AC to 25 degrees,set_temperature,real_user_set_temperature_016,real_mic,16000
+real_voice_set_temperature_017.wav,set temperature to 18 degrees,set_temperature,real_user_set_temperature_017,real_mic,16000
+real_voice_set_temperature_018.wav,set temperature to 20 degrees,set_temperature,real_user_set_temperature_018,real_mic,16000
+real_voice_set_temperature_019.wav,set temperature to 22 degrees,set_temperature,real_user_set_temperature_019,real_mic,16000
+real_voice_set_temperature_020.wav,set temperature to 25 degrees,set_temperature,real_user_set_temperature_020,real_mic,16000
+real_voice_manage_reminders_017.wav,remind me to check email,manage_reminders,real_user_manage_reminders_017,real_mic,16000
+real_voice_manage_reminders_018.wav,show reminders,manage_reminders,real_user_manage_reminders_018,real_mic,16000
+real_voice_manage_reminders_019.wav,what are my reminders,manage_reminders,real_user_manage_reminders_019,real_mic,16000
+real_voice_set_alarm_015.wav,alarm for 6 AM,set_alarm,real_user_set_alarm_015,real_mic,16000
+real_voice_set_alarm_016.wav,alarm for 6:30 AM,set_alarm,real_user_set_alarm_016,real_mic,16000
+real_voice_set_alarm_017.wav,alarm for 7 AM,set_alarm,real_user_set_alarm_017,real_mic,16000
+real_voice_set_alarm_018.wav,alarm for 7:30 AM,set_alarm,real_user_set_alarm_018,real_mic,16000
+real_voice_set_alarm_019.wav,alarm for 8 AM,set_alarm,real_user_set_alarm_019,real_mic,16000
+real_voice_set_alarm_020.wav,set an alarm for 6 AM,set_alarm,real_user_set_alarm_020,real_mic,16000
+real_voice_set_alarm_021.wav,set an alarm for 6:30 AM,set_alarm,real_user_set_alarm_021,real_mic,16000
+real_voice_set_alarm_022.wav,set an alarm for 7 AM,set_alarm,real_user_set_alarm_022,real_mic,16000
+real_voice_set_alarm_023.wav,set an alarm for 7:30 AM,set_alarm,real_user_set_alarm_023,real_mic,16000
+real_voice_set_alarm_024.wav,set an alarm for 8 AM,set_alarm,real_user_set_alarm_024,real_mic,16000
+real_voice_get_time_016.wav,current time,get_time,real_user_get_time_016,real_mic,16000
+real_voice_get_time_017.wav,tell me the time,get_time,real_user_get_time_017,real_mic,16000
+real_voice_get_time_018.wav,what time is it,get_time,real_user_get_time_018,real_mic,16000
+real_voice_get_time_019.wav,current time,get_time,real_user_get_time_019,real_mic,16000
+real_voice_get_time_020.wav,tell me the time,get_time,real_user_get_time_020,real_mic,16000
+real_voice_get_time_021.wav,what time is it,get_time,real_user_get_time_021,real_mic,16000
+real_voice_set_timer_015.wav,set a timer for 5 minutes,set_timer,real_user_set_timer_015,real_mic,16000
+real_voice_set_timer_016.wav,set a timer for 10 minutes,set_timer,real_user_set_timer_016,real_mic,16000
+real_voice_set_timer_017.wav,set a timer for 15 minutes,set_timer,real_user_set_timer_017,real_mic,16000
+real_voice_set_timer_018.wav,set a timer for 30 minutes,set_timer,real_user_set_timer_018,real_mic,16000
+real_voice_set_timer_019.wav,set a timer for 45 minutes,set_timer,real_user_set_timer_019,real_mic,16000
+real_voice_set_timer_020.wav,timer for 5 minutes,set_timer,real_user_set_timer_020,real_mic,16000
+real_voice_set_timer_021.wav,timer for 10 minutes,set_timer,real_user_set_timer_021,real_mic,16000
+real_voice_set_timer_022.wav,timer for 15 minutes,set_timer,real_user_set_timer_022,real_mic,16000
+real_voice_set_timer_023.wav,timer for 30 minutes,set_timer,real_user_set_timer_023,real_mic,16000
+real_voice_set_timer_024.wav,timer for 45 minutes,set_timer,real_user_set_timer_024,real_mic,16000

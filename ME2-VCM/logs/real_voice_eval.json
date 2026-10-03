@@ -1,0 +1,3566 @@
+{
+  "checkpoint": "/mnt/jfs_hpc/home/kent.justin.canja/sandbox/AI-222-231/ME2-VCM/models/crnn_ai231_42.pth",
+  "n_clips": 300,
+  "correct": 57,
+  "accuracy_pct": 19.0,
+  "per_class": {
+    "dim_lights": {
+      "n": 50,
+      "ok": 2,
+      "acc_pct": 4.0,
+      "predictions": {
+        "CREATE_REMINDER": 6,
+        "LIST_REMINDERS": 3,
+        "MESSAGE": 23,
+        "TEMPERATURE": 5,
+        "TIMER": 4,
+        "COLOR": 1,
+        "NEXT": 2,
+        "LIGHT_ON": 2,
+        "BRIGHTNESS": 2,
+        "VOLUME_DOWN": 2
+      }
+    },
+    "get_time": {
+      "n": 22,
+      "ok": 1,
+      "acc_pct": 4.5,
+      "predictions": {
+        "CREATE_REMINDER": 12,
+        "VOLUME_DOWN": 6,
+        "PLAY_MUSIC": 1,
+        "LIST_REMINDERS": 2,
+        "TIME": 1
+      }
+    },
+    "get_weather": {
+      "n": 22,
+      "ok": 2,
+      "acc_pct": 9.1,
+      "predictions": {
+        "CREATE_REMINDER": 14,
+        "LIST_REMINDERS": 2,
+        "VOLUME_DOWN": 3,
+        "WEATHER": 2,
+        "PAUSE": 1
+      }
+    },
+    "light_off": {
+      "n": 22,
+      "ok": 0,
+      "acc_pct": 0.0,
+      "predictions": {
+        "CREATE_REMINDER": 9,
+        "LIGHT_ON": 5,
+        "VOLUME_UP": 1,
+        "LIST_REMINDERS": 1,
+        "VOLUME_DOWN": 6
+      }
+    },
+    "light_on": {
+      "n": 22,
+      "ok": 5,
+      "acc_pct": 22.7,
+      "predictions": {
+        "CREATE_REMINDER": 12,
+        "NEXT": 1,
+        "LIGHT_ON": 5,
+        "VOLUME_DOWN": 3,
+        "TIMER": 1
+      }
+    },
+    "make_call": {
+      "n": 21,
+      "ok": 0,
+      "acc_pct": 0.0,
+      "predictions": {
+        "CREATE_REMINDER": 6,
+        "TIMER": 1,
+        "VOLUME_DOWN": 7,
+        "VOLUME_UP": 3,
+        "LIGHT_ON": 4
+      }
+    },
+    "manage_reminders": {
+      "n": 20,
+      "ok": 10,
+      "acc_pct": 50.0,
+      "predictions": {
+        "CREATE_REMINDER": 9,
+        "VOLUME_DOWN": 8,
+        "LIST_REMINDERS": 1,
+        "MESSAGE": 1,
+        "TIMER": 1
+      }
+    },
+    "media_control": {
+      "n": 21,
+      "ok": 9,
+      "acc_pct": 42.9,
+      "predictions": {
+        "CREATE_REMINDER": 9,
+        "VOLUME_UP": 1,
+        "TIME": 2,
+        "VOLUME_DOWN": 6,
+        "COLOR": 1,
+        "STOP": 2
+      }
+    },
+    "play_music": {
+      "n": 29,
+      "ok": 6,
+      "acc_pct": 20.7,
+      "predictions": {
+        "CREATE_REMINDER": 13,
+        "BRIGHTNESS": 1,
+        "STOP": 3,
+        "PLAY_MUSIC": 6,
+        "VOLUME_DOWN": 6
+      }
+    },
+    "set_alarm": {
+      "n": 25,
+      "ok": 8,
+      "acc_pct": 32.0,
+      "predictions": {
+        "ALARM": 8,
+        "TIMER": 6,
+        "CREATE_REMINDER": 7,
+        "VOLUME_DOWN": 4
+      }
+    },
+    "set_temperature": {
+      "n": 21,
+      "ok": 5,
+      "acc_pct": 23.8,
+      "predictions": {
+        "TIME": 1,
+        "LIST_REMINDERS": 7,
+        "VOLUME_DOWN": 1,
+        "TEMPERATURE": 5,
+        "CREATE_REMINDER": 1,
+        "BRIGHTNESS": 5,
+        "CALL": 1
+      }
+    },
+    "set_timer": {
+      "n": 25,
+      "ok": 9,
+      "acc_pct": 36.0,
+      "predictions": {
+        "LIST_REMINDERS": 8,
+        "BRIGHTNESS": 2,
+        "TIMER": 9,
+        "CREATE_REMINDER": 4,
+        "VOLUME_DOWN": 1,
+        "ALARM": 1
+      }
+    }
+  },
+  "clips": [
+    {
+      "file": "real_voice_dim_lights_000.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 10 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.8797,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_time_000.wav",
+      "class": "get_time",
+      "transcript": "current time",
+      "expected": [
+        "TIME"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.8462,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_weather_000.wav",
+      "class": "get_weather",
+      "transcript": "how is the weather",
+      "expected": [
+        "WEATHER"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9324,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_off_000.wav",
+      "class": "light_off",
+      "transcript": "lights off",
+      "expected": [
+        "LIGHT_OFF"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9235,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_on_000.wav",
+      "class": "light_on",
+      "transcript": "lights on",
+      "expected": [
+        "LIGHT_ON"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9377,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_001.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 20 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.8605,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_time_001.wav",
+      "class": "get_time",
+      "transcript": "tell me the time",
+      "expected": [
+        "TIME"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.8265,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_weather_001.wav",
+      "class": "get_weather",
+      "transcript": "what is the weather today",
+      "expected": [
+        "WEATHER"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9251,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_off_001.wav",
+      "class": "light_off",
+      "transcript": "turn off light",
+      "expected": [
+        "LIGHT_OFF"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9218,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_on_001.wav",
+      "class": "light_on",
+      "transcript": "turn on light",
+      "expected": [
+        "LIGHT_ON"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9226,
+      "correct": false
+    },
+    {
+      "file": "real_voice_make_call_000.wav",
+      "class": "make_call",
+      "transcript": "call Dad",
+      "expected": [
+        "CALL"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.904,
+      "correct": false
+    },
+    {
+      "file": "real_voice_manage_reminders_000.wav",
+      "class": "manage_reminders",
+      "transcript": "remind me to check email",
+      "expected": [
+        "CREATE_REMINDER",
+        "LIST_REMINDERS"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.6661,
+      "correct": true
+    },
+    {
+      "file": "real_voice_media_control_000.wav",
+      "class": "media_control",
+      "transcript": "louder",
+      "expected": [
+        "NEXT",
+        "PAUSE",
+        "STOP",
+        "VOLUME_DOWN",
+        "VOLUME_UP"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9043,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_000.wav",
+      "class": "play_music",
+      "transcript": "play music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.8985,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_alarm_000.wav",
+      "class": "set_alarm",
+      "transcript": "alarm for 6 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "ALARM",
+      "confidence": 0.3976,
+      "correct": true
+    },
+    {
+      "file": "real_voice_set_temperature_000.wav",
+      "class": "set_temperature",
+      "transcript": "set AC to 18 degrees",
+      "expected": [
+        "TEMPERATURE"
+      ],
+      "predicted": "TIME",
+      "confidence": 0.4896,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_timer_000.wav",
+      "class": "set_timer",
+      "transcript": "set a timer for 5 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.633,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_002.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 30 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.5284,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_time_002.wav",
+      "class": "get_time",
+      "transcript": "what time is it",
+      "expected": [
+        "TIME"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9133,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_weather_002.wav",
+      "class": "get_weather",
+      "transcript": "what's the weather",
+      "expected": [
+        "WEATHER"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9218,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_off_002.wav",
+      "class": "light_off",
+      "transcript": "turn off lights",
+      "expected": [
+        "LIGHT_OFF"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9128,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_on_002.wav",
+      "class": "light_on",
+      "transcript": "turn on lights",
+      "expected": [
+        "LIGHT_ON"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.8805,
+      "correct": false
+    },
+    {
+      "file": "real_voice_make_call_001.wav",
+      "class": "make_call",
+      "transcript": "call John",
+      "expected": [
+        "CALL"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9149,
+      "correct": false
+    },
+    {
+      "file": "real_voice_manage_reminders_001.wav",
+      "class": "manage_reminders",
+      "transcript": "show reminders",
+      "expected": [
+        "CREATE_REMINDER",
+        "LIST_REMINDERS"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.78,
+      "correct": false
+    },
+    {
+      "file": "real_voice_media_control_001.wav",
+      "class": "media_control",
+      "transcript": "mute",
+      "expected": [
+        "NEXT",
+        "PAUSE",
+        "STOP",
+        "VOLUME_DOWN",
+        "VOLUME_UP"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9253,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_001.wav",
+      "class": "play_music",
+      "transcript": "play some music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.8957,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_alarm_001.wav",
+      "class": "set_alarm",
+      "transcript": "alarm for 6:30 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "TIMER",
+      "confidence": 0.3495,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_temperature_001.wav",
+      "class": "set_temperature",
+      "transcript": "set AC to 20 degrees",
+      "expected": [
+        "TEMPERATURE"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.7683,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_timer_001.wav",
+      "class": "set_timer",
+      "transcript": "set a timer for 10 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.7316,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_003.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 50 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.7296,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_time_003.wav",
+      "class": "get_time",
+      "transcript": "current time",
+      "expected": [
+        "TIME"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9217,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_weather_003.wav",
+      "class": "get_weather",
+      "transcript": "how is the weather",
+      "expected": [
+        "WEATHER"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9329,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_off_003.wav",
+      "class": "light_off",
+      "transcript": "turn off the lights",
+      "expected": [
+        "LIGHT_OFF"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.8957,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_on_003.wav",
+      "class": "light_on",
+      "transcript": "turn on the lights",
+      "expected": [
+        "LIGHT_ON"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9012,
+      "correct": false
+    },
+    {
+      "file": "real_voice_make_call_002.wav",
+      "class": "make_call",
+      "transcript": "call Mom",
+      "expected": [
+        "CALL"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9129,
+      "correct": false
+    },
+    {
+      "file": "real_voice_manage_reminders_002.wav",
+      "class": "manage_reminders",
+      "transcript": "what are my reminders",
+      "expected": [
+        "CREATE_REMINDER",
+        "LIST_REMINDERS"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.7356,
+      "correct": true
+    },
+    {
+      "file": "real_voice_media_control_002.wav",
+      "class": "media_control",
+      "transcript": "next song",
+      "expected": [
+        "NEXT",
+        "PAUSE",
+        "STOP",
+        "VOLUME_DOWN",
+        "VOLUME_UP"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9167,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_002.wav",
+      "class": "play_music",
+      "transcript": "start playing music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9228,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_alarm_002.wav",
+      "class": "set_alarm",
+      "transcript": "alarm for 7 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9107,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_temperature_002.wav",
+      "class": "set_temperature",
+      "transcript": "set AC to 22 degrees",
+      "expected": [
+        "TEMPERATURE"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.7125,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_timer_002.wav",
+      "class": "set_timer",
+      "transcript": "set a timer for 15 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.8504,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_004.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 75 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.6135,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_time_004.wav",
+      "class": "get_time",
+      "transcript": "tell me the time",
+      "expected": [
+        "TIME"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9213,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_weather_004.wav",
+      "class": "get_weather",
+      "transcript": "what is the weather today",
+      "expected": [
+        "WEATHER"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9166,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_off_004.wav",
+      "class": "light_off",
+      "transcript": "lights off",
+      "expected": [
+        "LIGHT_OFF"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9357,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_on_004.wav",
+      "class": "light_on",
+      "transcript": "lights on",
+      "expected": [
+        "LIGHT_ON"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9058,
+      "correct": false
+    },
+    {
+      "file": "real_voice_make_call_003.wav",
+      "class": "make_call",
+      "transcript": "call Wife",
+      "expected": [
+        "CALL"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9291,
+      "correct": false
+    },
+    {
+      "file": "real_voice_manage_reminders_003.wav",
+      "class": "manage_reminders",
+      "transcript": "remind me to check email",
+      "expected": [
+        "CREATE_REMINDER",
+        "LIST_REMINDERS"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.8283,
+      "correct": true
+    },
+    {
+      "file": "real_voice_media_control_003.wav",
+      "class": "media_control",
+      "transcript": "pause",
+      "expected": [
+        "NEXT",
+        "PAUSE",
+        "STOP",
+        "VOLUME_DOWN",
+        "VOLUME_UP"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9267,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_003.wav",
+      "class": "play_music",
+      "transcript": "play music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9367,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_alarm_003.wav",
+      "class": "set_alarm",
+      "transcript": "alarm for 7:30 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.8879,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_temperature_003.wav",
+      "class": "set_temperature",
+      "transcript": "set AC to 25 degrees",
+      "expected": [
+        "TEMPERATURE"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.5665,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_timer_003.wav",
+      "class": "set_timer",
+      "transcript": "set a timer for 30 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "BRIGHTNESS",
+      "confidence": 0.9289,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_005.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 100 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.529,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_time_005.wav",
+      "class": "get_time",
+      "transcript": "what time is it",
+      "expected": [
+        "TIME"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.8958,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_weather_005.wav",
+      "class": "get_weather",
+      "transcript": "what's the weather",
+      "expected": [
+        "WEATHER"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9191,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_off_005.wav",
+      "class": "light_off",
+      "transcript": "turn off light",
+      "expected": [
+        "LIGHT_OFF"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9124,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_on_005.wav",
+      "class": "light_on",
+      "transcript": "turn on light",
+      "expected": [
+        "LIGHT_ON"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9101,
+      "correct": false
+    },
+    {
+      "file": "real_voice_make_call_004.wav",
+      "class": "make_call",
+      "transcript": "phone Dad",
+      "expected": [
+        "CALL"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9154,
+      "correct": false
+    },
+    {
+      "file": "real_voice_manage_reminders_004.wav",
+      "class": "manage_reminders",
+      "transcript": "show reminders",
+      "expected": [
+        "CREATE_REMINDER",
+        "LIST_REMINDERS"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9075,
+      "correct": true
+    },
+    {
+      "file": "real_voice_media_control_004.wav",
+      "class": "media_control",
+      "transcript": "skip",
+      "expected": [
+        "NEXT",
+        "PAUSE",
+        "STOP",
+        "VOLUME_DOWN",
+        "VOLUME_UP"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9153,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_004.wav",
+      "class": "play_music",
+      "transcript": "play some music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9232,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_alarm_004.wav",
+      "class": "set_alarm",
+      "transcript": "alarm for 8 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.8965,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_temperature_004.wav",
+      "class": "set_temperature",
+      "transcript": "set temperature to 18 degrees",
+      "expected": [
+        "TEMPERATURE"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.7131,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_timer_004.wav",
+      "class": "set_timer",
+      "transcript": "set a timer for 45 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.587,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_006.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 10 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.7839,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_007.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 20 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "TEMPERATURE",
+      "confidence": 0.8677,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_008.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 30 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.7788,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_009.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 50 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "TIMER",
+      "confidence": 0.4311,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_010.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 75 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.5867,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_011.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 100 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "COLOR",
+      "confidence": 0.8192,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_012.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 10 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.7301,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_013.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 20 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "NEXT",
+      "confidence": 0.2375,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_014.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 30 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "LIGHT_ON",
+      "confidence": 0.7981,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_015.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 50 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.248,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_016.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 75 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.6776,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_017.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 100 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.5506,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_018.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 10 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "BRIGHTNESS",
+      "confidence": 0.7979,
+      "correct": true
+    },
+    {
+      "file": "real_voice_dim_lights_019.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 20 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "BRIGHTNESS",
+      "confidence": 0.9222,
+      "correct": true
+    },
+    {
+      "file": "real_voice_dim_lights_020.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 30 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.3348,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_021.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 50 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "TEMPERATURE",
+      "confidence": 0.3796,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_022.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 75 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.8345,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_023.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 100 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.5766,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_024.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 10 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.8055,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_025.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 20 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.3963,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_time_006.wav",
+      "class": "get_time",
+      "transcript": "current time",
+      "expected": [
+        "TIME"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.7955,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_time_007.wav",
+      "class": "get_time",
+      "transcript": "tell me the time",
+      "expected": [
+        "TIME"
+      ],
+      "predicted": "PLAY_MUSIC",
+      "confidence": 0.692,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_time_008.wav",
+      "class": "get_time",
+      "transcript": "what time is it",
+      "expected": [
+        "TIME"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.8635,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_time_009.wav",
+      "class": "get_time",
+      "transcript": "current time",
+      "expected": [
+        "TIME"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.314,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_weather_006.wav",
+      "class": "get_weather",
+      "transcript": "how is the weather",
+      "expected": [
+        "WEATHER"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.2929,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_weather_007.wav",
+      "class": "get_weather",
+      "transcript": "what is the weather today",
+      "expected": [
+        "WEATHER"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.6901,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_weather_008.wav",
+      "class": "get_weather",
+      "transcript": "what's the weather",
+      "expected": [
+        "WEATHER"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.3435,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_weather_009.wav",
+      "class": "get_weather",
+      "transcript": "how is the weather",
+      "expected": [
+        "WEATHER"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.8952,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_off_006.wav",
+      "class": "light_off",
+      "transcript": "turn off lights",
+      "expected": [
+        "LIGHT_OFF"
+      ],
+      "predicted": "LIGHT_ON",
+      "confidence": 0.4683,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_off_007.wav",
+      "class": "light_off",
+      "transcript": "turn off the lights",
+      "expected": [
+        "LIGHT_OFF"
+      ],
+      "predicted": "VOLUME_UP",
+      "confidence": 0.8304,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_off_008.wav",
+      "class": "light_off",
+      "transcript": "lights off",
+      "expected": [
+        "LIGHT_OFF"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.4772,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_off_009.wav",
+      "class": "light_off",
+      "transcript": "turn off light",
+      "expected": [
+        "LIGHT_OFF"
+      ],
+      "predicted": "LIGHT_ON",
+      "confidence": 0.9073,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_on_006.wav",
+      "class": "light_on",
+      "transcript": "turn on lights",
+      "expected": [
+        "LIGHT_ON"
+      ],
+      "predicted": "NEXT",
+      "confidence": 0.236,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_on_007.wav",
+      "class": "light_on",
+      "transcript": "turn on the lights",
+      "expected": [
+        "LIGHT_ON"
+      ],
+      "predicted": "LIGHT_ON",
+      "confidence": 0.9119,
+      "correct": true
+    },
+    {
+      "file": "real_voice_light_on_008.wav",
+      "class": "light_on",
+      "transcript": "lights on",
+      "expected": [
+        "LIGHT_ON"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.9012,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_on_009.wav",
+      "class": "light_on",
+      "transcript": "turn on light",
+      "expected": [
+        "LIGHT_ON"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.6248,
+      "correct": false
+    },
+    {
+      "file": "real_voice_make_call_005.wav",
+      "class": "make_call",
+      "transcript": "phone John",
+      "expected": [
+        "CALL"
+      ],
+      "predicted": "TIMER",
+      "confidence": 0.5504,
+      "correct": false
+    },
+    {
+      "file": "real_voice_make_call_006.wav",
+      "class": "make_call",
+      "transcript": "phone Mom",
+      "expected": [
+        "CALL"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.3617,
+      "correct": false
+    },
+    {
+      "file": "real_voice_make_call_007.wav",
+      "class": "make_call",
+      "transcript": "phone Wife",
+      "expected": [
+        "CALL"
+      ],
+      "predicted": "VOLUME_UP",
+      "confidence": 0.2512,
+      "correct": false
+    },
+    {
+      "file": "real_voice_make_call_008.wav",
+      "class": "make_call",
+      "transcript": "call Dad",
+      "expected": [
+        "CALL"
+      ],
+      "predicted": "LIGHT_ON",
+      "confidence": 0.6062,
+      "correct": false
+    },
+    {
+      "file": "real_voice_make_call_009.wav",
+      "class": "make_call",
+      "transcript": "call John",
+      "expected": [
+        "CALL"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.896,
+      "correct": false
+    },
+    {
+      "file": "real_voice_make_call_010.wav",
+      "class": "make_call",
+      "transcript": "call Mom",
+      "expected": [
+        "CALL"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.8549,
+      "correct": false
+    },
+    {
+      "file": "real_voice_make_call_011.wav",
+      "class": "make_call",
+      "transcript": "call Wife",
+      "expected": [
+        "CALL"
+      ],
+      "predicted": "LIGHT_ON",
+      "confidence": 0.3199,
+      "correct": false
+    },
+    {
+      "file": "real_voice_make_call_012.wav",
+      "class": "make_call",
+      "transcript": "phone Dad",
+      "expected": [
+        "CALL"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.8518,
+      "correct": false
+    },
+    {
+      "file": "real_voice_manage_reminders_005.wav",
+      "class": "manage_reminders",
+      "transcript": "what are my reminders",
+      "expected": [
+        "CREATE_REMINDER",
+        "LIST_REMINDERS"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.8789,
+      "correct": false
+    },
+    {
+      "file": "real_voice_manage_reminders_006.wav",
+      "class": "manage_reminders",
+      "transcript": "remind me to check email",
+      "expected": [
+        "CREATE_REMINDER",
+        "LIST_REMINDERS"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.9193,
+      "correct": true
+    },
+    {
+      "file": "real_voice_manage_reminders_007.wav",
+      "class": "manage_reminders",
+      "transcript": "show reminders",
+      "expected": [
+        "CREATE_REMINDER",
+        "LIST_REMINDERS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.3392,
+      "correct": false
+    },
+    {
+      "file": "real_voice_manage_reminders_008.wav",
+      "class": "manage_reminders",
+      "transcript": "what are my reminders",
+      "expected": [
+        "CREATE_REMINDER",
+        "LIST_REMINDERS"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.5602,
+      "correct": false
+    },
+    {
+      "file": "real_voice_manage_reminders_009.wav",
+      "class": "manage_reminders",
+      "transcript": "remind me to check email",
+      "expected": [
+        "CREATE_REMINDER",
+        "LIST_REMINDERS"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.6993,
+      "correct": false
+    },
+    {
+      "file": "real_voice_manage_reminders_010.wav",
+      "class": "manage_reminders",
+      "transcript": "show reminders",
+      "expected": [
+        "CREATE_REMINDER",
+        "LIST_REMINDERS"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.735,
+      "correct": false
+    },
+    {
+      "file": "real_voice_media_control_005.wav",
+      "class": "media_control",
+      "transcript": "stop",
+      "expected": [
+        "NEXT",
+        "PAUSE",
+        "STOP",
+        "VOLUME_DOWN",
+        "VOLUME_UP"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.4369,
+      "correct": false
+    },
+    {
+      "file": "real_voice_media_control_006.wav",
+      "class": "media_control",
+      "transcript": "volume down",
+      "expected": [
+        "NEXT",
+        "PAUSE",
+        "STOP",
+        "VOLUME_DOWN",
+        "VOLUME_UP"
+      ],
+      "predicted": "VOLUME_UP",
+      "confidence": 0.6999,
+      "correct": true
+    },
+    {
+      "file": "real_voice_media_control_007.wav",
+      "class": "media_control",
+      "transcript": "volume up",
+      "expected": [
+        "NEXT",
+        "PAUSE",
+        "STOP",
+        "VOLUME_DOWN",
+        "VOLUME_UP"
+      ],
+      "predicted": "TIME",
+      "confidence": 0.4069,
+      "correct": false
+    },
+    {
+      "file": "real_voice_media_control_008.wav",
+      "class": "media_control",
+      "transcript": "louder",
+      "expected": [
+        "NEXT",
+        "PAUSE",
+        "STOP",
+        "VOLUME_DOWN",
+        "VOLUME_UP"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.9146,
+      "correct": true
+    },
+    {
+      "file": "real_voice_media_control_009.wav",
+      "class": "media_control",
+      "transcript": "mute",
+      "expected": [
+        "NEXT",
+        "PAUSE",
+        "STOP",
+        "VOLUME_DOWN",
+        "VOLUME_UP"
+      ],
+      "predicted": "COLOR",
+      "confidence": 0.3048,
+      "correct": false
+    },
+    {
+      "file": "real_voice_media_control_010.wav",
+      "class": "media_control",
+      "transcript": "next song",
+      "expected": [
+        "NEXT",
+        "PAUSE",
+        "STOP",
+        "VOLUME_DOWN",
+        "VOLUME_UP"
+      ],
+      "predicted": "STOP",
+      "confidence": 0.8004,
+      "correct": true
+    },
+    {
+      "file": "real_voice_media_control_011.wav",
+      "class": "media_control",
+      "transcript": "pause",
+      "expected": [
+        "NEXT",
+        "PAUSE",
+        "STOP",
+        "VOLUME_DOWN",
+        "VOLUME_UP"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.9267,
+      "correct": true
+    },
+    {
+      "file": "real_voice_media_control_012.wav",
+      "class": "media_control",
+      "transcript": "skip",
+      "expected": [
+        "NEXT",
+        "PAUSE",
+        "STOP",
+        "VOLUME_DOWN",
+        "VOLUME_UP"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.9284,
+      "correct": true
+    },
+    {
+      "file": "real_voice_play_music_005.wav",
+      "class": "play_music",
+      "transcript": "start playing music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.5589,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_006.wav",
+      "class": "play_music",
+      "transcript": "play music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "BRIGHTNESS",
+      "confidence": 0.5898,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_007.wav",
+      "class": "play_music",
+      "transcript": "play some music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "STOP",
+      "confidence": 0.3406,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_008.wav",
+      "class": "play_music",
+      "transcript": "start playing music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "PLAY_MUSIC",
+      "confidence": 0.9274,
+      "correct": true
+    },
+    {
+      "file": "real_voice_play_music_009.wav",
+      "class": "play_music",
+      "transcript": "play music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "PLAY_MUSIC",
+      "confidence": 0.7742,
+      "correct": true
+    },
+    {
+      "file": "real_voice_play_music_010.wav",
+      "class": "play_music",
+      "transcript": "play some music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "PLAY_MUSIC",
+      "confidence": 0.9242,
+      "correct": true
+    },
+    {
+      "file": "real_voice_set_alarm_005.wav",
+      "class": "set_alarm",
+      "transcript": "set an alarm for 6 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.4039,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_alarm_006.wav",
+      "class": "set_alarm",
+      "transcript": "set an alarm for 6:30 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "ALARM",
+      "confidence": 0.5571,
+      "correct": true
+    },
+    {
+      "file": "real_voice_set_alarm_007.wav",
+      "class": "set_alarm",
+      "transcript": "set an alarm for 7 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "TIMER",
+      "confidence": 0.4636,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_alarm_008.wav",
+      "class": "set_alarm",
+      "transcript": "set an alarm for 7:30 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.5159,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_alarm_009.wav",
+      "class": "set_alarm",
+      "transcript": "set an alarm for 8 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "TIMER",
+      "confidence": 0.918,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_alarm_010.wav",
+      "class": "set_alarm",
+      "transcript": "alarm for 6 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "TIMER",
+      "confidence": 0.8179,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_alarm_011.wav",
+      "class": "set_alarm",
+      "transcript": "alarm for 6:30 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "ALARM",
+      "confidence": 0.9121,
+      "correct": true
+    },
+    {
+      "file": "real_voice_set_alarm_012.wav",
+      "class": "set_alarm",
+      "transcript": "alarm for 7 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "ALARM",
+      "confidence": 0.9237,
+      "correct": true
+    },
+    {
+      "file": "real_voice_set_alarm_013.wav",
+      "class": "set_alarm",
+      "transcript": "alarm for 7:30 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "ALARM",
+      "confidence": 0.9288,
+      "correct": true
+    },
+    {
+      "file": "real_voice_set_alarm_014.wav",
+      "class": "set_alarm",
+      "transcript": "alarm for 8 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "ALARM",
+      "confidence": 0.8406,
+      "correct": true
+    },
+    {
+      "file": "real_voice_set_temperature_005.wav",
+      "class": "set_temperature",
+      "transcript": "set temperature to 20 degrees",
+      "expected": [
+        "TEMPERATURE"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.6646,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_temperature_006.wav",
+      "class": "set_temperature",
+      "transcript": "set temperature to 22 degrees",
+      "expected": [
+        "TEMPERATURE"
+      ],
+      "predicted": "TEMPERATURE",
+      "confidence": 0.5661,
+      "correct": true
+    },
+    {
+      "file": "real_voice_set_temperature_007.wav",
+      "class": "set_temperature",
+      "transcript": "set temperature to 25 degrees",
+      "expected": [
+        "TEMPERATURE"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.2633,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_temperature_008.wav",
+      "class": "set_temperature",
+      "transcript": "set AC to 18 degrees",
+      "expected": [
+        "TEMPERATURE"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.8654,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_temperature_009.wav",
+      "class": "set_temperature",
+      "transcript": "set AC to 20 degrees",
+      "expected": [
+        "TEMPERATURE"
+      ],
+      "predicted": "BRIGHTNESS",
+      "confidence": 0.2446,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_temperature_010.wav",
+      "class": "set_temperature",
+      "transcript": "set AC to 22 degrees",
+      "expected": [
+        "TEMPERATURE"
+      ],
+      "predicted": "BRIGHTNESS",
+      "confidence": 0.3174,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_temperature_011.wav",
+      "class": "set_temperature",
+      "transcript": "set AC to 25 degrees",
+      "expected": [
+        "TEMPERATURE"
+      ],
+      "predicted": "TEMPERATURE",
+      "confidence": 0.92,
+      "correct": true
+    },
+    {
+      "file": "real_voice_set_temperature_012.wav",
+      "class": "set_temperature",
+      "transcript": "set temperature to 18 degrees",
+      "expected": [
+        "TEMPERATURE"
+      ],
+      "predicted": "TEMPERATURE",
+      "confidence": 0.9272,
+      "correct": true
+    },
+    {
+      "file": "real_voice_set_timer_005.wav",
+      "class": "set_timer",
+      "transcript": "timer for 5 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "TIMER",
+      "confidence": 0.4059,
+      "correct": true
+    },
+    {
+      "file": "real_voice_set_timer_006.wav",
+      "class": "set_timer",
+      "transcript": "timer for 10 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.882,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_timer_007.wav",
+      "class": "set_timer",
+      "transcript": "timer for 15 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "TIMER",
+      "confidence": 0.8956,
+      "correct": true
+    },
+    {
+      "file": "real_voice_set_timer_008.wav",
+      "class": "set_timer",
+      "transcript": "timer for 30 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "TIMER",
+      "confidence": 0.8866,
+      "correct": true
+    },
+    {
+      "file": "real_voice_set_timer_009.wav",
+      "class": "set_timer",
+      "transcript": "timer for 45 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.7812,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_timer_010.wav",
+      "class": "set_timer",
+      "transcript": "set a timer for 5 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "TIMER",
+      "confidence": 0.6492,
+      "correct": true
+    },
+    {
+      "file": "real_voice_set_timer_011.wav",
+      "class": "set_timer",
+      "transcript": "set a timer for 10 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.4504,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_timer_012.wav",
+      "class": "set_timer",
+      "transcript": "set a timer for 15 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.8426,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_timer_013.wav",
+      "class": "set_timer",
+      "transcript": "set a timer for 30 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "TIMER",
+      "confidence": 0.9213,
+      "correct": true
+    },
+    {
+      "file": "real_voice_set_timer_014.wav",
+      "class": "set_timer",
+      "transcript": "set a timer for 45 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "TIMER",
+      "confidence": 0.9077,
+      "correct": true
+    },
+    {
+      "file": "real_voice_manage_reminders_011.wav",
+      "class": "manage_reminders",
+      "transcript": "remind me to check email",
+      "expected": [
+        "CREATE_REMINDER",
+        "LIST_REMINDERS"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.7252,
+      "correct": false
+    },
+    {
+      "file": "real_voice_manage_reminders_012.wav",
+      "class": "manage_reminders",
+      "transcript": "show reminders",
+      "expected": [
+        "CREATE_REMINDER",
+        "LIST_REMINDERS"
+      ],
+      "predicted": "TIMER",
+      "confidence": 0.2651,
+      "correct": false
+    },
+    {
+      "file": "real_voice_manage_reminders_013.wav",
+      "class": "manage_reminders",
+      "transcript": "what are my reminders",
+      "expected": [
+        "CREATE_REMINDER",
+        "LIST_REMINDERS"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.5072,
+      "correct": true
+    },
+    {
+      "file": "real_voice_manage_reminders_014.wav",
+      "class": "manage_reminders",
+      "transcript": "remind me to check email",
+      "expected": [
+        "CREATE_REMINDER",
+        "LIST_REMINDERS"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.9079,
+      "correct": true
+    },
+    {
+      "file": "real_voice_manage_reminders_015.wav",
+      "class": "manage_reminders",
+      "transcript": "show reminders",
+      "expected": [
+        "CREATE_REMINDER",
+        "LIST_REMINDERS"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.8363,
+      "correct": true
+    },
+    {
+      "file": "real_voice_manage_reminders_016.wav",
+      "class": "manage_reminders",
+      "transcript": "what are my reminders",
+      "expected": [
+        "CREATE_REMINDER",
+        "LIST_REMINDERS"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.6319,
+      "correct": true
+    },
+    {
+      "file": "real_voice_get_time_010.wav",
+      "class": "get_time",
+      "transcript": "current time",
+      "expected": [
+        "TIME"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.4125,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_time_011.wav",
+      "class": "get_time",
+      "transcript": "tell me the time",
+      "expected": [
+        "TIME"
+      ],
+      "predicted": "TIME",
+      "confidence": 0.836,
+      "correct": true
+    },
+    {
+      "file": "real_voice_get_time_012.wav",
+      "class": "get_time",
+      "transcript": "what time is it",
+      "expected": [
+        "TIME"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.8452,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_time_013.wav",
+      "class": "get_time",
+      "transcript": "current time",
+      "expected": [
+        "TIME"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.2975,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_time_014.wav",
+      "class": "get_time",
+      "transcript": "tell me the time",
+      "expected": [
+        "TIME"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.6383,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_time_015.wav",
+      "class": "get_time",
+      "transcript": "what time is it",
+      "expected": [
+        "TIME"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.7774,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_on_010.wav",
+      "class": "light_on",
+      "transcript": "lights on",
+      "expected": [
+        "LIGHT_ON"
+      ],
+      "predicted": "LIGHT_ON",
+      "confidence": 0.8767,
+      "correct": true
+    },
+    {
+      "file": "real_voice_light_on_011.wav",
+      "class": "light_on",
+      "transcript": "turn on light",
+      "expected": [
+        "LIGHT_ON"
+      ],
+      "predicted": "LIGHT_ON",
+      "confidence": 0.7821,
+      "correct": true
+    },
+    {
+      "file": "real_voice_light_on_012.wav",
+      "class": "light_on",
+      "transcript": "turn on lights",
+      "expected": [
+        "LIGHT_ON"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.758,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_on_013.wav",
+      "class": "light_on",
+      "transcript": "turn on the lights",
+      "expected": [
+        "LIGHT_ON"
+      ],
+      "predicted": "TIMER",
+      "confidence": 0.5148,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_on_014.wav",
+      "class": "light_on",
+      "transcript": "lights on",
+      "expected": [
+        "LIGHT_ON"
+      ],
+      "predicted": "LIGHT_ON",
+      "confidence": 0.777,
+      "correct": true
+    },
+    {
+      "file": "real_voice_light_on_015.wav",
+      "class": "light_on",
+      "transcript": "turn on light",
+      "expected": [
+        "LIGHT_ON"
+      ],
+      "predicted": "LIGHT_ON",
+      "confidence": 0.8648,
+      "correct": true
+    },
+    {
+      "file": "real_voice_light_on_016.wav",
+      "class": "light_on",
+      "transcript": "turn on lights",
+      "expected": [
+        "LIGHT_ON"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.7686,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_on_017.wav",
+      "class": "light_on",
+      "transcript": "turn on the lights",
+      "expected": [
+        "LIGHT_ON"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.5798,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_off_010.wav",
+      "class": "light_off",
+      "transcript": "lights off",
+      "expected": [
+        "LIGHT_OFF"
+      ],
+      "predicted": "LIGHT_ON",
+      "confidence": 0.8637,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_off_011.wav",
+      "class": "light_off",
+      "transcript": "turn off light",
+      "expected": [
+        "LIGHT_OFF"
+      ],
+      "predicted": "LIGHT_ON",
+      "confidence": 0.4416,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_off_012.wav",
+      "class": "light_off",
+      "transcript": "turn off lights",
+      "expected": [
+        "LIGHT_OFF"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.7787,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_off_013.wav",
+      "class": "light_off",
+      "transcript": "turn off the lights",
+      "expected": [
+        "LIGHT_OFF"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.7871,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_off_014.wav",
+      "class": "light_off",
+      "transcript": "lights off",
+      "expected": [
+        "LIGHT_OFF"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.4026,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_off_015.wav",
+      "class": "light_off",
+      "transcript": "turn off light",
+      "expected": [
+        "LIGHT_OFF"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.414,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_off_016.wav",
+      "class": "light_off",
+      "transcript": "turn off lights",
+      "expected": [
+        "LIGHT_OFF"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.4444,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_off_017.wav",
+      "class": "light_off",
+      "transcript": "turn off the lights",
+      "expected": [
+        "LIGHT_OFF"
+      ],
+      "predicted": "LIGHT_ON",
+      "confidence": 0.9159,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_011.wav",
+      "class": "play_music",
+      "transcript": "play music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "PLAY_MUSIC",
+      "confidence": 0.9421,
+      "correct": true
+    },
+    {
+      "file": "real_voice_play_music_012.wav",
+      "class": "play_music",
+      "transcript": "play some music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.797,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_013.wav",
+      "class": "play_music",
+      "transcript": "start playing music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "STOP",
+      "confidence": 0.6574,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_014.wav",
+      "class": "play_music",
+      "transcript": "play music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "PLAY_MUSIC",
+      "confidence": 0.9416,
+      "correct": true
+    },
+    {
+      "file": "real_voice_play_music_015.wav",
+      "class": "play_music",
+      "transcript": "play some music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.4781,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_016.wav",
+      "class": "play_music",
+      "transcript": "start playing music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "STOP",
+      "confidence": 0.7023,
+      "correct": false
+    },
+    {
+      "file": "real_voice_make_call_013.wav",
+      "class": "make_call",
+      "transcript": "call Dad",
+      "expected": [
+        "CALL"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.3617,
+      "correct": false
+    },
+    {
+      "file": "real_voice_make_call_014.wav",
+      "class": "make_call",
+      "transcript": "call John",
+      "expected": [
+        "CALL"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.2049,
+      "correct": false
+    },
+    {
+      "file": "real_voice_make_call_015.wav",
+      "class": "make_call",
+      "transcript": "call Mom",
+      "expected": [
+        "CALL"
+      ],
+      "predicted": "VOLUME_UP",
+      "confidence": 0.812,
+      "correct": false
+    },
+    {
+      "file": "real_voice_make_call_016.wav",
+      "class": "make_call",
+      "transcript": "call Wife",
+      "expected": [
+        "CALL"
+      ],
+      "predicted": "LIGHT_ON",
+      "confidence": 0.3316,
+      "correct": false
+    },
+    {
+      "file": "real_voice_make_call_017.wav",
+      "class": "make_call",
+      "transcript": "phone Dad",
+      "expected": [
+        "CALL"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.5617,
+      "correct": false
+    },
+    {
+      "file": "real_voice_make_call_018.wav",
+      "class": "make_call",
+      "transcript": "phone John",
+      "expected": [
+        "CALL"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.7427,
+      "correct": false
+    },
+    {
+      "file": "real_voice_make_call_019.wav",
+      "class": "make_call",
+      "transcript": "phone Mom",
+      "expected": [
+        "CALL"
+      ],
+      "predicted": "VOLUME_UP",
+      "confidence": 0.3184,
+      "correct": false
+    },
+    {
+      "file": "real_voice_make_call_020.wav",
+      "class": "make_call",
+      "transcript": "phone Wife",
+      "expected": [
+        "CALL"
+      ],
+      "predicted": "LIGHT_ON",
+      "confidence": 0.9151,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_026.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 10 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "LIGHT_ON",
+      "confidence": 0.6909,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_027.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 20 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "NEXT",
+      "confidence": 0.6018,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_028.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 30 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.6701,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_029.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 50 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.9219,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_030.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 75 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.7943,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_031.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 100 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "TIMER",
+      "confidence": 0.7251,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_032.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 10 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.7739,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_033.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 20 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "TIMER",
+      "confidence": 0.2628,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_034.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 30 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "TEMPERATURE",
+      "confidence": 0.6097,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_035.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 50 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.7444,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_036.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 75 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.7728,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_037.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 100 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.8764,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_038.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 10 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.9047,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_039.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 20 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "TEMPERATURE",
+      "confidence": 0.4337,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_040.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 30 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.3294,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_041.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 50 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.8504,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_042.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 75 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "TEMPERATURE",
+      "confidence": 0.3288,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_043.wav",
+      "class": "dim_lights",
+      "transcript": "dim lights to 100 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.7921,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_044.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 10 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.4827,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_045.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 20 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.3351,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_046.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 30 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.4152,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_047.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 50 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "MESSAGE",
+      "confidence": 0.4764,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_048.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 75 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "TIMER",
+      "confidence": 0.6362,
+      "correct": false
+    },
+    {
+      "file": "real_voice_dim_lights_049.wav",
+      "class": "dim_lights",
+      "transcript": "set brightness to 100 percent",
+      "expected": [
+        "BRIGHTNESS"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.518,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_017.wav",
+      "class": "play_music",
+      "transcript": "play music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.5904,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_018.wav",
+      "class": "play_music",
+      "transcript": "play some music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.7681,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_019.wav",
+      "class": "play_music",
+      "transcript": "start playing music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.8078,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_020.wav",
+      "class": "play_music",
+      "transcript": "play music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.4969,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_021.wav",
+      "class": "play_music",
+      "transcript": "play some music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.8956,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_022.wav",
+      "class": "play_music",
+      "transcript": "start playing music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.8194,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_023.wav",
+      "class": "play_music",
+      "transcript": "play music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "PLAY_MUSIC",
+      "confidence": 0.9202,
+      "correct": true
+    },
+    {
+      "file": "real_voice_play_music_024.wav",
+      "class": "play_music",
+      "transcript": "play some music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.7361,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_025.wav",
+      "class": "play_music",
+      "transcript": "start playing music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.9158,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_026.wav",
+      "class": "play_music",
+      "transcript": "play music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.8369,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_027.wav",
+      "class": "play_music",
+      "transcript": "play some music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.4847,
+      "correct": false
+    },
+    {
+      "file": "real_voice_play_music_028.wav",
+      "class": "play_music",
+      "transcript": "start playing music",
+      "expected": [
+        "PLAY_MUSIC"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.4365,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_weather_010.wav",
+      "class": "get_weather",
+      "transcript": "how is the weather",
+      "expected": [
+        "WEATHER"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.4926,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_weather_011.wav",
+      "class": "get_weather",
+      "transcript": "what is the weather today",
+      "expected": [
+        "WEATHER"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.5209,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_weather_012.wav",
+      "class": "get_weather",
+      "transcript": "what's the weather",
+      "expected": [
+        "WEATHER"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.5122,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_weather_013.wav",
+      "class": "get_weather",
+      "transcript": "how is the weather",
+      "expected": [
+        "WEATHER"
+      ],
+      "predicted": "WEATHER",
+      "confidence": 0.8696,
+      "correct": true
+    },
+    {
+      "file": "real_voice_get_weather_014.wav",
+      "class": "get_weather",
+      "transcript": "what is the weather today",
+      "expected": [
+        "WEATHER"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.366,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_weather_015.wav",
+      "class": "get_weather",
+      "transcript": "what's the weather",
+      "expected": [
+        "WEATHER"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.5624,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_weather_016.wav",
+      "class": "get_weather",
+      "transcript": "how is the weather",
+      "expected": [
+        "WEATHER"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.7701,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_weather_017.wav",
+      "class": "get_weather",
+      "transcript": "what is the weather today",
+      "expected": [
+        "WEATHER"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.8116,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_weather_018.wav",
+      "class": "get_weather",
+      "transcript": "what's the weather",
+      "expected": [
+        "WEATHER"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.8565,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_weather_019.wav",
+      "class": "get_weather",
+      "transcript": "how is the weather",
+      "expected": [
+        "WEATHER"
+      ],
+      "predicted": "PAUSE",
+      "confidence": 0.3745,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_weather_020.wav",
+      "class": "get_weather",
+      "transcript": "what is the weather today",
+      "expected": [
+        "WEATHER"
+      ],
+      "predicted": "WEATHER",
+      "confidence": 0.8616,
+      "correct": true
+    },
+    {
+      "file": "real_voice_get_weather_021.wav",
+      "class": "get_weather",
+      "transcript": "what's the weather",
+      "expected": [
+        "WEATHER"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.8124,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_off_018.wav",
+      "class": "light_off",
+      "transcript": "lights off",
+      "expected": [
+        "LIGHT_OFF"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.6809,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_off_019.wav",
+      "class": "light_off",
+      "transcript": "turn off light",
+      "expected": [
+        "LIGHT_OFF"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.4601,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_off_020.wav",
+      "class": "light_off",
+      "transcript": "turn off lights",
+      "expected": [
+        "LIGHT_OFF"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.6916,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_off_021.wav",
+      "class": "light_off",
+      "transcript": "turn off the lights",
+      "expected": [
+        "LIGHT_OFF"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.4671,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_on_018.wav",
+      "class": "light_on",
+      "transcript": "lights on",
+      "expected": [
+        "LIGHT_ON"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.6765,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_on_019.wav",
+      "class": "light_on",
+      "transcript": "turn on light",
+      "expected": [
+        "LIGHT_ON"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.5301,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_on_020.wav",
+      "class": "light_on",
+      "transcript": "turn on lights",
+      "expected": [
+        "LIGHT_ON"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.4471,
+      "correct": false
+    },
+    {
+      "file": "real_voice_light_on_021.wav",
+      "class": "light_on",
+      "transcript": "turn on the lights",
+      "expected": [
+        "LIGHT_ON"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.7024,
+      "correct": false
+    },
+    {
+      "file": "real_voice_media_control_013.wav",
+      "class": "media_control",
+      "transcript": "louder",
+      "expected": [
+        "NEXT",
+        "PAUSE",
+        "STOP",
+        "VOLUME_DOWN",
+        "VOLUME_UP"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.3666,
+      "correct": true
+    },
+    {
+      "file": "real_voice_media_control_014.wav",
+      "class": "media_control",
+      "transcript": "mute",
+      "expected": [
+        "NEXT",
+        "PAUSE",
+        "STOP",
+        "VOLUME_DOWN",
+        "VOLUME_UP"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.53,
+      "correct": true
+    },
+    {
+      "file": "real_voice_media_control_015.wav",
+      "class": "media_control",
+      "transcript": "next song",
+      "expected": [
+        "NEXT",
+        "PAUSE",
+        "STOP",
+        "VOLUME_DOWN",
+        "VOLUME_UP"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.4895,
+      "correct": false
+    },
+    {
+      "file": "real_voice_media_control_016.wav",
+      "class": "media_control",
+      "transcript": "pause",
+      "expected": [
+        "NEXT",
+        "PAUSE",
+        "STOP",
+        "VOLUME_DOWN",
+        "VOLUME_UP"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.7664,
+      "correct": true
+    },
+    {
+      "file": "real_voice_media_control_017.wav",
+      "class": "media_control",
+      "transcript": "skip",
+      "expected": [
+        "NEXT",
+        "PAUSE",
+        "STOP",
+        "VOLUME_DOWN",
+        "VOLUME_UP"
+      ],
+      "predicted": "TIME",
+      "confidence": 0.1609,
+      "correct": false
+    },
+    {
+      "file": "real_voice_media_control_018.wav",
+      "class": "media_control",
+      "transcript": "stop",
+      "expected": [
+        "NEXT",
+        "PAUSE",
+        "STOP",
+        "VOLUME_DOWN",
+        "VOLUME_UP"
+      ],
+      "predicted": "STOP",
+      "confidence": 0.7479,
+      "correct": true
+    },
+    {
+      "file": "real_voice_media_control_019.wav",
+      "class": "media_control",
+      "transcript": "volume down",
+      "expected": [
+        "NEXT",
+        "PAUSE",
+        "STOP",
+        "VOLUME_DOWN",
+        "VOLUME_UP"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.6194,
+      "correct": false
+    },
+    {
+      "file": "real_voice_media_control_020.wav",
+      "class": "media_control",
+      "transcript": "volume up",
+      "expected": [
+        "NEXT",
+        "PAUSE",
+        "STOP",
+        "VOLUME_DOWN",
+        "VOLUME_UP"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.7108,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_temperature_013.wav",
+      "class": "set_temperature",
+      "transcript": "set AC to 18 degrees",
+      "expected": [
+        "TEMPERATURE"
+      ],
+      "predicted": "TEMPERATURE",
+      "confidence": 0.9187,
+      "correct": true
+    },
+    {
+      "file": "real_voice_set_temperature_014.wav",
+      "class": "set_temperature",
+      "transcript": "set AC to 20 degrees",
+      "expected": [
+        "TEMPERATURE"
+      ],
+      "predicted": "BRIGHTNESS",
+      "confidence": 0.4335,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_temperature_015.wav",
+      "class": "set_temperature",
+      "transcript": "set AC to 22 degrees",
+      "expected": [
+        "TEMPERATURE"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.7244,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_temperature_016.wav",
+      "class": "set_temperature",
+      "transcript": "set AC to 25 degrees",
+      "expected": [
+        "TEMPERATURE"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.3958,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_temperature_017.wav",
+      "class": "set_temperature",
+      "transcript": "set temperature to 18 degrees",
+      "expected": [
+        "TEMPERATURE"
+      ],
+      "predicted": "BRIGHTNESS",
+      "confidence": 0.8792,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_temperature_018.wav",
+      "class": "set_temperature",
+      "transcript": "set temperature to 20 degrees",
+      "expected": [
+        "TEMPERATURE"
+      ],
+      "predicted": "CALL",
+      "confidence": 0.3908,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_temperature_019.wav",
+      "class": "set_temperature",
+      "transcript": "set temperature to 22 degrees",
+      "expected": [
+        "TEMPERATURE"
+      ],
+      "predicted": "BRIGHTNESS",
+      "confidence": 0.7383,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_temperature_020.wav",
+      "class": "set_temperature",
+      "transcript": "set temperature to 25 degrees",
+      "expected": [
+        "TEMPERATURE"
+      ],
+      "predicted": "TEMPERATURE",
+      "confidence": 0.3585,
+      "correct": true
+    },
+    {
+      "file": "real_voice_manage_reminders_017.wav",
+      "class": "manage_reminders",
+      "transcript": "remind me to check email",
+      "expected": [
+        "CREATE_REMINDER",
+        "LIST_REMINDERS"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.6144,
+      "correct": false
+    },
+    {
+      "file": "real_voice_manage_reminders_018.wav",
+      "class": "manage_reminders",
+      "transcript": "show reminders",
+      "expected": [
+        "CREATE_REMINDER",
+        "LIST_REMINDERS"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.6195,
+      "correct": false
+    },
+    {
+      "file": "real_voice_manage_reminders_019.wav",
+      "class": "manage_reminders",
+      "transcript": "what are my reminders",
+      "expected": [
+        "CREATE_REMINDER",
+        "LIST_REMINDERS"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.5473,
+      "correct": true
+    },
+    {
+      "file": "real_voice_set_alarm_015.wav",
+      "class": "set_alarm",
+      "transcript": "alarm for 6 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.7765,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_alarm_016.wav",
+      "class": "set_alarm",
+      "transcript": "alarm for 6:30 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "TIMER",
+      "confidence": 0.9205,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_alarm_017.wav",
+      "class": "set_alarm",
+      "transcript": "alarm for 7 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.8119,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_alarm_018.wav",
+      "class": "set_alarm",
+      "transcript": "alarm for 7:30 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "TIMER",
+      "confidence": 0.5047,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_alarm_019.wav",
+      "class": "set_alarm",
+      "transcript": "alarm for 8 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.444,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_alarm_020.wav",
+      "class": "set_alarm",
+      "transcript": "set an alarm for 6 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.757,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_alarm_021.wav",
+      "class": "set_alarm",
+      "transcript": "set an alarm for 6:30 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.3771,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_alarm_022.wav",
+      "class": "set_alarm",
+      "transcript": "set an alarm for 7 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "ALARM",
+      "confidence": 0.3712,
+      "correct": true
+    },
+    {
+      "file": "real_voice_set_alarm_023.wav",
+      "class": "set_alarm",
+      "transcript": "set an alarm for 7:30 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "ALARM",
+      "confidence": 0.3349,
+      "correct": true
+    },
+    {
+      "file": "real_voice_set_alarm_024.wav",
+      "class": "set_alarm",
+      "transcript": "set an alarm for 8 AM",
+      "expected": [
+        "ALARM"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.4039,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_time_016.wav",
+      "class": "get_time",
+      "transcript": "current time",
+      "expected": [
+        "TIME"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.5144,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_time_017.wav",
+      "class": "get_time",
+      "transcript": "tell me the time",
+      "expected": [
+        "TIME"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.7492,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_time_018.wav",
+      "class": "get_time",
+      "transcript": "what time is it",
+      "expected": [
+        "TIME"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.5808,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_time_019.wav",
+      "class": "get_time",
+      "transcript": "current time",
+      "expected": [
+        "TIME"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.5995,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_time_020.wav",
+      "class": "get_time",
+      "transcript": "tell me the time",
+      "expected": [
+        "TIME"
+      ],
+      "predicted": "VOLUME_DOWN",
+      "confidence": 0.6585,
+      "correct": false
+    },
+    {
+      "file": "real_voice_get_time_021.wav",
+      "class": "get_time",
+      "transcript": "what time is it",
+      "expected": [
+        "TIME"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.6952,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_timer_015.wav",
+      "class": "set_timer",
+      "transcript": "set a timer for 5 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "ALARM",
+      "confidence": 0.7505,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_timer_016.wav",
+      "class": "set_timer",
+      "transcript": "set a timer for 10 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.3906,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_timer_017.wav",
+      "class": "set_timer",
+      "transcript": "set a timer for 15 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "LIST_REMINDERS",
+      "confidence": 0.4696,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_timer_018.wav",
+      "class": "set_timer",
+      "transcript": "set a timer for 30 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "TIMER",
+      "confidence": 0.6146,
+      "correct": true
+    },
+    {
+      "file": "real_voice_set_timer_019.wav",
+      "class": "set_timer",
+      "transcript": "set a timer for 45 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "BRIGHTNESS",
+      "confidence": 0.626,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_timer_020.wav",
+      "class": "set_timer",
+      "transcript": "timer for 5 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "TIMER",
+      "confidence": 0.2859,
+      "correct": true
+    },
+    {
+      "file": "real_voice_set_timer_021.wav",
+      "class": "set_timer",
+      "transcript": "timer for 10 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "TIMER",
+      "confidence": 0.783,
+      "correct": true
+    },
+    {
+      "file": "real_voice_set_timer_022.wav",
+      "class": "set_timer",
+      "transcript": "timer for 15 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.4728,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_timer_023.wav",
+      "class": "set_timer",
+      "transcript": "timer for 30 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.5341,
+      "correct": false
+    },
+    {
+      "file": "real_voice_set_timer_024.wav",
+      "class": "set_timer",
+      "transcript": "timer for 45 minutes",
+      "expected": [
+        "TIMER"
+      ],
+      "predicted": "CREATE_REMINDER",
+      "confidence": 0.4135,
+      "correct": false
+    }
+  ]
+}

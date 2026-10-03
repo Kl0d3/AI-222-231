@@ -1,0 +1,363 @@
+{
+  "args": {
+    "epochs": 40,
+    "batch": 64,
+    "lr": 0.0005,
+    "weight_decay": 0.0001,
+    "device": "cuda",
+    "seed": 42,
+    "workers": 16,
+    "patience": 8,
+    "label_smoothing": 0.1,
+    "out": "models/crnn_ai231_42.pth"
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 2.3005,
+      "val_acc": 0.562,
+      "lr": 0.000499229333433282,
+      "elapsed_s": 15.0
+    },
+    {
+      "epoch": 2,
+      "train_loss": 1.4872,
+      "val_acc": 0.875,
+      "lr": 0.0004969220851487844,
+      "elapsed_s": 18.3
+    },
+    {
+      "epoch": 3,
+      "train_loss": 1.0638,
+      "val_acc": 0.9343,
+      "lr": 0.0004930924800994191,
+      "elapsed_s": 21.6
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.9114,
+      "val_acc": 0.9558,
+      "lr": 0.00048776412907378835,
+      "elapsed_s": 25.7
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.8423,
+      "val_acc": 0.9596,
+      "lr": 0.0004809698831278216,
+      "elapsed_s": 29.0
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.8009,
+      "val_acc": 0.9714,
+      "lr": 0.0004727516310470919,
+      "elapsed_s": 32.2
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.7568,
+      "val_acc": 0.9747,
+      "lr": 0.000463160041088523,
+      "elapsed_s": 35.5
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.7429,
+      "val_acc": 0.9725,
+      "lr": 0.0004522542485937368,
+      "elapsed_s": 38.8
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.7339,
+      "val_acc": 0.9774,
+      "lr": 0.0004401014914000077,
+      "elapsed_s": 41.8
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.7143,
+      "val_acc": 0.9763,
+      "lr": 0.0004267766952966368,
+      "elapsed_s": 44.8
+    },
+    {
+      "epoch": 11,
+      "train_loss": 0.7035,
+      "val_acc": 0.9779,
+      "lr": 0.0004123620120825459,
+      "elapsed_s": 47.8
+    },
+    {
+      "epoch": 12,
+      "train_loss": 0.6945,
+      "val_acc": 0.979,
+      "lr": 0.00039694631307311823,
+      "elapsed_s": 50.8
+    },
+    {
+      "epoch": 13,
+      "train_loss": 0.6912,
+      "val_acc": 0.979,
+      "lr": 0.0003806246411789871,
+      "elapsed_s": 53.9
+    },
+    {
+      "epoch": 14,
+      "train_loss": 0.6837,
+      "val_acc": 0.9871,
+      "lr": 0.0003634976249348866,
+      "elapsed_s": 56.9
+    },
+    {
+      "epoch": 15,
+      "train_loss": 0.6807,
+      "val_acc": 0.9855,
+      "lr": 0.00034567085809127237,
+      "elapsed_s": 60.0
+    },
+    {
+      "epoch": 16,
+      "train_loss": 0.677,
+      "val_acc": 0.9822,
+      "lr": 0.0003272542485937368,
+      "elapsed_s": 63.0
+    },
+    {
+      "epoch": 17,
+      "train_loss": 0.6674,
+      "val_acc": 0.9817,
+      "lr": 0.00030836134096397634,
+      "elapsed_s": 66.2
+    },
+    {
+      "epoch": 18,
+      "train_loss": 0.6608,
+      "val_acc": 0.9849,
+      "lr": 0.0002891086162600577,
+      "elapsed_s": 69.4
+    },
+    {
+      "epoch": 19,
+      "train_loss": 0.6603,
+      "val_acc": 0.9892,
+      "lr": 0.0002696147739319612,
+      "elapsed_s": 72.5
+    },
+    {
+      "epoch": 20,
+      "train_loss": 0.6561,
+      "val_acc": 0.9855,
+      "lr": 0.00024999999999999995,
+      "elapsed_s": 75.8
+    },
+    {
+      "epoch": 21,
+      "train_loss": 0.6482,
+      "val_acc": 0.9849,
+      "lr": 0.00023038522606803874,
+      "elapsed_s": 78.8
+    },
+    {
+      "epoch": 22,
+      "train_loss": 0.65,
+      "val_acc": 0.9881,
+      "lr": 0.0002108913837399423,
+      "elapsed_s": 81.9
+    },
+    {
+      "epoch": 23,
+      "train_loss": 0.6467,
+      "val_acc": 0.9865,
+      "lr": 0.0001916386590360236,
+      "elapsed_s": 85.0
+    },
+    {
+      "epoch": 24,
+      "train_loss": 0.6441,
+      "val_acc": 0.9914,
+      "lr": 0.0001727457514062631,
+      "elapsed_s": 88.0
+    },
+    {
+      "epoch": 25,
+      "train_loss": 0.6448,
+      "val_acc": 0.9903,
+      "lr": 0.00015432914190872753,
+      "elapsed_s": 91.1
+    },
+    {
+      "epoch": 26,
+      "train_loss": 0.6432,
+      "val_acc": 0.9898,
+      "lr": 0.00013650237506511326,
+      "elapsed_s": 94.1
+    },
+    {
+      "epoch": 27,
+      "train_loss": 0.6407,
+      "val_acc": 0.9892,
+      "lr": 0.00011937535882101275,
+      "elapsed_s": 97.2
+    },
+    {
+      "epoch": 28,
+      "train_loss": 0.6418,
+      "val_acc": 0.9876,
+      "lr": 0.0001030536869268817,
+      "elapsed_s": 100.2
+    },
+    {
+      "epoch": 29,
+      "train_loss": 0.6342,
+      "val_acc": 0.9892,
+      "lr": 8.763798791745408e-05,
+      "elapsed_s": 103.2
+    },
+    {
+      "epoch": 30,
+      "train_loss": 0.6393,
+      "val_acc": 0.9919,
+      "lr": 7.32233047033631e-05,
+      "elapsed_s": 106.2
+    },
+    {
+      "epoch": 31,
+      "train_loss": 0.6341,
+      "val_acc": 0.9898,
+      "lr": 5.9898508599992235e-05,
+      "elapsed_s": 109.3
+    },
+    {
+      "epoch": 32,
+      "train_loss": 0.6334,
+      "val_acc": 0.9892,
+      "lr": 4.7745751406263136e-05,
+      "elapsed_s": 112.3
+    },
+    {
+      "epoch": 33,
+      "train_loss": 0.6334,
+      "val_acc": 0.9919,
+      "lr": 3.683995891147693e-05,
+      "elapsed_s": 115.4
+    },
+    {
+      "epoch": 34,
+      "train_loss": 0.6317,
+      "val_acc": 0.9914,
+      "lr": 2.7248368952908038e-05,
+      "elapsed_s": 118.5
+    },
+    {
+      "epoch": 35,
+      "train_loss": 0.6336,
+      "val_acc": 0.9908,
+      "lr": 1.9030116872178306e-05,
+      "elapsed_s": 121.5
+    },
+    {
+      "epoch": 36,
+      "train_loss": 0.6316,
+      "val_acc": 0.9914,
+      "lr": 1.223587092621161e-05,
+      "elapsed_s": 124.6
+    },
+    {
+      "epoch": 37,
+      "train_loss": 0.6308,
+      "val_acc": 0.9908,
+      "lr": 6.907519900580857e-06,
+      "elapsed_s": 127.6
+    },
+    {
+      "epoch": 38,
+      "train_loss": 0.6334,
+      "val_acc": 0.9914,
+      "lr": 3.077914851215584e-06,
+      "elapsed_s": 130.7
+    }
+  ],
+  "best_val": 0.9919181034482759,
+  "final_val": 0.9919181034482759,
+  "final_test": 0.9820846905537459,
+  "test_per_intent": {
+    "ALARM": [
+      173,
+      175
+    ],
+    "BRIGHTNESS": [
+      180,
+      184
+    ],
+    "CALL": [
+      49,
+      49
+    ],
+    "PAUSE": [
+      54,
+      57
+    ],
+    "VOLUME_UP": [
+      57,
+      59
+    ],
+    "PLAY_MUSIC": [
+      57,
+      60
+    ],
+    "CREATE_REMINDER": [
+      180,
+      182
+    ],
+    "LIGHT_OFF": [
+      58,
+      59
+    ],
+    "LIGHT_ON": [
+      53,
+      55
+    ],
+    "LIST_REMINDERS": [
+      54,
+      58
+    ],
+    "MESSAGE": [
+      55,
+      55
+    ],
+    "NEXT": [
+      57,
+      57
+    ],
+    "STOP": [
+      54,
+      58
+    ],
+    "TEMPERATURE": [
+      180,
+      180
+    ],
+    "TIME": [
+      50,
+      50
+    ],
+    "WEATHER": [
+      50,
+      52
+    ],
+    "TIMER": [
+      171,
+      173
+    ],
+    "VOLUME_DOWN": [
+      50,
+      52
+    ],
+    "COLOR": [
+      227,
+      227
+    ]
+  }
+}

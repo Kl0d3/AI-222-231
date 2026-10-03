@@ -1,0 +1,87 @@
+{
+  "overall_acc": 0.865323675871435,
+  "n_test": 4418,
+  "per_intent": {
+    "PLAY_MUSIC": [
+      91,
+      141
+    ],
+    "WEATHER": [
+      99,
+      141
+    ],
+    "TIME": [
+      112,
+      141
+    ],
+    "LIGHT_ON": [
+      90,
+      141
+    ],
+    "LIGHT_OFF": [
+      87,
+      141
+    ],
+    "PAUSE": [
+      128,
+      141
+    ],
+    "STOP": [
+      125,
+      141
+    ],
+    "NEXT": [
+      126,
+      141
+    ],
+    "VOLUME_UP": [
+      80,
+      141
+    ],
+    "VOLUME_DOWN": [
+      105,
+      141
+    ],
+    "CALL": [
+      107,
+      141
+    ],
+    "MESSAGE": [
+      127,
+      141
+    ],
+    "LIST_REMINDERS": [
+      109,
+      141
+    ],
+    "TIMER": [
+      406,
+      423
+    ],
+    "ALARM": [
+      408,
+      423
+    ],
+    "TEMPERATURE": [
+      419,
+      423
+    ],
+    "BRIGHTNESS": [
+      406,
+      423
+    ],
+    "COLOR": [
+      381,
+      423
+    ],
+    "CREATE_REMINDER": [
+      414,
+      423
+    ],
+    "OUT_OF_SCOPE": [
+      3,
+      47
+    ]
+  },
+  "best_val_acc": 0.8670411985018727
+}

@@ -1,0 +1,75 @@
+================================================================
+CRNN on AI231/MEX2 19-intent  (seed=42, device=cuda)
+================================================================
+  train:  14677 clips
+  val  :   1856 clips
+  test :   1842 clips
+[train] CRNN params=988,851  (3.96 MB fp32)
+[train] conv out: tf=24 tm=10 feat=640
+[train] class weights: ALARM=1.00, BRIGH=1.00, CALL=1.00, COLOR=1.00, CREAT=1.00, LIGHT=1.00, LIGHT=1.00, LIST_=1.00, MESSA=1.00, NEXT=1.00, PAUSE=1.00, PLAY_=1.00, STOP=1.00, TEMPE=1.00, TIME=1.00, TIMER=1.00, VOLUM=1.00, VOLUM=1.00, WEATH=1.00
+ep   1  loss 2.3005  val 56.20%  lr 4.99e-04      15s
+ep   2  loss 1.4872  val 87.50%  lr 4.97e-04      18s
+ep   3  loss 1.0638  val 93.43%  lr 4.93e-04      22s
+ep   4  loss 0.9114  val 95.58%  lr 4.88e-04      26s
+ep   5  loss 0.8423  val 95.96%  lr 4.81e-04      29s
+ep   6  loss 0.8009  val 97.14%  lr 4.73e-04      32s
+ep   7  loss 0.7568  val 97.47%  lr 4.63e-04      36s
+ep   8  loss 0.7429  val 97.25%  lr 4.52e-04      39s
+ep   9  loss 0.7339  val 97.74%  lr 4.40e-04      42s
+ep  10  loss 0.7143  val 97.63%  lr 4.27e-04      45s
+ep  11  loss 0.7035  val 97.79%  lr 4.12e-04      48s
+ep  12  loss 0.6945  val 97.90%  lr 3.97e-04      51s
+ep  13  loss 0.6912  val 97.90%  lr 3.81e-04      54s
+ep  14  loss 0.6837  val 98.71%  lr 3.63e-04      57s
+ep  15  loss 0.6807  val 98.55%  lr 3.46e-04      60s
+ep  16  loss 0.6770  val 98.22%  lr 3.27e-04      63s
+ep  17  loss 0.6674  val 98.17%  lr 3.08e-04      66s
+ep  18  loss 0.6608  val 98.49%  lr 2.89e-04      69s
+ep  19  loss 0.6603  val 98.92%  lr 2.70e-04      73s
+ep  20  loss 0.6561  val 98.55%  lr 2.50e-04      76s
+ep  21  loss 0.6482  val 98.49%  lr 2.30e-04      79s
+ep  22  loss 0.6500  val 98.81%  lr 2.11e-04      82s
+ep  23  loss 0.6467  val 98.65%  lr 1.92e-04      85s
+ep  24  loss 0.6441  val 99.14%  lr 1.73e-04      88s
+ep  25  loss 0.6448  val 99.03%  lr 1.54e-04      91s
+ep  26  loss 0.6432  val 98.98%  lr 1.37e-04      94s
+ep  27  loss 0.6407  val 98.92%  lr 1.19e-04      97s
+ep  28  loss 0.6418  val 98.76%  lr 1.03e-04     100s
+ep  29  loss 0.6342  val 98.92%  lr 8.76e-05     103s
+ep  30  loss 0.6393  val 99.19%  lr 7.32e-05     106s
+ep  31  loss 0.6341  val 98.98%  lr 5.99e-05     109s
+ep  32  loss 0.6334  val 98.92%  lr 4.77e-05     112s
+ep  33  loss 0.6334  val 99.19%  lr 3.68e-05     115s
+ep  34  loss 0.6317  val 99.14%  lr 2.72e-05     119s
+ep  35  loss 0.6336  val 99.08%  lr 1.90e-05     122s
+ep  36  loss 0.6316  val 99.14%  lr 1.22e-05     125s
+ep  37  loss 0.6308  val 99.08%  lr 6.91e-06     128s
+ep  38  loss 0.6334  val 99.14%  lr 3.08e-06     131s
+[train] early stop @ ep 38 (best val 99.19% @ ep 30)
+
+================================================================
+BEST val 99.19% @ ep 30
+FINAL val 99.19%   TEST 98.21%  (1842 held-out clips, 10 unseen speakers)
+----------------------------------------------------------------
+intent                  test
+ALARM             173/ 175    98.9%
+BRIGHTNESS        180/ 184    97.8%
+CALL              49/  49   100.0%
+COLOR             227/ 227   100.0%
+CREATE_REMINDER   180/ 182    98.9%
+LIGHT_OFF         58/  59    98.3%
+LIGHT_ON          53/  55    96.4%
+LIST_REMINDERS    54/  58    93.1%
+MESSAGE           55/  55   100.0%
+NEXT              57/  57   100.0%
+PAUSE             54/  57    94.7%
+PLAY_MUSIC        57/  60    95.0%
+STOP              54/  58    93.1%
+TEMPERATURE       180/ 180   100.0%
+TIME              50/  50   100.0%
+TIMER             171/ 173    98.8%
+VOLUME_DOWN       50/  52    96.2%
+VOLUME_UP         57/  59    96.6%
+WEATHER           50/  52    96.2%
+================================================================
+[train] saved -> models/crnn_ai231_42.pth
