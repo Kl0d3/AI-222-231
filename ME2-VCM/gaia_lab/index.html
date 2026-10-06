@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gaia's Chamber · 3D Voice Lab</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{overflow:hidden;background:#000;font-family:'Segoe UI',system-ui,sans-serif;color:#e0e8f8}
+#canvas3d{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:1}
+/* HUD overlay */
+#hud{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10}
+#hud>*{pointer-events:auto}
+/* Top bar */
+#topbar{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:14px 24px;background:linear-gradient(180deg,rgba(8,12,24,.85) 0%,transparent 100%)}
+#topbar h1{font-size:17px;font-weight:700;letter-spacing:2px;color:#7dd3fc;text-shadow:0 0 20px rgba(125,211,252,.4)}
+#topbar h1 span{color:#475569;font-weight:400}
+#model-badge{font-size:11px;color:#94a3b8;background:rgba(30,41,59,.7);border:1px solid #334155;padding:5px 12px;border-radius:14px}
+/* Left panel — device states */
+#left-panel{position:absolute;left:20px;top:70px;width:240px;display:flex;flex-direction:column;gap:10px}
+.dev-card{background:rgba(15,23,42,.82);backdrop-filter:blur(12px);border:1px solid rgba(51,65,85,.6);border-radius:12px;padding:12px 14px;transition:border-color .3s,box-shadow .3s}
+.dev-card.active{border-color:rgba(125,211,252,.5);box-shadow:0 0 16px rgba(125,211,252,.15)}
+.dev-card h3{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:#64748b;margin-bottom:6px}
+.dev-card .val{font-size:15px;font-weight:600;color:#e2e8f0}
+.dev-card .val.on{color:#4ade80}
+.dev-card .val.off{color:#475569}
+/* Bottom center — mic + status */
+#bottom-bar{position:absolute;bottom:0;left:0;right:0;display:flex;flex-direction:column;align-items:center;padding:20px;gap:12px;background:linear-gradient(0deg,rgba(8,12,24,.9) 0%,transparent 100%)}
+#mic-btn{width:80px;height:80px;border-radius:50%;border:2px solid rgba(125,211,252,.4);background:radial-gradient(circle at 40% 35%,#1e3a5f,#0f172a);color:#7dd3fc;font-size:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;box-shadow:0 4px 24px rgba(125,211,252,.2)}
+#mic-btn:hover{transform:scale(1.05);box-shadow:0 4px 32px rgba(125,211,252,.35)}
+#mic-btn.listening{border-color:#f87171;color:#f87171;animation:micpulse 1.2s infinite;background:radial-gradient(circle at 40% 35%,#451a1a,#1a0f0f)}
+#mic-btn.wake{border-color:#4ade80;color:#4ade80;animation:wakepulse 1.6s infinite;background:radial-gradient(circle at 40% 35%,#14532d,#052e16)}
+@keyframes wakepulse{0%{box-shadow:0 0 0 0 rgba(74,222,128,.4)}70%{box-shadow:0 0 0 20px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
+@keyframes micpulse{0%{box-shadow:0 0 0 0 rgba(248,113,113,.4)}70%{box-shadow:0 0 0 20px rgba(248,113,113,0)}100%{box-shadow:0 0 0 0 rgba(248,113,113,0)}}
+#status-text{font-size:13px;color:#94a3b8;min-height:20px;text-align:center}
+#status-text b{color:#7dd3fc}
+#wake-transcript{font-size:11px;color:#4ade80;min-height:16px;text-align:center;opacity:.75;font-style:italic;margin-top:2px}
+/* Right panel — activity feed */
+#right-panel{position:absolute;right:20px;top:70px;width:260px;max-height:calc(100vh - 160px);display:flex;flex-direction:column;gap:8px}
+#right-panel h3{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:#64748b;padding:0 4px}
+#feed{display:flex;flex-direction:column;gap:5px;overflow-y:auto;max-height:calc(100vh - 200px)}
+#feed::-webkit-scrollbar{width:4px}
+#feed::-webkit-scrollbar-thumb{background:#334155;border-radius:2px}
+.feed-item{background:rgba(15,23,42,.75);border-left:3px solid #38bdf8;border-radius:0 8px 8px 0;padding:8px 10px;font-size:12px;color:#cbd5e1;animation:slideIn .3s ease}
+.feed-item .t{color:#64748b;font-size:10px;margin-right:6px}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+/* Prediction popup */
+#pred-popup{position:absolute;bottom:130px;left:50%;transform:translateX(-50%);background:rgba(15,23,42,.92);backdrop-filter:blur(16px);border:1px solid rgba(125,211,252,.3);border-radius:16px;padding:16px 24px;text-align:center;opacity:0;transition:opacity .3s,transform .3s;pointer-events:none}
+#pred-popup.show{opacity:1;transform:translateX(-50%) translateY(-10px)}
+#pred-popup .intent-name{font-size:20px;font-weight:700;color:#7dd3fc;margin-bottom:4px}
+#pred-popup .conf{font-size:12px;color:#94a3b8}
+/* Loading */
+#loading{position:fixed;top:0;left:0;width:100%;height:100%;background:#060a14;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;transition:opacity .6s}
+#loading.hide{opacity:0;pointer-events:none}
+#loading h2{font-size:22px;color:#7dd3fc;letter-spacing:3px;margin-bottom:12px}
+#loading p{font-size:13px;color:#64748b}
+.spinner{width:40px;height:40px;border:3px solid #1e293b;border-top-color:#38bdf8;border-radius:50%;animation:spin .8s linear infinite;margin-bottom:20px}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* Command cheat sheet — collapsible dropdown */
+#cmd-toggle{position:absolute;top:64px;right:20px;display:flex;align-items:center;gap:8px;background:rgba(15,23,42,.85);backdrop-filter:blur(12px);border:1px solid rgba(51,65,85,.6);border-radius:14px;padding:8px 14px;font-size:12px;color:#94a3b8;cursor:pointer;user-select:none;transition:all .2s;z-index:20}
+#cmd-toggle:hover{border-color:rgba(125,211,252,.5);color:#e2e8f0;box-shadow:0 0 16px rgba(125,211,252,.15)}
+#cmd-toggle .arrow{display:inline-block;transition:transform .25s;font-size:10px;color:#64748b}
+#cmd-toggle.open .arrow{transform:rotate(180deg)}
+#cmd-sheet{position:absolute;top:104px;right:20px;width:300px;max-height:calc(100vh - 220px);overflow-y:auto;background:rgba(10,15,28,.94);backdrop-filter:blur(16px);border:1px solid rgba(51,65,85,.7);border-radius:14px;padding:14px 16px;z-index:19;opacity:0;transform:translateY(-8px);pointer-events:none;transition:opacity .25s,transform .25s}
+#cmd-sheet.open{opacity:1;transform:translateY(0);pointer-events:auto}
+#cmd-sheet::-webkit-scrollbar{width:4px}
+#cmd-sheet::-webkit-scrollbar-thumb{background:#334155;border-radius:2px}
+#cmd-sheet h4{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:#64748b;margin:10px 0 6px}
+#cmd-sheet h4:first-child{margin-top:0}
+.cmd-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:5px 8px;border-radius:8px;font-size:12px;cursor:pointer;transition:background .15s}
+.cmd-row:hover{background:rgba(56,189,248,.12)}
+.cmd-row .say{color:#e2e8f0;font-style:italic}
+.cmd-row .tag{font-size:9px;color:#7dd3fc;background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.25);padding:2px 7px;border-radius:10px;white-space:nowrap}
+.cmd-hint{font-size:10px;color:#475569;margin-top:12px;padding-top:10px;border-top:1px solid rgba(51,65,85,.5);line-height:1.5}
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="spinner"></div>
+  <h2>GAIA'S CHAMBER</h2>
+  <p>Initializing 3D laboratory…</p>
+</div>
+
+<canvas id="canvas3d"></canvas>
+
+<div id="hud">
+  <div id="topbar">
+    <h1>GAIA'S CHAMBER <span>· 3D Voice Lab</span></h1>
+    <div id="model-badge">CRNN-HF-20 · 20 intents</div>
+  </div>
+
+    <!-- Voice response banner -->
+  <div id="voice-banner"><span class="vb-icon">🧐</span><span class="vb-text"></span></div>
+  <!-- Music chip -->
+  <div id="music-chip"><div class="eq"><span></span><span></span><span></span><span></span></div><div class="mt">No music</div></div>
+<div id="left-panel">
+    <div class="dev-card" id="card-lights">
+      <h3>💡 Ceiling Lights</h3>
+      <div class="val off" id="val-lights">OFF</div>
+    </div>
+    <div class="dev-card" id="card-temp">
+      <h3>🌡️ Climate</h3>
+      <div class="val" id="val-temp">—°C</div>
+    </div>
+    <div class="dev-card" id="card-media">
+      <h3>🔊 Speaker</h3>
+      <div class="val off" id="val-media">Stopped</div>
+    </div>
+    <div class="dev-card" id="card-volume">
+      <h3>📢 Volume</h3>
+      <div class="val" id="val-volume">50%</div>
+    </div>
+    <div class="dev-card" id="card-timers">
+      <h3>⏱️ Timers</h3>
+      <div class="val" id="val-timers">None</div>
+    </div>
+    <div class="dev-card" id="card-clock">
+      <h3>🕐 Clock</h3>
+      <div class="val" id="val-clock">--:--</div>
+    </div>
+  </div>
+
+  <div id="right-panel">
+    <h3>Activity Log</h3>
+    <div id="feed"></div>
+  </div>
+
+  <!-- Command cheat sheet — toggle + dropdown -->
+  <div id="cmd-toggle" title="Toggle command cheat sheet">
+    <span>📋 Commands</span><span class="arrow">▼</span>
+  </div>
+  <div id="cmd-sheet">
+    <h4>💡 Lights</h4>
+    <div class="cmd-row" data-intent="LIGHT_ON"><span class="say">"Turn on the lights"</span><span class="tag">LIGHT_ON</span></div>
+    <div class="cmd-row" data-intent="LIGHT_OFF"><span class="say">"Turn off the lights"</span><span class="tag">LIGHT_OFF</span></div>
+    <div class="cmd-row" data-intent="BRIGHTNESS"><span class="say">"Dim the lights"</span><span class="tag">BRIGHTNESS</span></div>
+    <div class="cmd-row" data-intent="COLOR"><span class="say">"Change the light color"</span><span class="tag">COLOR</span></div>
+    <h4>🌡️ Climate</h4>
+    <div class="cmd-row" data-intent="TEMPERATURE"><span class="say">"Set temperature to 24"</span><span class="tag">TEMPERATURE</span></div>
+    <h4>🔊 Media</h4>
+    <div class="cmd-row" data-intent="PLAY_MUSIC"><span class="say">"Play music"</span><span class="tag">PLAY_MUSIC</span></div>
+    <div class="cmd-row" data-intent="PAUSE"><span class="say">"Pause"</span><span class="tag">PAUSE</span></div>
+    <div class="cmd-row" data-intent="NEXT"><span class="say">"Next track"</span><span class="tag">NEXT</span></div>
+    <div class="cmd-row" data-intent="VOLUME_UP"><span class="say">"Volume up"</span><span class="tag">VOLUME_UP</span></div>
+    <div class="cmd-row" data-intent="VOLUME_DOWN"><span class="say">"Volume down"</span><span class="tag">VOLUME_DOWN</span></div>
+    <h4>⏰ Time &amp; Alerts</h4>
+    <div class="cmd-row" data-intent="TIMER"><span class="say">"Set a timer"</span><span class="tag">TIMER</span></div>
+    <div class="cmd-row" data-intent="ALARM"><span class="say">"Set an alarm"</span><span class="tag">ALARM</span></div>
+    <div class="cmd-row" data-intent="TIME"><span class="say">"What time is it?"</span><span class="tag">TIME</span></div>
+    <h4>📡 Other</h4>
+    <div class="cmd-row" data-intent="WEATHER"><span class="say">"What's the weather?"</span><span class="tag">WEATHER</span></div>
+    <div class="cmd-row" data-intent="CALL"><span class="say">"Call mom"</span><span class="tag">CALL</span></div>
+    <div class="cmd-row" data-intent="MESSAGE"><span class="say">"Send a message"</span><span class="tag">MESSAGE</span></div>
+    <div class="cmd-row" data-intent="CREATE_REMINDER"><span class="say">"Remind me to…"</span><span class="tag">REMINDER</span></div>
+    <div class="cmd-row" data-intent="LIST_REMINDERS"><span class="say">"List my reminders"</span><span class="tag">REMINDERS</span></div>
+    <div class="cmd-hint">💡 Tip: Click any row to fire the command instantly (no mic needed). Or tap the 🎤 mic and speak naturally.</div>
+  </div>
+
+  <div id="pred-popup">
+    <div class="intent-name" id="pred-name"></div>
+    <div class="conf" id="pred-conf"></div>
+  </div>
+
+  <div id="bottom-bar">
+    <div id="status-text">🟢 Always listening — say <b>"Hey Gaia"</b></div>
+    <div id="wake-transcript"></div>
+    <button id="mic-btn" title="Pause / resume always-on listening">🎤</button>
+  </div>
+</div>
+
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+
+// ─── Scene Setup ───────────────────────────────────────────────────────
+const canvas = document.getElementById('canvas3d');
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.9;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x04060a); // near-black when lights off
+scene.fog = new THREE.FogExp2(0x04060a, 0.02);
+const bgLit = new THREE.Color(0xe8edf4);
+const bgDark = new THREE.Color(0x04060a);
+const fogLit = new THREE.Color(0xdde4ee);
+const fogDark = new THREE.Color(0x04060a);
+
+const camera = new THREE.PerspectiveCamera(55, window.innerWidth/window.innerHeight, 0.1, 100);
+camera.position.set(6, 4.5, 8);
+
+const controls = new OrbitControls(camera, canvas);
+controls.target.set(0, 1.5, 0);
+controls.enableDamping = true;
+controls.dampingFactor = 0.06;
+controls.maxPolarAngle = Math.PI/2 - 0.05;
+controls.minDistance = 3;
+controls.maxDistance = 18;
+controls.update();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ─── Room Geometry ─────────────────────────────────────────────────────
+const ROOM_W = 14, ROOM_D = 12, ROOM_H = 5;
+
+// ─── Procedural clean tile floor texture ──────────────────────
+function makeTileTexture(){
+  const S = 512;                       // 4x4 tiles per texture repeat unit
+  const cv = document.createElement('canvas');
+  cv.width = cv.height = S;
+  const ctx = cv.getContext('2d');
+  const n = 4, ts = S/n;
+  // tile bodies — very light cool white with subtle variation
+  for(let y=0;y<n;y++){
+    for(let x=0;x<n;x++){
+      const shade = 236 + Math.floor(Math.random()*10);
+      ctx.fillStyle = `rgb(${shade},${shade+2},${Math.min(255,shade+6)})`;
+      ctx.fillRect(x*ts, y*ts, ts, ts);
+      // faint inner highlight (glossy tile)
+      const g = ctx.createLinearGradient(x*ts, y*ts, x*ts+ts, y*ts+ts);
+      g.addColorStop(0,'rgba(255,255,255,0.35)');
+      g.addColorStop(0.5,'rgba(255,255,255,0)');
+      g.addColorStop(1,'rgba(180,195,215,0.12)');
+      ctx.fillStyle = g;
+      ctx.fillRect(x*ts, y*ts, ts, ts);
+    }
+  }
+  // grout lines
+  ctx.strokeStyle = 'rgba(150,165,190,0.9)';
+  ctx.lineWidth = 3;
+  for(let i=0;i<=n;i++){
+    ctx.beginPath(); ctx.moveTo(i*ts, 0); ctx.lineTo(i*ts, S); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, i*ts); ctx.lineTo(S, i*ts); ctx.stroke();
+  }
+  const tex = new THREE.CanvasTexture(cv);
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  tex.repeat.set(ROOM_W/4, ROOM_D/4);   // 1m tiles
+  tex.anisotropy = 8;
+  return tex;
+}
+const tileTex = makeTileTexture();
+
+// Floor — clean white tile finish
+const floorGeo = new THREE.PlaneGeometry(ROOM_W, ROOM_D);
+const floorMat = new THREE.MeshStandardMaterial({map:tileTex, color:0xffffff, roughness:0.25, metalness:0.08});
+const floor = new THREE.Mesh(floorGeo, floorMat);
+floor.rotation.x = -Math.PI/2;
+floor.receiveShadow = true;
+scene.add(floor);
+
+// Walls — bright white lab panels
+const wallMat = new THREE.MeshStandardMaterial({color:0xf2f5fa, roughness:0.9, metalness:0.02, side:THREE.BackSide});
+// Back wall
+const backWall = new THREE.Mesh(new THREE.PlaneGeometry(ROOM_W, ROOM_H), wallMat.clone());
+backWall.position.set(0, ROOM_H/2, -ROOM_D/2);
+backWall.receiveShadow = true;
+scene.add(backWall);
+// Left wall
+const leftWall = new THREE.Mesh(new THREE.PlaneGeometry(ROOM_D, ROOM_H), wallMat.clone());
+leftWall.rotation.y = Math.PI/2;
+leftWall.position.set(-ROOM_W/2, ROOM_H/2, 0);
+leftWall.receiveShadow = true;
+scene.add(leftWall);
+// Right wall
+const rightWall = new THREE.Mesh(new THREE.PlaneGeometry(ROOM_D, ROOM_H), wallMat.clone());
+rightWall.rotation.y = -Math.PI/2;
+rightWall.position.set(ROOM_W/2, ROOM_H/2, 0);
+rightWall.receiveShadow = true;
+scene.add(rightWall);
+// Ceiling
+const ceilMat = new THREE.MeshStandardMaterial({color:0xeef1f6, roughness:0.95});
+const ceiling = new THREE.Mesh(new THREE.PlaneGeometry(ROOM_W, ROOM_D), ceilMat);
+ceiling.rotation.x = Math.PI/2;
+ceiling.position.y = ROOM_H;
+scene.add(ceiling);
+
+// Wall panels (decorative)
+for(let i = 0; i < 5; i++){
+  const panel = new THREE.Mesh(
+    new THREE.BoxGeometry(2.2, 1.6, 0.05),
+    new THREE.MeshStandardMaterial({color:0xdde4ee, roughness:0.5, metalness:0.3, emissive:0x9fb4d8, emissiveIntensity:0.15})
+  );
+  panel.position.set(-5.5 + i*2.8, 2.2, -ROOM_D/2 + 0.03);
+  scene.add(panel);
+}
+
+// ─── Ceiling Lights (3 fixtures) ───────────────────────────────────────
+const lightFixtures = [];
+const lightPositions = [[-3, ROOM_H-0.15, -2], [0, ROOM_H-0.15, -2], [3, ROOM_H-0.15, -2]];
+let lightsOn = false;
+let lightIntensity = 1.0;
+
+lightPositions.forEach((pos, i) => {
+  // Fixture housing
+  const housing = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.3, 0.35, 0.12, 16),
+    new THREE.MeshStandardMaterial({color:0xb9c2d0, metalness:0.8, roughness:0.3})
+  );
+  housing.position.set(...pos);
+  scene.add(housing);
+  // Diffuser (glows when on) — bright white
+  const diffuser = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.28, 0.28, 0.04, 16),
+    new THREE.MeshStandardMaterial({color:0xffffff, emissive:0xfff8ea, emissiveIntensity:0, transparent:true, opacity:0.95})
+  );
+  diffuser.position.set(pos[0], pos[1]-0.08, pos[2]);
+  scene.add(diffuser);
+  // Point light — bright white lab lighting
+  const pl = new THREE.PointLight(0xfff8ea, 0, 20, 1.2);
+  pl.position.set(pos[0], pos[1]-0.3, pos[2]);
+  pl.castShadow = true;
+  pl.shadow.mapSize.set(512, 512);
+  scene.add(pl);
+  lightFixtures.push({housing, diffuser, light:pl});
+});
+
+// ─── Central Lab Table ─────────────────────────────────────────────────
+const tableGroup = new THREE.Group();
+// Table top
+const tableTop = new THREE.Mesh(
+  new THREE.BoxGeometry(4, 0.12, 2),
+  new THREE.MeshStandardMaterial({color:0xcfd6e2, roughness:0.35, metalness:0.4})
+);
+tableTop.position.y = 1.0;
+tableTop.castShadow = true;
+tableTop.receiveShadow = true;
+tableGroup.add(tableTop);
+// Legs
+[[-1.8,-0.8],[1.8,-0.8],[-1.8,0.8],[1.8,0.8]].forEach(([x,z])=>{
+  const leg = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.05, 0.05, 1.0, 8),
+    new THREE.MeshStandardMaterial({color:0xa8b2c4, metalness:0.7, roughness:0.3})
+  );
+  leg.position.set(x, 0.5, z);
+  leg.castShadow = true;
+  tableGroup.add(leg);
+});
+tableGroup.position.set(0, 0, -1);
+scene.add(tableGroup);
+
+// ─── Monitor on Table ──────────────────────────────────────────────────
+const monitorGroup = new THREE.Group();
+const monStand = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.06, 0.12, 0.3, 8),
+  new THREE.MeshStandardMaterial({color:0x333f55, metalness:0.6})
+);
+monStand.position.y = 0.15;
+monitorGroup.add(monStand);
+const monScreen = new THREE.Mesh(
+  new THREE.BoxGeometry(1.2, 0.75, 0.04),
+  new THREE.MeshStandardMaterial({color:0x111827, emissive:0x1a4a7a, emissiveIntensity:0.4, roughness:0.2, metalness:0.5})
+);
+monScreen.position.y = 0.75;
+monitorGroup.add(monScreen);
+// Screen glow plane
+const screenGlow = new THREE.Mesh(
+  new THREE.PlaneGeometry(1.1, 0.65),
+  new THREE.MeshBasicMaterial({color:0x2288cc, transparent:true, opacity:0.15})
+);
+screenGlow.position.set(0, 0.75, 0.025);
+monitorGroup.add(screenGlow);
+monitorGroup.position.set(-0.8, 1.06, -1.2);
+scene.add(monitorGroup);
+
+// ─── Speaker / Radio (on table) ────────────────────────────────────────
+const speakerGroup = new THREE.Group();
+// Body
+const spkBody = new THREE.Mesh(
+  new THREE.BoxGeometry(0.5, 0.65, 0.35),
+  new THREE.MeshStandardMaterial({color:0x1e293b, roughness:0.5, metalness:0.4})
+);
+spkBody.castShadow = true;
+speakerGroup.add(spkBody);
+// Speaker cone (front)
+const spkCone = new THREE.Mesh(
+  new THREE.CircleGeometry(0.15, 24),
+  new THREE.MeshStandardMaterial({color:0x0f172a, roughness:0.8})
+);
+spkCone.position.set(0, 0.05, 0.176);
+speakerGroup.add(spkCone);
+// Tweeter
+const spkTw = new THREE.Mesh(
+  new THREE.CircleGeometry(0.06, 16),
+  new THREE.MeshStandardMaterial({color:0x334155, metalness:0.6})
+);
+spkTw.position.set(0, 0.22, 0.176);
+speakerGroup.add(spkTw);
+// LED indicator
+const spkLED = new THREE.Mesh(
+  new THREE.SphereGeometry(0.02, 8, 8),
+  new THREE.MeshStandardMaterial({color:0x22c55e, emissive:0x22c55e, emissiveIntensity:0})
+);
+spkLED.position.set(0.18, -0.22, 0.176);
+speakerGroup.add(spkLED);
+// Sound wave rings (animated when playing)
+const waveRings = [];
+for(let i = 0; i < 3; i++){
+  const ring = new THREE.Mesh(
+    new THREE.RingGeometry(0.2 + i*0.12, 0.22 + i*0.12, 32),
+    new THREE.MeshBasicMaterial({color:0x38bdf8, transparent:true, opacity:0, side:THREE.DoubleSide})
+  );
+  ring.position.set(0, 0.05, 0.18);
+  speakerGroup.add(ring);
+  waveRings.push(ring);
+}
+speakerGroup.position.set(1.2, 1.38, -1.2);
+scene.add(speakerGroup);
+
+// ─── Thermostat Unit (wall-mounted, left wall) ─────────────────────────
+const thermoGroup = new THREE.Group();
+const thermoBody = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.3, 0.3, 0.08, 32),
+  new THREE.MeshStandardMaterial({color:0x1e293b, roughness:0.4, metalness:0.5})
+);
+thermoBody.rotation.z = Math.PI/2;
+thermoGroup.add(thermoBody);
+// Display ring
+const thermoRing = new THREE.Mesh(
+  new THREE.TorusGeometry(0.22, 0.025, 8, 48),
+  new THREE.MeshStandardMaterial({color:0x38bdf8, emissive:0x38bdf8, emissiveIntensity:0.5})
+);
+thermoRing.position.x = 0.045;
+thermoGroup.add(thermoRing);
+// Center display
+const thermoDisp = new THREE.Mesh(
+  new THREE.CircleGeometry(0.18, 32),
+  new THREE.MeshStandardMaterial({color:0x0f172a, emissive:0x1a3a5a, emissiveIntensity:0.6})
+);
+thermoDisp.position.x = 0.045;
+thermoDisp.rotation.y = Math.PI/2;
+thermoGroup.add(thermoDisp);
+thermoGroup.position.set(-ROOM_W/2 + 0.06, 2.0, -1);
+scene.add(thermoGroup);
+
+// ─── Plant (corner decoration) ─────────────────────────────────────────
+function makePlant(x, z){
+  const g = new THREE.Group();
+  const pot = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.18, 0.14, 0.25, 12),
+    new THREE.MeshStandardMaterial({color:0x8b5e3c, roughness:0.8})
+  );
+  pot.position.y = 0.125;
+  pot.castShadow = true;
+  g.add(pot);
+  // Leaves (simple spheres)
+  for(let i = 0; i < 5; i++){
+    const leaf = new THREE.Mesh(
+      new THREE.SphereGeometry(0.1 + Math.random()*0.06, 8, 6),
+      new THREE.MeshStandardMaterial({color:0x2d6b3f, roughness:0.7})
+    );
+    leaf.position.set((Math.random()-0.5)*0.2, 0.3 + Math.random()*0.2, (Math.random()-0.5)*0.2);
+    leaf.scale.y = 0.7;
+    g.add(leaf);
+  }
+  g.position.set(x, 0, z);
+  scene.add(g);
+}
+makePlant(-5.5, -4.5);
+makePlant(5.5, -4.5);
+makePlant(-5.5, 4.0);
+
+// ─── Coffee Mug on table ───────────────────────────────────────────────
+const mug = new THREE.Group();
+const mugBody = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.07, 0.06, 0.12, 12),
+  new THREE.MeshStandardMaterial({color:0xdc2626, roughness:0.5})
+);
+mugBody.position.y = 0.06;
+mug.add(mugBody);
+const mugHandle = new THREE.Mesh(
+  new THREE.TorusGeometry(0.04, 0.012, 8, 16, Math.PI),
+  new THREE.MeshStandardMaterial({color:0xdc2626, roughness:0.5})
+);
+mugHandle.position.set(0.07, 0.06, 0);
+mugHandle.rotation.z = -Math.PI/2;
+mug.add(mugHandle);
+mug.position.set(0.3, 1.06, -0.6);
+scene.add(mug);
+
+// ─── Books stack ───────────────────────────────────────────────────────
+const bookColors = [0x3b82f6, 0xef4444, 0x22c55e];
+bookColors.forEach((c, i) => {
+  const book = new THREE.Mesh(
+    new THREE.BoxGeometry(0.35, 0.04, 0.25),
+    new THREE.MeshStandardMaterial({color:c, roughness:0.7})
+  );
+  book.position.set(-1.5, 1.06 + i*0.04, -0.5);
+  book.rotation.y = (i-1)*0.15;
+  book.castShadow = true;
+  scene.add(book);
+});
+
+// ─── Ambient + fill lighting ───────────────────────────────────────────
+const ambient = new THREE.AmbientLight(0xffffff, 0.04); // faint floor so the room isn't pitch black
+scene.add(ambient);
+const hemi = new THREE.HemisphereLight(0xffffff, 0xcfd8e6, 0.0);
+scene.add(hemi);
+// Key light only shines when the ceiling fixtures are on
+const keyLight = new THREE.DirectionalLight(0xffffff, 0.0);
+keyLight.position.set(4, 6, 5);
+scene.add(keyLight);
+
+// ─── Music player (royalty-free ambient loop) + spoken voice ───
+let musicAudio = null;
+let musicWasPlaying = false;
+function ensureMusic(){
+  if(!musicAudio){
+    musicAudio = new Audio('/static/music.wav');
+    musicAudio.loop = true;
+    musicAudio.preload = 'auto';
+  }
+  return musicAudio;
+}
+function syncMusicChip(){
+  const chip = document.getElementById('music-chip');
+  const mt = chip.querySelector('.mt');
+  if(state.media_playing){
+    chip.classList.add('playing');
+    mt.textContent = state.media_track || 'Music';
+  }else{
+    chip.classList.remove('playing');
+    mt.textContent = 'No music';
+  }
+}
+function startMusic(){
+  const a = ensureMusic();
+  // BUGFIX: cap music at 35% volume. At the default 50% the music bleeds
+  // into the mic and Chrome's SpeechRecognition transcribes the music as
+  // garbage, drowning out "hey gaia." 35% is loud enough to hear but quiet
+  // enough that the mic still picks up the user's voice clearly.
+  a.volume = Math.max(0, Math.min(0.35, state.volume/100));
+  a.currentTime = 0;
+  a.play().catch(()=>{});
+}
+function stopMusic(){
+  if(musicAudio){ try{ musicAudio.pause(); musicAudio.currentTime = 0; }catch(e){} }
+}
+function setMusicVolume(){
+  // Same 35% cap as startMusic() — keeps music from drowning the mic
+  if(musicAudio) musicAudio.volume = Math.max(0, Math.min(0.35, state.volume/100));
+}
+let voiceBannerTimer = null;
+// TTS playback state — used to gate wake-word re-arm so the ASR doesn't
+// pick up Gaia's own voice and wedge the recognizer.
+let ttsPlaying = false;
+
+function speak(text){
+  if(!text) return;
+  const banner = document.getElementById('voice-banner');
+  if(banner){
+    banner.querySelector('.vb-text').textContent = text;
+    banner.classList.add('show');
+    clearTimeout(voiceBannerTimer);
+    voiceBannerTimer = setTimeout(()=>banner.classList.remove('show'), 3200);
+  }
+  try{
+    if('speechSynthesis' in window){
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.rate = 1.05; u.pitch = 1.1; u.volume = 1.0;
+      const voices = window.speechSynthesis.getVoices();
+      const pref = voices.find(v=>/en[-_]?(US|GB)/i.test(v.lang) && /female|samantha|zira|google us/i.test(v.name))
+                 || voices.find(v=>/^en/i.test(v.lang));
+      if(pref) u.voice = pref;
+      ttsPlaying = true;
+      u.onend = ()=>{ ttsPlaying = false; };
+      u.onerror = ()=>{ ttsPlaying = false; };
+      window.speechSynthesis.speak(u);
+      // Safety: if onend never fires (Chrome bug), force-clear after 8s
+      setTimeout(()=>{ ttsPlaying = false; }, 8000);
+    }
+  }catch(e){ ttsPlaying = false; }
+}
+if('speechSynthesis' in window){ try{ window.speechSynthesis.getVoices(); }catch(e){} }
+
+// ─── State tracking ────────────────────────────────────────────────────
+let state = {
+  lights_on: false,
+  brightness: 100,
+  temperature: 22,
+  setpoint: null,
+  _temp_confirmed: false,
+  media_playing: false,
+  volume: 50,
+  timers: {}
+};
+let mediaWavePhase = 0;
+let lightTransition = {current: 0, target: 0};
+
+// ─── Apply state to 3D scene ───────────────────────────────────────────
+function applyState(s){
+  state = {...state, ...s};
+  // Trust the server: it tells us whether a real setpoint was spoken.
+  if(s && '_temp_confirmed' in s){ state._temp_confirmed = !!s._temp_confirmed; }
+
+  // Drive the music player from state (idempotent)
+  if(state.media_playing && !musicWasPlaying){ startMusic(); }
+  else if(!state.media_playing && musicWasPlaying){ stopMusic(); }
+  musicWasPlaying = !!state.media_playing;
+  setMusicVolume();
+  syncMusicChip();
+  
+  // Lights
+  lightTransition.target = state.lights_on ? (state.brightness/100) : 0;
+  
+  // Update HUD cards
+  const vl = document.getElementById('val-lights');
+  const cl = document.getElementById('card-lights');
+  if(state.lights_on){
+    vl.textContent = `ON · ${state.brightness}%`;
+    vl.className = 'val on';
+    cl.classList.add('active');
+  } else {
+    vl.textContent = 'OFF';
+    vl.className = 'val off';
+    cl.classList.remove('active');
+  }
+  
+  const vt = document.getElementById('val-temp');
+  // Show "—" until a real setpoint has been spoken — never invent 22°.
+  if(state._temp_confirmed){
+    vt.textContent = `${state.temperature}°C → ${state.setpoint}°C`;
+    vt.title = '';
+  } else {
+    vt.textContent = '—°C';
+    vt.title = 'No setpoint yet — say “set temperature to 24”';
+  }
+  document.getElementById('card-temp').classList.toggle('active', !!state._temp_confirmed && Math.abs(state.temperature - state.setpoint) > 0.5);
+  
+  const vm = document.getElementById('val-media');
+  const cm = document.getElementById('card-media');
+  if(state.media_playing){
+    vm.textContent = '▶ Playing';
+    vm.className = 'val on';
+    cm.classList.add('active');
+  } else {
+    vm.textContent = 'Stopped';
+    vm.className = 'val off';
+    cm.classList.remove('active');
+  }
+  
+  document.getElementById('val-volume').textContent = `${state.volume}%`;
+  
+  const timerKeys = Object.keys(state.timers||{}).filter(k => state.timers[k].active);
+  const vti = document.getElementById('val-timers');
+  vti.textContent = timerKeys.length ? `${timerKeys.length} active` : 'None';
+  document.getElementById('card-timers').classList.toggle('active', timerKeys.length > 0);
+}
+
+// ─── Poll state ────────────────────────────────────────────────────────
+async function pollState(){
+  try{
+    const r = await fetch('/api/state');
+    const d = await r.json();
+    applyState(d);
+  }catch(e){}
+}
+// Reset the lab to pristine state on every page open (lights off, music off…)
+async function resetLab(){
+  try{
+    const r = await fetch('/api/reset', {method:'POST'});
+    const d = await r.json();
+    if(d.state) applyState(d.state);
+    lightTransition.current = 0;  // snap 3D lights to off immediately
+    addFeed('🔄 Lab reset — ready for a fresh session', '');
+  }catch(e){}
+}
+resetLab();
+pollState();
+setInterval(pollState, 2000);
+// Live clock — always the actual local time, updated every second
+(function tickClock(){
+  const el = document.getElementById('val-clock');
+  if(!el) return;
+  const now = new Date();
+  let h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
+  const ap = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;
+  el.textContent = `${h}:${String(m).padStart(2,'0')} ${ap}`;
+  el.title = now.toLocaleDateString(undefined, {weekday:'long', year:'numeric', month:'short', day:'numeric'}) + ' · ' + now.toLocaleTimeString();
+  setTimeout(tickClock, 1000);
+})();
+
+// ─── Activity feed ─────────────────────────────────────────────────────
+function addFeed(msg, time){
+  const feed = document.getElementById('feed');
+  const div = document.createElement('div');
+  div.className = 'feed-item';
+  div.innerHTML = `<span class="t">${time||''}</span>${msg}`;
+  feed.prepend(div);
+  while(feed.children.length > 20) feed.lastChild.remove();
+}
+
+// ─── Prediction popup ──────────────────────────────────────────────────
+// ─── Cute capture beep (two rising notes) ────────────────────────────
+function playBeep(){
+  try{
+    const ctx = audioCtx || (audioCtx = new AudioContext());
+    if(ctx.state === 'suspended') ctx.resume();
+    const t0 = ctx.currentTime;
+    [[880, 0, 0.09], [1318.5, 0.09, 0.12]].forEach(([freq, off, dur])=>{
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, t0 + off);
+      g.gain.exponentialRampToValueAtTime(0.25, t0 + off + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + off + dur);
+      o.connect(g).connect(ctx.destination);
+      o.start(t0 + off);
+      o.stop(t0 + off + dur + 0.02);
+    });
+  }catch(e){ /* audio blocked — ignore */ }
+}
+
+// Wake-word confirmation — higher triple chirp, distinct from the capture beep
+function playWakeBeep(){
+  try{
+    const ctx = audioCtx || (audioCtx = new AudioContext());
+    if(ctx.state === 'suspended') ctx.resume();
+    const t0 = ctx.currentTime;
+    [[1046.5, 0, 0.08], [1318.5, 0.08, 0.08], [1568, 0.16, 0.14]].forEach(([freq, off, dur])=>{
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, t0 + off);
+      g.gain.exponentialRampToValueAtTime(0.3, t0 + off + 0.012);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + off + dur);
+      o.connect(g).connect(ctx.destination);
+      o.start(t0 + off);
+      o.stop(t0 + off + dur + 0.02);
+    });
+  }catch(e){ /* audio blocked — ignore */ }
+}
+
+let popupTimer = null;
+// Friendly label for the intent that was ACTUALLY executed (device vocab).
+// The raw model class (PLAY_MUSIC, LIGHT_ON, ...) is shown smaller underneath.
+function friendlyIntent(deviceIntent, modelIntent){
+  const d = (deviceIntent || '').replace(/_/g,' ');
+  switch(d){
+    case 'play_music': return 'Play music';
+    case 'media_control': return 'Media control';
+    case 'light_on': return 'Lights on';
+    case 'light_off': return 'Lights off';
+    case 'dim_lights': return 'Dim lights';
+    case 'set_temperature': return 'Set temperature';
+    case 'set_alarm': return 'Set alarm';
+    case 'set_timer': return 'Set timer';
+    case 'get_time': return 'Get time';
+    case 'get_weather': return 'Get weather';
+    case 'make_call': return 'Make call';
+    case 'manage_reminders': return 'Reminders';
+    default:
+      return (modelIntent || d || '?').replace(/_/g,' ').toUpperCase();
+  }
+}
+
+function showPrediction(intent, conf, deviceIntent){
+  const pop = document.getElementById('pred-popup');
+  const label = deviceIntent ? friendlyIntent(deviceIntent, intent)
+                             : intent.replace(/_/g,' ').toUpperCase();
+  document.getElementById('pred-name').textContent = label;
+  document.getElementById('pred-conf').textContent = `Confidence: ${(conf*100).toFixed(1)}%`;
+  pop.classList.add('show');
+  clearTimeout(popupTimer);
+  popupTimer = setTimeout(()=>pop.classList.remove('show'), 3000);
+}
+
+// ─── Mic recording ─────────────────────────────────────────────────────
+// ── Wake word: "Hey Gaia" (browser-side, Option A) ─────────────────────────
+// IDLE → (mic on, green ring) → WAKE_DETECTED → 3s command → ACTION → IDLE
+// The lab's brightness is NEVER touched here — it follows the light state only.
+function rms(buf){
+  let s = 0;
+  for(let i = 0; i < buf.length; i++) s += buf[i]*buf[i];
+  return Math.sqrt(s / buf.length);
+}
+
+function armWakeWindow(){
+  wakeArmed = true;
+  wakeWindowStart = performance.now();
+  clearTimeout(wakeSilenceTimer);
+  wakeSilenceTimer = setTimeout(()=>{
+    if(wakeArmed && performance.now() - wakeWindowStart >= WAKE_WINDOW_MS){
+      wakeArmed = false;
+      statusText.innerHTML = 'No command heard — listening again…';
+      addFeed('⏱️ No command after wake word — back to listening', '');
+    }
+  }, WAKE_WINDOW_MS);
+}
+
+function handleWakeFrame(f32){
+  // BUGFIX: This is now a PASSIVE accumulator only.
+  // The primary wake-word path is the ASR transcript (pushWakeTranscript →
+  // tryWakeDetect). The raw audio path used to call stopWakeMic() +
+  // sendCommand() when the window expired, which killed the persistent
+  // stream and raced with the ASR. Now it just trims old frames.
+  // If the ASR misses "hey gaia" (e.g. music is playing), the audio frames
+  // are still available in wakeChunks as a fallback for future use.
+  if(!wakeArmed) return;
+  wakeChunks.push(f32);
+  const maxSamples = 16000 * 3;
+  while(wakeChunks.length && wakeChunks.reduce((s,c)=>s+c.length,0) > maxSamples){
+    wakeChunks.shift();
+  }
+  // Do NOT call stopWakeMic() or sendCommand() here.
+  // The window expiry is handled by the silence timer in rearmWake().
+}
+
+async function startWakeMic(){
+  try{
+    if(!audioCtx) audioCtx = new AudioContext({sampleRate:16000});
+    if(audioCtx.state === 'suspended') await audioCtx.resume();
+    // If we already have a stream, just resume the AudioContext
+    if(wakeStream){
+      wakeActive = true;
+      micBtn.classList.add('wake');
+      statusText.innerHTML = 'Listening… say <b>"Hey Gaia"</b>';
+      return;
+    }
+    wakeStream = await navigator.mediaDevices.getUserMedia({
+      audio:{sampleRate:16000, channelCount:1, echoCancellation:true, noiseSuppression:true}
+    });
+    wakeSrc = audioCtx.createMediaStreamSource(wakeStream);
+    wakeProc = audioCtx.createScriptProcessor(4096, 1, 1);
+    wakeProc.onaudioprocess = (e)=>{
+      const f = new Float32Array(e.inputBuffer.getChannelData(0));
+      // BUGFIX: commandArmed MUST be checked BEFORE the wakeActive guard.
+      // If wakeActive is false (tab suspend, pause) but commandArmed is
+      // true, we still need to capture command audio. Previously the early
+      // return dropped ALL frames -> commandChunks stayed empty ->
+      // sendCommand([]) -> no command heard after the first command.
+      if(commandArmed){
+        // BUGFIX: Passive accumulator only. The ASR transcript path
+        // (commandSilenceTimer in onWakeDetected) is the primary trigger
+        // for sending the command. Previously this block ALSO called
+        // sendCommand() when COMMAND_WINDOW_MS expired, racing with the
+        // ASR path. Both could fire, causing double-sends or the audio
+        // path firing with empty/garbage chunks while the ASR had the
+        // real text. Now we just accumulate; the ASR path decides when
+        // to send.
+        commandChunks.push(f);
+        const maxSamples = 16000 * 3;
+        while(commandChunks.length && commandChunks.reduce((s,c)=>s+c.length,0) > maxSamples){
+          commandChunks.shift();
+        }
+        return;
+      }
+      // Not in command mode - only process wake-word frames if active
+      if(!wakeActive) return;
+      // Normal mode: feed into wake-word detection
+      if(!isRecording) handleWakeFrame(f);
+    };
+    // AGC (Automatic Gain Control): boost quieter voices so other people
+    // in the room can trigger the wake word. Chrome's ASR is calibrated
+    // for the primary user's distance/volume; others are typically 6-12dB
+    // quieter. A gain of 2.0 (+6dB) lifts them into the ASR's sweet spot
+    // without clipping the primary user (who's already near max).
+    wakeGain = audioCtx.createGain();
+    wakeGain.gain.value = 2.0;  // +6dB boost
+    wakeSrc.connect(wakeGain);
+    wakeGain.connect(wakeProc);
+    wakeProc.connect(audioCtx.destination);
+    wakeActive = true;
+    wakeChunks = [];
+    // BUGFIX: wakeArmed = true on startup so the audio accumulator is
+    // active from the very first frame. Previously it was false, meaning
+    // handleWakeFrame() returned immediately and no audio was ever
+    // collected — the ASR transcript was the only path, and if it missed
+    // "hey gaia" (e.g. music playing) there was no fallback.
+    wakeArmed = true;
+    wakeWindowStart = performance.now();
+    micBtn.classList.add('wake');
+    statusText.innerHTML = 'Listening… say <b>"Hey Gaia"</b>';
+    addFeed('🟢 Gaia is listening — say "Hey Gaia"', '');
+  }catch(err){
+    micBtn.classList.remove('wake');
+    statusText.textContent = 'Mic unavailable: ' + err.message;
+  }
+}
+
+function stopWakeMic(){
+  // Only pause detection — do NOT kill the stream.
+  // The stream is persistent; we just stop processing frames for wake word.
+  wakeActive = false;
+  commandArmed = false;
+  clearTimeout(wakeSilenceTimer);
+  clearTimeout(commandSilenceTimer);
+  micBtn.classList.remove('wake');
+}
+
+function toggleWake(){
+  if(isRecording) return;
+  if(wakeActive){
+    stopWakeMic();
+    statusText.innerHTML = '\u23f8 Paused — tap the mic to resume listening';
+  }else{
+    startWakeMic();
+  }
+}
+
+// Called when "hey gaia" is detected: confirmation beep, then capture 3s
+// KEY CHANGE: we do NOT stop the mic. The same persistent stream keeps
+// feeding both the wake-word detector (paused) and the command capturer.
+// This eliminates the teardown/rebuild race that caused "works once, then dies".
+//
+// BUGFIX (TTS race): after the command window closes, we WAIT for TTS to
+// finish before re-arming the wake-word detector. Previously a fixed 1.2s
+// setTimeout fired while TTS was still playing → ASR picked up Gaia's own
+// voice → onend fired → recognizer respawned → user's next "Hey Gaia"
+// landed in the dead window and was never detected.
+function onWakeDetected(){
+  playWakeBeep();
+  // BUGFIX: Keep wakeArmed = true. The audio path is now passive
+  // (handleWakeFrame just accumulates), so it won't re-trigger a wake
+  // detection during the command window. Setting it to false killed the
+  // audio accumulator, leaving no fallback if the ASR missed the command.
+  // wakeTranscriptBuf is cleared below, so tryWakeDetect() won't fire
+  // on stale text. The commandArmed flag in the ASR onresult handler
+  // is what actually gates command vs wake-word processing.
+  wakeChunks = [];
+  // BUGFIX: clear transcript so command window starts clean
+  wakeTranscriptBuf = '';
+  // Arm the command window on the SAME persistent stream
+  commandArmed = true;
+  commandWindowStart = performance.now();
+  commandChunks = [];
+  commandTranscriptBuf = '';
+  commandHadFinal = false;
+  statusText.innerHTML = '<b>Hey!</b> Say your command…';
+  addFeed('✨ Wake word detected — listening for command', '');
+  // Auto-stop after COMMAND_WINDOW_MS if user says nothing
+  clearTimeout(commandSilenceTimer);
+  commandSilenceTimer = setTimeout(()=>{
+    if(commandArmed){
+      commandArmed = false;
+      const cmd = commandChunks; commandChunks = [];
+      const txt = commandTranscriptBuf.trim(); commandTranscriptBuf = '';
+      if(txt.length > 2){
+        addFeed('✍️ Heard: "' + txt + '"', '');
+        sendCommandWithText(cmd, txt);
+      } else if(cmd.length){ sendCommand(cmd); }
+      else {
+        statusText.innerHTML = 'No command heard — listening again…';
+        addFeed('⏱️ No command after wake word — back to listening', '');
+        rearmWake();
+      }
+    }
+  }, COMMAND_WINDOW_MS);
+}
+
+function rearmWake(){
+  wakeTranscriptBuf = '';
+  const _el = document.getElementById('wake-transcript');
+  if(_el) _el.textContent = '';
+  // BUGFIX: wakeArmed MUST be true so handleWakeFrame() processes audio frames.
+  wakeArmed = true;
+  // BUGFIX: Reset the cooldown so the next "hey gaia" isn't blocked
+  // by the WAKE_COOLDOWN_MS from the previous detection. Without this,
+  // the mic appears dead for 2.5s after every command.
+  wakeLastFire = 0;
+  wakeWindowStart = performance.now();
+  clearTimeout(wakeSilenceTimer);
+  wakeSilenceTimer = setTimeout(()=>{
+    if(wakeArmed && performance.now() - wakeWindowStart >= WAKE_SILENCE_MS){
+      wakeWindowStart = performance.now();
+    }
+  }, WAKE_SILENCE_MS);
+  statusText.innerHTML = '\ud83d\udfe2 Always listening \u2014 say <b>"Hey Gaia"</b>';
+  ensureWakeRecognition();
+}
+function rearmAfterTts(){
+  if(ttsPlaying){ setTimeout(rearmAfterTts, 150); return; }
+  setTimeout(()=>{ if(!isRecording) rearmWake(); }, 200);
+}
+
+// ── Wake-word matching: rolling transcript + phonetic fuzzy match ──
+// Why the old version missed ~9/10: Chrome's continuous recognizer splits
+// utterances into short result chunks ("hey" in one, "gaia" in the next, or
+// "heigh ayah" across two). Matching each chunk in isolation failed. We now
+// keep a rolling window of recent transcript text and fuzzy-match every word
+// against the wake-word phonemes, so mis-hearings and split chunks still land.
+const WAKE_TARGETS = ['gaia','gaiya','gaiaa','gaja','gayah','heygaia','heigaia'];
+const WAKE_MAX_DIST = 1;   // Levenshtein tolerance (1 edit = one dropped/swapped letter)
+// Words that are TOO SHORT to be a valid wake-word candidate.
+// With WAKE_MAX_DIST=1, a 3-letter word can match a 3-letter target with 1 edit,
+// causing false positives ("the" → "gaj", "nah" → "gay", "yay" → "jay").
+// Minimum 4 letters ensures only plausible wake-word attempts are considered.
+const WAKE_MIN_WORD_LEN = 4;
+const WAKE_COOLDOWN_MS = 1500;
+let wakeLastFire = 0;
+let wakeTranscriptBuf = '';   // rolling recent transcript (last ~6s of speech)
+
+function levenshtein(a, b){
+  if(a === b) return 0;
+  const m = a.length, n = b.length;
+  if(!m) return n; if(!n) return m;
+  let prev = new Array(n+1);
+  for(let j = 0; j <= n; j++) prev[j] = j;
+  for(let i = 1; i <= m; i++){
+    let cur = [i];
+    for(let j = 1; j <= n; j++){
+      const cost = a[i-1] === b[j-1] ? 0 : 1;
+      cur[j] = Math.min(prev[j]+1, cur[j-1]+1, prev[j-1]+cost);
+    }
+    prev = cur;
+  }
+  return prev[n];
+}
+
+function fuzzyWakeHit(text){
+  const words = text.toLowerCase().replace(/[^a-z\s]/g,' ').split(/\s+/).filter(Boolean);
+  for(const w of words){
+    if(w.length < WAKE_MIN_WORD_LEN) continue;  // skip "the", "and", "nah", "yay" — too short to be wake word
+    for(const t of WAKE_TARGETS){
+      if(w === t) return true;
+      if(Math.abs(w.length - t.length) <= WAKE_MAX_DIST && levenshtein(w, t) <= WAKE_MAX_DIST) return true;
+    }
+  }
+  return false;
+}
+
+function pushWakeTranscript(txt){
+  wakeTranscriptBuf = (wakeTranscriptBuf + ' ' + txt).trim();
+  if(wakeTranscriptBuf.length > 120) wakeTranscriptBuf = wakeTranscriptBuf.slice(-120);
+  const el = document.getElementById('wake-transcript');
+  if(el) el.textContent = wakeTranscriptBuf ? ('“' + wakeTranscriptBuf + '”') : '';
+}
+
+function tryWakeDetect(){
+  if(!wakeActive || isRecording) return;
+  if(performance.now() - wakeLastFire < WAKE_COOLDOWN_MS) return;
+  if(fuzzyWakeHit(wakeTranscriptBuf)){
+    wakeLastFire = performance.now();
+    wakeTranscriptBuf = '';
+    const el = document.getElementById('wake-transcript');
+    if(el) el.textContent = '';
+    onWakeDetected();
+  }
+}
+
+// ── Continuous recognition loop — idempotent, self-healing ─────────────────
+// BUGFIX (2nd+ wake call died): the old version closed over a single `rec`
+// instance and tried `rec.start()` inside `onend`. After the first command,
+// that instance was already stopped/invalid, so `start()` threw, the fallback
+// `setTimeout(startWakeRecognition, 300)` spawned a SECOND parallel loop, and
+// the two loops raced on the same transcript buffer — wedging the matcher.
+// Now: one global handle, a generation counter so stale closures bail out,
+// and we ALWAYS build a fresh recognizer instead of restarting a dead one.
+let wakeRec = null;          // current SpeechRecognition instance
+let wakeRecGen = 0;          // bumped every time we (re)spawn
+let wakeRecLastActivity = 0; // timestamp of last onresult/onstart — watchdog uses it
+function startWakeRecognition(){
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR){
+    statusText.innerHTML = 'Tap the mic to record manually (wake word needs Chrome)';
+    return;
+  }
+  // Kill any previous instance so we never have two loops alive at once
+  if(wakeRec){
+    try{ wakeRec.onresult = null; wakeRec.onerror = null; wakeRec.onend = null; wakeRec.abort(); }catch(e){}
+    wakeRec = null;
+  }
+  const gen = ++wakeRecGen;
+  // BUGFIX: Clear the transcript buffer so a fresh recognizer doesn't
+  // inherit stale text from the previous session. Without this, the old
+  // command text ("turn on the lights") stays in the buffer, and the
+  // first onresult from the new recognizer appends to it. tryWakeDetect()
+  // then fuzzy-matches on polluted text, potentially firing a false
+  // wake detection that swallows the user's real "hey gaia".
+  wakeTranscriptBuf = '';
+  const _wtEl = document.getElementById('wake-transcript');
+  if(_wtEl) _wtEl.textContent = '';
+  const rec = new SR();
+  wakeRec = rec;
+  rec.continuous = true;
+  rec.interimResults = true;
+  rec.lang = 'en-US';
+  rec.maxAlternatives = 3;   // more candidates = more chances to catch a mis-hearing
+  rec.onstart = ()=>{ if(gen === wakeRecGen) wakeRecLastActivity = performance.now(); };
+
+
+
+
+
+  // BUGFIX: Priming guard. After a respawn, the first ~1.5s of ASR
+  // results are unreliable (residual TTS audio, room noise, the
+  // recognizer warming up). Ignore them to prevent the transcript
+  // buffer from being polluted before the user actually speaks.
+  const recStartTime = performance.now();
+  rec.onresult = (ev)=>{
+    if(gen !== wakeRecGen || isRecording) return;
+    wakeRecLastActivity = performance.now();
+    // Skip the first 0.8s of results (priming period)
+    // Reduced from 1.5s: the old value made Gaia feel "laggy" after every
+    // respawn — 1.5s + 2.5s cooldown = 4s dead zone. Now 0.8s + 1.5s = 2.3s.
+    if(performance.now() - recStartTime < 800) return;
+    for(let i = ev.resultIndex; i < ev.results.length; i++){
+      const res = ev.results[i];
+      const isFinal = res.isFinal;
+      for(let alt = 0; alt < res.length; alt++){
+        const txt = res[alt].transcript;
+        if(!txt) continue;
+        if(commandArmed){
+          commandTranscriptBuf += ' ' + txt;
+          if(isFinal) commandHadFinal = true;
+          const el = document.getElementById('wake-transcript');
+          if(el) el.textContent = '“' + commandTranscriptBuf.trim() + '”';
+          if(isFinal && commandTranscriptBuf.trim().length > 3){
+            clearTimeout(commandSilenceTimer);
+            commandSilenceTimer = setTimeout(()=>{
+              if(commandArmed){
+                commandArmed = false;
+                const cmd = commandChunks; commandChunks = [];
+                const t = commandTranscriptBuf.trim(); commandTranscriptBuf = '';
+                if(t.length > 2){ addFeed('✍️ Heard: "' + t + '"', ''); sendCommandWithText(cmd, t); }
+                else if(cmd.length){ sendCommand(cmd); }
+                else { statusText.innerHTML = 'No command heard — listening again…'; addFeed('⏱️ No command after wake word — back to listening', ''); rearmWake(); }
+              }
+            }, 800);
+          }
+          continue;
+        }
+        if(wakeActive) pushWakeTranscript(txt);
+      }
+    }
+    if(!commandArmed) tryWakeDetect();
+  };
+  rec.onerror = (e)=>{ /* transient — onend respawns a fresh instance */ };
+  rec.onend = ()=>{
+    // Only respawn if THIS instance is still the current one and we're idle
+    if(gen !== wakeRecGen) return;
+    if(wakeActive && !isRecording){
+      // BUGFIX: Wait for TTS to finish before respawning.
+      // Previously a fixed 200ms setTimeout fired while TTS was still
+      // playing → the new recognizer picked up Gaia's own voice →
+      // garbage transcripts → "hey gaia" never matched → wake word
+      // appeared dead. Now we poll until ttsPlaying is false, then
+      // add a 500ms grace period for the audio to fully settle.
+      const tryRespawn = ()=>{
+        if(gen !== wakeRecGen || !wakeActive || isRecording) return;
+        if(ttsPlaying){ setTimeout(tryRespawn, 200); return; }
+        setTimeout(()=>{
+          if(gen === wakeRecGen && wakeActive && !isRecording){
+            // Clear stale transcript before spawning a fresh recognizer
+            wakeTranscriptBuf = '';
+            const _e = document.getElementById('wake-transcript');
+            if(_e) _e.textContent = '';
+            startWakeRecognition();
+          }
+        }, 500);
+      };
+      tryRespawn();
+    }
+  };
+  try{ rec.start(); }catch(e){
+    // Some Chrome versions throw if start() is called too fast after abort()
+    setTimeout(()=>{ if(gen === wakeRecGen && wakeActive && !isRecording) startWakeRecognition(); }, 300);
+  }
+}
+
+function textToIntent(text){
+  const t = text.toLowerCase().replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+  if(!t) return null;
+  if(/(turn|switch)\s+(the\s+)?lights?\s*(on|off)|lights?\s*(on|off)|on\s+the\s+lights?|off\s+the\s+lights?/.test(t))
+    return t.includes('off') ? 'LIGHT_OFF' : 'LIGHT_ON';
+  if(/bright(er|ness)|dim\s+(the\s+)?lights?|lights?\s*(brighter|dimmer|down|up)/.test(t)) return 'BRIGHTNESS';
+  if(/(change|set)\s+(the\s+)?(light\s+)?color|color\s+(the\s+)?lights?|lights?\s*(red|blue|green|yellow|white|warm|cool)/.test(t)) return 'COLOR';
+  if(/play|resume|start\s+(the\s+)?(music|song|track|audio)/.test(t)) return 'PLAY_MUSIC';
+  if(/pause|stop|halt|cancel\s+(the\s+)?(music|song|track|audio|playing)/.test(t)) return 'PAUSE';
+  if(/\bnext\b|skip|forward/.test(t)) return 'NEXT';
+  if(/volume\s+(up|higher|louder)|louder|turn\s+(it|the\s+volume)\s+up/.test(t)) return 'VOLUME_UP';
+  if(/volume\s+(down|lower|quieter)|quieter|softer|turn\s+(it|the\s+volume)\s+down/.test(t)) return 'VOLUME_DOWN';
+  if(/temperature|thermostat|heat|cool\s+it|ac\s+(on|off)/.test(t)) return 'TEMPERATURE';
+  if(/alarm|wake\s+me\s+up|set\s+(an\s+)?alarm/.test(t)) return 'ALARM';
+  if(/timer|count\s+down|remind\s+me\s+in|set\s+a\s+timer/.test(t)) return 'TIMER';
+  if(/what\s+time|current\s+time|tell\s+me\s+the\s+time/.test(t)) return 'TIME';
+  if(/weather|forecast|how\s+(hot|cold|warm)\s+is\s+it\s+outside/.test(t)) return 'WEATHER';
+  if(/\bcall\b|phone|ring|dial/.test(t)) return 'CALL';
+  if(/message|text\s+(someone|him|her|them)|send\s+a\s+(text|message)/.test(t)) return 'MESSAGE';
+  if(/reminder|remind\s+me|don’t\s+forget|dont\s+forget/.test(t)) return 'CREATE_REMINDER';
+  if(/(list|show|what\s+are)\s+(my|the)\s+reminders?/.test(t)) return 'LIST_REMINDERS';
+  return null;
+}
+function sendCommandWithText(chunks, text){
+  // Strip wake word + filler from the front of the transcript.
+  // The continuous ASR often includes "hey gaia" (or variants) at the start
+  // of the command window because the recognizer was already running.
+  let clean = text.replace(/^\s*(hey\s+gaia|heigh\s+ayah|hey\s+aiya|hi\s+gaia)[\s,.!]?/i, '').trim();
+  if(clean.length < 2) clean = text.trim(); // fallback if stripping ate everything
+  const intent = textToIntent(clean);
+  if(intent){
+    playBeep();
+    statusText.innerHTML = '<b>Processing…</b>';
+    fetch('/api/command', { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({intent: intent, arg: clean})
+    }).then(r=>r.json()).then(data=>{
+      if(data.state) applyState(data.state);
+      if(data.speak) speak(data.speak);
+      const label = data.executed ? friendlyIntent(data.executed, intent) : intent;
+      statusText.innerHTML = 'Heard: <b>' + label + '</b>';
+      addFeed('🗣️ "' + label.toLowerCase() + '" (text match)', '');
+      showPrediction(intent, 1.0, data.executed);
+      rearmAfterTts();
+    }).catch(err=>{ statusText.textContent = 'Error: ' + err.message; rearmWake(); });
+    return;
+  }
+  if(chunks.length){ sendCommand(chunks); }
+  else {
+    statusText.innerHTML = '❓ <b>Did\'t recognize that command</b>';
+    addFeed('❓ "' + text + '" — not a recognized command', '');
+    rearmWake();
+  }
+}
+function sendCommand(chunks){
+  if(!chunks.length){
+    statusText.innerHTML = '🟢 Always listening — say <b>"Hey Gaia"</b>';
+    return;
+  }
+  const totalLen = chunks.reduce((s,c)=>s+c.length, 0);
+  const combined = new Float32Array(totalLen);
+  let offset = 0;
+  for(const c of chunks){ combined.set(c, offset); offset += c.length; }
+  const int16 = new Int16Array(combined.length);
+  for(let i = 0; i < combined.length; i++){
+    int16[i] = Math.max(-32768, Math.min(32767, Math.round(combined[i]*32767)));
+  }
+  playBeep();
+  statusText.innerHTML = '<b>Processing…</b>';
+  fetch('/api/predict', {
+    method:'POST',
+    headers:{'Content-Type':'application/octet-stream'},
+    body: int16.buffer
+  }).then(r=>r.json()).then(data=>{
+    if(data.low_confidence){
+      // Model was unsure — don't execute, ask user to repeat
+      if(data.state) applyState(data.state);
+      speak(data.speak);
+      statusText.innerHTML = '❓ <b>Didn\'t catch that</b> — try again';
+      addFeed(`🤔 Low confidence (${(data.prediction.confidence*100).toFixed(0)}%) — asking to repeat`, '');
+    } else if(data.prediction){
+      showPrediction(data.prediction.intent, data.prediction.confidence, data.device_intent);
+      if(data.state) applyState(data.state);
+      speak(data.speak);
+      const label = data.device_intent ? friendlyIntent(data.device_intent, data.prediction.intent)
+                                        : data.prediction.intent.replace(/_/g,' ');
+      statusText.innerHTML = `Heard: <b>${label}</b>`;
+      addFeed(`🗣️ "${label.toLowerCase()}" (${(data.prediction.confidence*100).toFixed(0)}%)`, '');
+    }
+    rearmAfterTts();
+  }).catch(err=>{
+    statusText.textContent = 'Error: ' + err.message;
+    rearmAfterTts();
+  });
+}
+
+// Boot: ALWAYS-ON wake-word listening. Starts immediately on page load and
+// self-heals: if the tab was hidden (Chrome suspends mic + SpeechRecognition)
+// or the recognizer died, we resume the moment the tab is visible again.
+startWakeMic();
+startWakeRecognition();
+document.addEventListener('visibilitychange', ()=>{
+  if(document.visibilityState === 'visible'){
+    if(!isRecording){ startWakeMic(); ensureWakeRecognition(); }
+  }
+});
+window.addEventListener('pageshow', ()=>{
+  if(!isRecording){ startWakeMic(); ensureWakeRecognition(); }
+});
+const micBtn = document.getElementById('mic-btn');
+const statusText = document.getElementById('status-text');
+let audioCtx = null, mediaStream = null, recorder = null;
+let isRecording = false;
+// ── Wake-word state ──────────────────────────────────────────────────────────
+let wakeActive = false, wakeStream = null, wakeSrc = null, wakeProc = null, wakeGain = null;
+let wakeChunks = [], wakeArmed = false, wakeWindowStart = 0, wakeSilenceTimer = null;
+// ── Command capture state (on the SAME persistent stream) ──
+let commandArmed = false, commandChunks = [], commandWindowStart = 0, commandSilenceTimer = null;
+let commandTranscriptBuf = '', commandHadFinal = false;
+const COMMAND_WINDOW_MS = 3000;  // how long to capture the command after wake word
+const WAKE_WINDOW_MS = 2500;   // how long to listen for "hey gaia"
+const WAKE_SILENCE_MS = 6000;  // auto-return to idle if nothing said
+
+async function startRecording(){
+  if(isRecording) return;
+  try{
+    if(!audioCtx) audioCtx = new AudioContext({sampleRate:16000});
+    if(audioCtx.state === 'suspended') await audioCtx.resume();
+    mediaStream = await navigator.mediaDevices.getUserMedia({
+      audio:{sampleRate:16000, channelCount:1, echoCancellation:true, noiseSuppression:true}
+    });
+    const src = audioCtx.createMediaStreamSource(mediaStream);
+    const processor = audioCtx.createScriptProcessor(4096, 1, 1);
+    const chunks = [];
+    let recording = false;
+    
+    processor.onaudioprocess = (e)=>{
+      if(recording) chunks.push(new Float32Array(e.inputBuffer.getChannelData(0)));
+    };
+    src.connect(processor);
+    processor.connect(audioCtx.destination);
+    
+    isRecording = true;
+    recording = true;
+    micBtn.classList.add('listening');
+    statusText.innerHTML = '<b>Listening…</b> Speak now';
+    
+    // Auto-stop after 3 seconds
+    setTimeout(async ()=>{
+      if(!recording) return;
+      recording = false;
+      isRecording = false;
+      micBtn.classList.remove('listening');
+      
+      // Disconnect
+      src.disconnect();
+      processor.disconnect();
+      mediaStream.getTracks().forEach(t=>t.stop());
+      
+      // Combine chunks
+      const totalLen = chunks.reduce((s,c)=>s+c.length, 0);
+      const combined = new Float32Array(totalLen);
+      let offset = 0;
+      for(const c of chunks){combined.set(c, offset); offset += c.length;}
+      
+      // Convert to int16
+      const int16 = new Int16Array(combined.length);
+      for(let i = 0; i < combined.length; i++){
+        int16[i] = Math.max(-32768, Math.min(32767, Math.round(combined[i]*32767)));
+      }
+      
+      // Send to server
+      playBeep();  // cute confirmation beep — command captured
+      statusText.innerHTML = '<b>Processing…</b>';
+      try{
+        const resp = await fetch('/api/predict', {
+          method:'POST',
+          headers:{'Content-Type':'application/octet-stream'},
+          body:int16.buffer
+        });
+        const data = await resp.json();
+        if(data.low_confidence){
+          statusText.innerHTML = '❓ <b>Didn\'t catch that</b> — try again';
+          addFeed(`🤔 Low confidence (${(data.prediction.confidence*100).toFixed(0)}%) — asking to repeat`, data.prediction.latency_ms.toFixed(0)+'ms');
+          applyState(data.state);
+          speak(data.speak);
+        } else if(data.prediction){
+          showPrediction(data.prediction.intent, data.prediction.confidence, data.device_intent);
+          const label = data.device_intent ? friendlyIntent(data.device_intent, data.prediction.intent)
+                                            : data.prediction.intent.replace(/_/g,' ');
+          statusText.innerHTML = `Heard: <b>${label}</b> (${(data.prediction.confidence*100).toFixed(0)}%)`;
+          addFeed(`🗣️ <b>${label.toUpperCase()}</b> (${(data.prediction.confidence*100).toFixed(0)}%)`, data.prediction.latency_ms.toFixed(0)+'ms');
+          applyState(data.state);
+          speak(data.speak);
+        } else if(data.error){
+          statusText.textContent = data.error;
+        }
+      }catch(err){
+        statusText.textContent = 'Error: ' + err.message;
+      }
+    }, 3000);
+    
+  }catch(err){
+    isRecording = false;
+    micBtn.classList.remove('listening');
+    statusText.textContent = 'Mic error: ' + err.message;
+  }
+}
+
+// BUGFIX helper: make sure the ASR loop is alive whenever we return to idle.
+// Called from every post-command path so a dead/wedged recognizer can never
+// silently kill the wake word after the first successful command.
+function ensureWakeRecognition(){
+  if(!wakeActive || isRecording) return;
+  // BUGFIX: Don't respawn while TTS is playing. The new recognizer would
+  // pick up Gaia's own voice, producing garbage transcripts that poison
+  // the wake-word buffer. Wait until TTS is done.
+  if(ttsPlaying) return;
+  // No instance at all → spawn one
+  if(!wakeRec){ startWakeRecognition(); return; }
+  // Instance exists but hasn't produced activity in >8s while we're idle →
+  // it's likely dead (Chrome sometimes drops the stream silently). Force a
+  // fresh one. 8s is generous: real speech produces interim results fast.
+  if(performance.now() - wakeRecLastActivity > 8000){
+    startWakeRecognition();
+  }
+}
+// Watchdog: every 4s, if we're supposed to be listening but the recognizer
+// is silent, heal it. This is the last line of defense against the
+// "works once, then never again" class of bugs.
+setInterval(()=>{ ensureWakeRecognition(); }, 4000);
+
+micBtn.addEventListener('click', toggleWake);
+// Manual recording finished — resume wake-word listening
+setTimeout(()=>{ if(!isRecording && !wakeActive) startWakeMic(); }, 1200);
+
+// ─── Animation Loop ────────────────────────────────────────────────────
+const clock = new THREE.Clock();
+
+function animate(){
+  requestAnimationFrame(animate);
+  const dt = clock.getDelta();
+  const t = clock.elapsedTime;
+  
+  // Smooth light transition
+  lightTransition.current += (lightTransition.target - lightTransition.current) * 0.08;
+  const li = lightTransition.current;
+  lightFixtures.forEach(f=>{
+    f.light.intensity = li * 6.0;
+    f.diffuser.material.emissiveIntensity = li * 2.5;
+  });
+  // Room visibility follows the lights: dark when off, bright white lab when on
+  ambient.intensity = 0.04 + li * 0.5;
+  hemi.intensity = li * 0.5;
+  keyLight.intensity = li * 0.5;
+  scene.background.copy(bgDark).lerp(bgLit, li);
+  scene.fog.color.copy(fogDark).lerp(fogLit, li);
+  
+  // Speaker animation
+  if(state.media_playing){
+    mediaWavePhase += dt * 3;
+    spkLED.material.emissiveIntensity = 1.5;
+    waveRings.forEach((ring, i)=>{
+      const phase = (mediaWavePhase + i*0.8) % 2.4;
+      const scale = 1 + phase * 0.5;
+      ring.scale.set(scale, scale, 1);
+      ring.material.opacity = Math.max(0, 0.5 - phase*0.25);
+    });
+  } else {
+    spkLED.material.emissiveIntensity = 0.1;
+    waveRings.forEach(r=>{r.material.opacity = 0;});
+  }
+  
+  // Monitor screen subtle flicker
+  screenGlow.material.opacity = 0.12 + Math.sin(t*2)*0.03;
+  
+  // Thermostat ring pulse when adjusting
+  const tempDiff = Math.abs(state.temperature - state.setpoint);
+  thermoRing.material.emissiveIntensity = 0.3 + (tempDiff > 0.5 ? Math.sin(t*4)*0.3 + 0.3 : 0);
+  
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+
+// Hide loading
+setTimeout(()=>document.getElementById('loading').classList.add('hide'), 800);
+
+// Initial feed
+addFeed('🏠 Gaia\'s Chamber initialized', '');
+addFeed('💡 Say "turn on the lights"', '');
+addFeed('🔊 Say "play music"', '');
+addFeed('🌡️ Say "set temperature to 24"', '');
+
+// ─── Command cheat sheet: toggle + click-to-fire ───
+(function(){
+  const toggle = document.getElementById('cmd-toggle');
+  const sheet  = document.getElementById('cmd-sheet');
+  if(!toggle || !sheet) return;
+
+  toggle.addEventListener('click', () => {
+    const open = sheet.classList.toggle('open');
+    toggle.classList.toggle('open', open);
+  });
+
+  // Click a row → fire the command via /api/command (no mic needed)
+  sheet.querySelectorAll('.cmd-row').forEach(row => {
+    row.addEventListener('click', async () => {
+      const intent = row.dataset.intent;
+      if(!intent) return;
+      try {
+        const r = await fetch('/api/command', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({intent, arg:''})
+        });
+        const j = await r.json();
+        if(j.state) applyState(j.state);
+        playBeep();  // cute confirmation beep
+        if(j.speak) speak(j.speak);
+        const tag = row.querySelector('.tag')?.textContent || intent;
+        addFeed(`⚡ ${tag} (cheat sheet)`, '');
+        statusText.innerHTML = `<b>${tag}</b> executed`;
+      } catch(e) {
+        statusText.innerHTML = `Failed: ${e.message}`;
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+# Core (training + inference). Keep minimal for a Pi 5 (4 GB).
+# CPU-only wheels are fine on the Pi; use the standard index on the server.
+torch>=2.0
+numpy>=1.24
+scipy>=1.10
+soundfile>=0.12
+Flask>=3.0

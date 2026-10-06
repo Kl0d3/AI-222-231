@@ -119,9 +119,9 @@ def predict(audio_input):
     if x is None or x.size == 0:
         return "⚠️ No audio received. Please record or upload a clip.", ""
 
-    # Preprocess -> (1, N_MELS, N_FRAMES)
-    feat = preprocess(x)  # (1, 40, 99)
-    tensor = torch.from_numpy(feat).unsqueeze(0).to(_device)  # (1,1,40,99)
+    # Preprocess -> (1, 1, 99, 40) — already batched, channels-last (what CRNN expects)
+    feat = preprocess(x)
+    tensor = torch.from_numpy(feat).to(_device)  # (1, 1, 99, 40)
 
     logits = _model(tensor)
     probs = F.softmax(logits, dim=-1)[0].cpu().numpy()
@@ -207,10 +207,17 @@ def build_app() -> gr.Blocks:
                 return predict(filepath)
             return "⚠️ Please upload a file first.", ""
 
+        def _predict_both(audio, filepath):
+            """Predict from whichever input has data (mic takes priority)."""
+            if audio is not None:
+                return predict(audio)
+            if filepath:
+                return predict(filepath)
+            return "⚠️ Please record or upload audio first.", ""
+
         mic_input.change(_predict_from_mic, mic_input, [result_md, top5_table])
         file_input.change(_predict_from_file, file_input, [result_md, top5_table])
-        predict_btn.click(_predict_from_mic, mic_input, [result_md, top5_table])
-        predict_btn.click(_predict_from_file, file_input, [result_md, top5_table])
+        predict_btn.click(_predict_both, [mic_input, file_input], [result_md, top5_table])
 
         gr.Markdown(
             "---\n"
