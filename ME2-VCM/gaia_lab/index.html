@@ -26,6 +26,16 @@ body{overflow:hidden;background:#000;font-family:'Segoe UI',system-ui,sans-serif
 .dev-card .val.off{color:#475569}
 /* Bottom center — mic + status */
 #bottom-bar{position:absolute;bottom:0;left:0;right:0;display:flex;flex-direction:column;align-items:center;padding:20px;gap:12px;background:linear-gradient(0deg,rgba(8,12,24,.9) 0%,transparent 100%)}
+/* Mic source toggle */
+#mic-toggle{display:flex;align-items:center;gap:10px;background:rgba(15,23,42,.85);backdrop-filter:blur(10px);border:1px solid rgba(51,65,85,.6);border-radius:20px;padding:6px 16px;cursor:pointer;user-select:none;transition:border-color .3s}
+#mic-toggle:hover{border-color:rgba(125,211,252,.4)}
+#mic-toggle .label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#64748b;transition:color .3s}
+#mic-toggle .label.active{color:#7dd3fc}
+#mic-toggle .track{width:44px;height:22px;border-radius:11px;background:#1e293b;position:relative;transition:background .3s}
+#mic-toggle .track.pi-active{background:rgba(74,222,128,.3)}
+#mic-toggle .thumb{width:18px;height:18px;border-radius:50%;background:#7dd3fc;position:absolute;top:2px;left:2px;transition:transform .3s,background .3s;box-shadow:0 0 8px rgba(125,211,252,.4)}
+#mic-toggle .thumb.pi-active{transform:translateX(22px);background:#4ade80;box-shadow:0 0 8px rgba(74,222,128,.4)}
+#mic-toggle .icon{font-size:14px}
 #mic-btn{width:80px;height:80px;border-radius:50%;border:2px solid rgba(125,211,252,.4);background:radial-gradient(circle at 40% 35%,#1e3a5f,#0f172a);color:#7dd3fc;font-size:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;box-shadow:0 4px 24px rgba(125,211,252,.2)}
 #mic-btn:hover{transform:scale(1.05);box-shadow:0 4px 32px rgba(125,211,252,.35)}
 #mic-btn.listening{border-color:#f87171;color:#f87171;animation:micpulse 1.2s infinite;background:radial-gradient(circle at 40% 35%,#451a1a,#1a0f0f)}
@@ -163,7 +173,8 @@ body{overflow:hidden;background:#000;font-family:'Segoe UI',system-ui,sans-serif
   </div>
 
   <div id="bottom-bar">
-    <div id="status-text">🟢 Always listening — say <b>"Hey Gaia"</b></div>
+    <div id="mic-toggle" title="Switch audio source"><span class="icon">💻</span><span class="label active" id="lbl-laptop">Laptop Mic</span><div class="track" id="toggle-track"><div class="thumb" id="toggle-thumb"></div></div><span class="label" id="lbl-pi">Pi Mic</span><span class="icon">🍓</span></div>
+<div id="status-text">🟢 Always listening — say <b>"Hey Gaia"</b></div>
     <div id="wake-transcript"></div>
     <button id="mic-btn" title="Pause / resume always-on listening">🎤</button>
   </div>
@@ -1403,6 +1414,111 @@ function ensureWakeRecognition(){
 // is silent, heal it. This is the last line of defense against the
 // "works once, then never again" class of bugs.
 setInterval(()=>{ ensureWakeRecognition(); }, 4000);
+
+// ─── Mic Source Toggle (Laptop ↔ Pi) ─────────────────────────────────────
+let micSource = 'laptop';
+const micToggle = document.getElementById('mic-toggle');
+const lblLaptop = document.getElementById('lbl-laptop');
+const lblPi = document.getElementById('lbl-pi');
+const toggleTrack = document.getElementById('toggle-track');
+const toggleThumb = document.getElementById('toggle-thumb');
+let wsConn = null;
+
+function setMicSourceUI(source) {
+  micSource = source;
+  const isPi = source === 'pi';
+  lblLaptop.classList.toggle('active', !isPi);
+  lblPi.classList.toggle('active', isPi);
+  toggleTrack.classList.toggle('pi-active', isPi);
+  toggleThumb.classList.toggle('pi-active', isPi);
+  // In Pi mode, the mic button is passive (Pi handles audio)
+  micBtn.style.opacity = isPi ? '0.4' : '1';
+  micBtn.style.pointerEvents = isPi ? 'none' : 'auto';
+  if (isPi) {
+    statusText.innerHTML = '🍓 <b>Pi Mic Active</b> — say <b>"Hey Gaia"</b> near the Pi';
+    // Stop browser mic
+    if (wakeActive) stopWakeMic();
+  } else {
+    statusText.innerHTML = '💻 <b>Laptop Mic Active</b> — say <b>"Hey Gaia"</b>';
+    // Resume browser mic
+    setTimeout(() => { if (!isRecording) startWakeMic(); }, 500);
+  }
+}
+
+async function toggleMicSource() {
+  const newSource = micSource === 'laptop' ? 'pi' : 'laptop';
+  try {
+    const res = await fetch('/api/mic-source', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({source: newSource})
+    });
+    const data = await res.json();
+    if (res.ok) {
+      setMicSourceUI(data.source);
+    } else {
+      statusText.innerHTML = '⚠️ ' + (data.error || 'Failed to switch mic source');
+      setTimeout(() => {
+        if (micSource === 'laptop')
+          statusText.innerHTML = '💻 <b>Laptop Mic Active</b> — say <b>"Hey Gaia"</b>';
+        else
+          statusText.innerHTML = '🍓 <b>Pi Mic Active</b> — say <b>"Hey Gaia"</b> near the Pi';
+      }, 3000);
+    }
+  } catch (e) {
+    statusText.innerHTML = '⚠️ Network error — cannot switch mic source';
+  }
+}
+
+micToggle.addEventListener('click', toggleMicSource);
+
+// WebSocket connection for real-time Pi mic updates
+function connectWS() {
+  const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const wsUrl = `${proto}//${location.host}/ws`;
+  try {
+    wsConn = new WebSocket(wsUrl);
+    wsConn.onopen = () => {
+      console.log('[WS] Connected');
+    };
+    wsConn.onmessage = (event) => {
+      try {
+        const msg = JSON.parse(event.data);
+        if (msg.type === 'init' || msg.type === 'update' || msg.type === 'reset') {
+          // Update state cards
+          if (msg.state) applyState(msg.state);
+          // Show prediction popup
+          if (msg.prediction) {
+            showPrediction(msg.prediction.intent, msg.prediction.confidence, msg.device_intent);
+          }
+          // Update status
+          if (msg.status === 'capturing') {
+            statusText.innerHTML = '🍓 <b>Pi is listening…</b> speak your command';
+          } else if (msg.speak) {
+            statusText.innerHTML = `🔊 ${msg.speak}`;
+          }
+        } else if (msg.type === 'mic_source') {
+          setMicSourceUI(msg.source);
+        }
+      } catch (e) { console.warn('[WS] parse error', e); }
+    };
+    wsConn.onclose = () => {
+      console.log('[WS] Disconnected — retrying in 3s');
+      setTimeout(connectWS, 3000);
+    };
+    wsConn.onerror = () => { wsConn.close(); };
+  } catch (e) {
+    console.warn('[WS] Failed to connect:', e);
+    setTimeout(connectWS, 5000);
+  }
+}
+
+// Fetch initial mic source state
+fetch('/api/mic-source').then(r => r.json()).then(d => {
+  if (d.source) setMicSourceUI(d.source);
+}).catch(() => {});
+
+connectWS();
 
 micBtn.addEventListener('click', toggleWake);
 // Manual recording finished — resume wake-word listening
