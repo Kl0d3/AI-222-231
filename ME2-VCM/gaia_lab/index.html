@@ -1159,9 +1159,9 @@ function asrReady(){
   // activity AND we're not in TTS (which suppresses results), it's likely
   // stopped. The onend handler will respawn it, but if onend didn't fire
   // (Chrome bug), this catches it.
-  if(wakeRecLastActivity > 0 && !ttsPlaying){
+  if(wakeRecLastActivity > 0){
     const idle = performance.now() - wakeRecLastActivity;
-    if(idle > 12000){
+    if(idle > 15000){
       console.warn('[gaia] asrReady: ASR idle ' + Math.floor(idle/1000) + 's — treating as stopped');
       return false;
     }
@@ -1225,6 +1225,7 @@ let asrEndTimestamps = [];   // rolling window of onend timestamps for churn bac
 let asrRespawnBackoff = 500; // current backoff delay (exponential: 500→1000→2000→4000→8000 cap)
 let wakeRecSpawnTime = 0;    // when the current instance was created (staleness check)
 let wakeRecLastError = '';   // last onerror event (surfaced in pill + feed)
+let respawnLock = false;     // BUGFIX: single-flight guard so onend + watchdog can't double-spawn
 // asrPill is declared at the top of the module (DOM refs block)
 function asrPillUpdate(state, detail){
   if(!asrPill) return;
@@ -1241,6 +1242,7 @@ setInterval(()=>{
   asrPillUpdate('live', idle + 's idle');
 }, 1000);
 function startWakeRecognition(){
+if(respawnLock){ console.log('[gaia] startWakeRecognition: respawn in flight — deferring'); return; } respawnLock = true; setTimeout(()=>{ respawnLock = false; }, 2500);
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if(!SR){
     statusText.innerHTML = 'Tap the mic to record manually (wake word needs Chrome)';
@@ -1311,13 +1313,13 @@ function startWakeRecognition(){
     // auto-stops during TTS (mic picks up Gaia's voice → confusion → stop).
     // Counting these inflates the backoff to 8s, creating long dead windows.
     const now = Date.now();
-    if(!ttsPlaying){
+    if(!ttsPlaying && (performance.now() - wakeRecSpawnTime) > 3000){
       asrEndTimestamps = asrEndTimestamps.filter(t => now - t < 10000);
       asrEndTimestamps.push(now);
     }
     const churnCount = asrEndTimestamps.length;
     if(churnCount >= 3){
-      asrRespawnBackoff = Math.min(asrRespawnBackoff * 2, 4000);
+      asrRespawnBackoff = Math.min(asrRespawnBackoff * 2, 2000);
       console.warn('[gaia] ASR churn detected (' + churnCount + ' ends in 10s) — backoff ' + asrRespawnBackoff + 'ms');
     } else if(churnCount <= 1){
       asrRespawnBackoff = 500;
@@ -1637,7 +1639,7 @@ setInterval(()=>{
   // left the mic dead for nearly a minute. 20s catches it faster.
   if(wakeRecLastActivity > 0){
     const idle = Math.floor((performance.now() - wakeRecLastActivity)/1000);
-    if(idle > 20){
+    if(idle > 15){
       console.warn('[gaia] Watchdog: ASR idle ' + idle + 's — nudging with fresh spawn');
       asrPillUpdate('dead', 'idle ' + idle + 's');
       startWakeRecognition();
