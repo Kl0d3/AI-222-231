@@ -881,7 +881,8 @@ async function startWakeMic(){
       // true, we still need to capture command audio. Previously the early
       // return dropped ALL frames -> commandChunks stayed empty ->
       // sendCommand([]) -> no command heard after the first command.
-      if(commandArmed){
+      if(ttsPlaying) return;
+if(commandArmed){
         // BUGFIX: Passive accumulator only. The ASR transcript path
         // (commandSilenceTimer in onWakeDetected) is the primary trigger
         // for sending the command. Previously this block ALSO called
@@ -1080,7 +1081,13 @@ function pushWakeTranscript(txt){
 
 function tryWakeDetect(){
   if(!wakeActive || isRecording) return;
-  if(performance.now() - wakeLastFire < WAKE_COOLDOWN_MS) return;
+  if(ttsPlaying){
+wakeTranscriptBuf = '';
+const _el2 = document.getElementById('wake-transcript');
+if(_el2) _el2.textContent = '';
+return;
+}
+if(performance.now() - wakeLastFire < WAKE_COOLDOWN_MS) return;
   if(fuzzyWakeHit(wakeTranscriptBuf)){
     wakeLastFire = performance.now();
     wakeTranscriptBuf = '';
@@ -1142,6 +1149,11 @@ function startWakeRecognition(){
   rec.onresult = (ev)=>{
     if(gen !== wakeRecGen || isRecording) return;
     wakeRecLastActivity = performance.now();
+    // BUGFIX (self-listen): Gate on TTS. While Gaia is speaking, the ASR
+    // transcribes HER voice. Chrome's ASR uses its own mic path, so the
+    // onaudioprocess gate doesn't help. Without this, her words pollute
+    // commandTranscriptBuf or wakeTranscriptBuf.
+    if(ttsPlaying) return;
     // Skip the first 0.8s of results (priming period)
     // Reduced from 1.5s: the old value made Gaia feel "laggy" after every
     // respawn — 1.5s + 2.5s cooldown = 4s dead zone. Now 0.8s + 1.5s = 2.3s.
