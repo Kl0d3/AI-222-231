@@ -1008,6 +1008,12 @@ function toggleWake(){
 // landed in the dead window and was never detected.
 function onWakeDetected(){
   console.log('[gaia] onWakeDetected: arming command window, commandArmed=true, ttsPlaying=' + ttsPlaying);
+  // FIX (Oct10): Reset the cooldown so the user can immediately say "Hey Gaia"
+  // again after the command completes. Without this, the 600ms cooldown from
+  // the CURRENT fire would block the NEXT wake if the user speaks quickly.
+  // Setting to 0 means the next tryWakeDetect() will pass the cooldown check
+  // as long as 600ms has elapsed since NOW (not since the previous fire).
+  wakeLastFire = 0;
   playWakeBeep();
   // BUGFIX: Keep wakeArmed = true. The audio path is now passive
   // (handleWakeFrame just accumulates), so it won't re-trigger a wake
@@ -1067,8 +1073,13 @@ function rearmWake(){
 }
 function rearmAfterTts(){
   console.log('[gaia] rearmAfterTts: ttsPlaying=' + ttsPlaying + ' isRecording=' + isRecording);
-  if(ttsPlaying){ setTimeout(rearmAfterTts, 150); return; }
-  setTimeout(()=>{ if(!isRecording) rearmWake(); }, 200);
+  if(ttsPlaying){ setTimeout(rearmAfterTts, 80); return; }
+  // FIX (Oct10): Was `setTimeout(()=>rearmWake(), 200)`. The 200ms delay meant
+  // the ASR wasn't restarted until 200ms after TTS ended. Combined with the
+  // 2500ms respawnLock and Chrome's ~100-300ms recognizer startup, the total
+  // dead window was 2.5-4s. Now we call rearmWake() synchronously — the
+  // ensureWakeRecognition() inside it will start a fresh recognizer immediately.
+  if(!isRecording) rearmWake();
 }
 
 // ── Wake-word matching: rolling transcript + phonetic fuzzy match ──
@@ -1079,7 +1090,10 @@ function rearmAfterTts(){
 // against the wake-word phonemes, so mis-hearings and split chunks still land.
 const WAKE_TARGETS = ['gaia','gaiya','gaiaa','gaja','gayah','gaya','jaya','jayaa','jaja','heigaia','heygaia'];
 const WAKE_MAX_DIST = 2;   // Levenshtein tolerance (2 edits ≈ one dropped/swapped letter)
-const WAKE_COOLDOWN_MS = 1500;
+// FIX (Oct10): 1500→600ms. The old 1.5s cooldown swallowed the user's next
+// "Hey Gaia" when they spoke immediately after TTS ended. 600ms still prevents
+// double-firing on the same utterance but allows rapid consecutive wakeups.
+const WAKE_COOLDOWN_MS = 600;
 let wakeLastFire = 0;
 let wakeTranscriptBuf = '';   // rolling recent transcript (last ~6s of speech)
 
@@ -1155,13 +1169,14 @@ function asrReady(){
   // after ~8s of silence. The instance still exists (wakeRec != null) but
   // is no longer listening. Without this check, asrReady() returns true
   // for a dead recognizer and the watchdog never heals it.
-  // Heuristic: if the recognizer has been alive for >12s with no onresult
-  // activity AND we're not in TTS (which suppresses results), it's likely
-  // stopped. The onend handler will respawn it, but if onend didn't fire
-  // (Chrome bug), this catches it.
+  // Heuristic: if the recognizer has been alive for >8s with no onresult
+  // activity, it's likely stopped. Chrome's continuous ASR auto-stops after
+  // ~8s of silence. The old 15s threshold left the mic "green" but dead for
+  // up to 7s after Chrome stopped the recognizer — the user's next "Hey Gaia"
+  // landed in that dead window and was never heard. 8s catches it fast.
   if(wakeRecLastActivity > 0){
     const idle = performance.now() - wakeRecLastActivity;
-    if(idle > 15000){
+    if(idle > 8000){
       console.warn('[gaia] asrReady: ASR idle ' + Math.floor(idle/1000) + 's — treating as stopped');
       return false;
     }
@@ -1242,7 +1257,7 @@ setInterval(()=>{
   asrPillUpdate('live', idle + 's idle');
 }, 1000);
 function startWakeRecognition(){
-if(respawnLock){ console.log('[gaia] startWakeRecognition: respawn in flight — deferring'); return; } respawnLock = true; setTimeout(()=>{ respawnLock = false; }, 2500);
+if(respawnLock){ console.log('[gaia] startWakeRecognition: respawn in flight — deferring'); return; } respawnLock = true; setTimeout(()=>{ respawnLock = false; }, 1200);
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if(!SR){
     statusText.innerHTML = 'Tap the mic to record manually (wake word needs Chrome)';
@@ -1323,6 +1338,15 @@ if(respawnLock){ console.log('[gaia] startWakeRecognition: respawn in flight —
       console.warn('[gaia] ASR churn detected (' + churnCount + ' ends in 10s) — backoff ' + asrRespawnBackoff + 'ms');
     } else if(churnCount <= 1){
       asrRespawnBackoff = 500;
+    }
+    // FIX (Oct10): If the recognizer stopped DURING TTS, reset backoff to
+    // minimum. TTS-caused stops are expected (Chrome auto-stops when it hears
+    // Gaia's voice) and should NOT accumulate backoff. Without this, repeated
+    // TTS cycles inflate the backoff to 2s, creating a dead window where the
+    // user's next "Hey Gaia" is missed.
+    if(ttsPlaying){
+      asrRespawnBackoff = 500;
+      console.log('[gaia] ASR stopped during TTS — resetting backoff to 500ms');
     }
     console.warn('[gaia] ASR ENDED (gen=' + gen + ', ends=' + wakeRecEnds +
       (wakeRecLastError ? ', err=' + wakeRecLastError : '') + (churnCount > 2 ? ', churn=' + churnCount : '') + ')');
@@ -1633,19 +1657,20 @@ setInterval(()=>{
       return;
     }
   }
-  // Idle nudge: ASR started but completely silent >20s
-  // FIX: Reduced from 45s to 20s. Chrome's continuous ASR auto-stops after
-  // ~8s of silence. If onend didn't fire (Chrome bug), the old 45s threshold
-  // left the mic dead for nearly a minute. 20s catches it faster.
+  // Idle nudge: ASR started but completely silent >8s
+  // FIX (Oct10): Reduced from 15s to 8s. Chrome's continuous ASR auto-stops
+  // after ~8s of silence. If onend didn't fire (Chrome bug), the old 15s
+  // threshold left the mic dead for 7s after Chrome stopped the recognizer.
+  // 8s matches Chrome's auto-stop window and heals within one watchdog tick.
   if(wakeRecLastActivity > 0){
     const idle = Math.floor((performance.now() - wakeRecLastActivity)/1000);
-    if(idle > 15){
+    if(idle > 8){
       console.warn('[gaia] Watchdog: ASR idle ' + idle + 's — nudging with fresh spawn');
       asrPillUpdate('dead', 'idle ' + idle + 's');
       startWakeRecognition();
     }
   }
-}, 3000);
+}, 1500);
 
 micBtn.addEventListener('click', toggleWake);
 // Manual recording finished — resume wake-word listening
