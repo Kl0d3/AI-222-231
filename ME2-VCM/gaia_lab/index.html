@@ -832,6 +832,34 @@ function handleWakeFrame(f32){
   // The window expiry is handled by the silence timer in rearmWake().
 }
 
+// ─── Secure-context-safe getUserMedia ───────────────────────────────────────
+// navigator.mediaDevices is undefined on plain-HTTP origins (e.g. http://172.20.10.3:8901).
+// Browsers only expose it on https:// or http://localhost.
+// This wrapper detects the missing API and shows actionable instructions.
+async function getUserMediaSafe(){
+  if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
+    return navigator.mediaDevices.getUserMedia({
+      audio:{sampleRate:16000, channelCount:1, echoCancellation:true, noiseSuppression:true}
+    });
+  }
+  if(navigator.webkitGetUserMedia){
+    return new Promise((resolve,reject)=>{
+      navigator.webkitGetUserMedia({
+        audio:{sampleRate:16000, channelCount:1, echoCancellation:true, noiseSuppression:true}
+      }, resolve, reject);
+    });
+  }
+  const hint = 'Mic blocked: browser requires HTTPS or localhost for mic access.\n\n'
+    + 'FIX (Chrome/Edge):\n'
+    + '1. Go to chrome://flags/#unsafely-treat-insecure-origin-as-secure\n'
+    + '2. Add: http://' + location.hostname + ':' + location.port + '\n'
+    + '3. Set to Enabled → Relaunch Chrome\n\n'
+    + 'Or open this page via http://localhost:8901 (SSH tunnel):\n'
+    + '  ssh -L 8901:localhost:8901 kentjustincanja@PI_IP';
+  alert(hint);
+  throw new Error('getUserMedia unavailable — non-secure context');
+}
+
 async function startWakeMic(){
   try{
     if(!audioCtx) audioCtx = new AudioContext({sampleRate:16000});
@@ -843,9 +871,7 @@ async function startWakeMic(){
       statusText.innerHTML = 'Listening… say <b>"Hey Gaia"</b>';
       return;
     }
-    wakeStream = await navigator.mediaDevices.getUserMedia({
-      audio:{sampleRate:16000, channelCount:1, echoCancellation:true, noiseSuppression:true}
-    });
+    wakeStream = await getUserMediaSafe();
     wakeSrc = audioCtx.createMediaStreamSource(wakeStream);
     wakeProc = audioCtx.createScriptProcessor(4096, 1, 1);
     wakeProc.onaudioprocess = (e)=>{
@@ -1311,9 +1337,7 @@ async function startRecording(){
   try{
     if(!audioCtx) audioCtx = new AudioContext({sampleRate:16000});
     if(audioCtx.state === 'suspended') await audioCtx.resume();
-    mediaStream = await navigator.mediaDevices.getUserMedia({
-      audio:{sampleRate:16000, channelCount:1, echoCancellation:true, noiseSuppression:true}
-    });
+    mediaStream = await getUserMediaSafe();
     const src = audioCtx.createMediaStreamSource(mediaStream);
     const processor = audioCtx.createScriptProcessor(4096, 1, 1);
     const chunks = [];
