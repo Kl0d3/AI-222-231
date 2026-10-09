@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Gaia's Chamber · 3D Voice Lab</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230a1428'/%3E%3Ccircle cx='50' cy='50' r='30' fill='%2300e5ff' opacity='0.8'/%3E%3Ccircle cx='50' cy='50' r='15' fill='%23ffffff'/%3E%3C/svg%3E">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{overflow:hidden;background:#000;font-family:'Segoe UI',system-ui,sans-serif;color:#e0e8f8}
@@ -26,25 +27,20 @@ body{overflow:hidden;background:#000;font-family:'Segoe UI',system-ui,sans-serif
 .dev-card .val.off{color:#475569}
 /* Bottom center — mic + status */
 #bottom-bar{position:absolute;bottom:0;left:0;right:0;display:flex;flex-direction:column;align-items:center;padding:20px;gap:12px;background:linear-gradient(0deg,rgba(8,12,24,.9) 0%,transparent 100%)}
-/* Mic source toggle */
-#mic-toggle{display:flex;align-items:center;gap:10px;background:rgba(15,23,42,.85);backdrop-filter:blur(10px);border:1px solid rgba(51,65,85,.6);border-radius:20px;padding:6px 16px;cursor:pointer;user-select:none;transition:border-color .3s}
-#mic-toggle:hover{border-color:rgba(125,211,252,.4)}
-#mic-toggle .label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#64748b;transition:color .3s}
-#mic-toggle .label.active{color:#7dd3fc}
-#mic-toggle .track{width:44px;height:22px;border-radius:11px;background:#1e293b;position:relative;transition:background .3s}
-#mic-toggle .track.pi-active{background:rgba(74,222,128,.3)}
-#mic-toggle .thumb{width:18px;height:18px;border-radius:50%;background:#7dd3fc;position:absolute;top:2px;left:2px;transition:transform .3s,background .3s;box-shadow:0 0 8px rgba(125,211,252,.4)}
-#mic-toggle .thumb.pi-active{transform:translateX(22px);background:#4ade80;box-shadow:0 0 8px rgba(74,222,128,.4)}
-#mic-toggle .icon{font-size:14px}
 #mic-btn{width:80px;height:80px;border-radius:50%;border:2px solid rgba(125,211,252,.4);background:radial-gradient(circle at 40% 35%,#1e3a5f,#0f172a);color:#7dd3fc;font-size:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;box-shadow:0 4px 24px rgba(125,211,252,.2)}
 #mic-btn:hover{transform:scale(1.05);box-shadow:0 4px 32px rgba(125,211,252,.35)}
-#mic-btn.listening{border-color:#f87171;color:#f87171;animation:micpulse 1.2s infinite;background:radial-gradient(circle at 40% 35%,#451a1a,#1a0f0f)}
+#mic-btn.listening{border-color:#f87171;color:#f87171;animation:micpulse 1.2s infinite;background:radial-gradient(circle at 40% 35%,#451a1a,#1a0f1f)}
 #mic-btn.wake{border-color:#4ade80;color:#4ade80;animation:wakepulse 1.6s infinite;background:radial-gradient(circle at 40% 35%,#14532d,#052e16)}
+#mic-btn.error{border-color:#f87171;color:#f87171;background:radial-gradient(circle at 40% 35%,#451a1a,#1a0f0f);box-shadow:0 0 16px rgba(248,113,113,.3)}
+#mic-btn.neutral{border-color:rgba(125,211,252,.4);color:#7dd3fc;background:radial-gradient(circle at 40% 35%,#1e3a5f,#0f172a)}
 @keyframes wakepulse{0%{box-shadow:0 0 0 0 rgba(74,222,128,.4)}70%{box-shadow:0 0 0 20px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
 @keyframes micpulse{0%{box-shadow:0 0 0 0 rgba(248,113,113,.4)}70%{box-shadow:0 0 0 20px rgba(248,113,113,0)}100%{box-shadow:0 0 0 0 rgba(248,113,113,0)}}
 #status-text{font-size:13px;color:#94a3b8;min-height:20px;text-align:center}
 #status-text b{color:#7dd3fc}
 #wake-transcript{font-size:11px;color:#4ade80;min-height:16px;text-align:center;opacity:.75;font-style:italic;margin-top:2px}
+#asr-status{font-size:10px;letter-spacing:1px;padding:3px 10px;border-radius:10px;background:rgba(30,41,59,.8);border:1px solid #334155;color:#64748b;margin-bottom:6px}
+#asr-status.live{color:#4ade80;border-color:#14532d;background:rgba(20,83,45,.35)}
+#asr-status.dead{color:#f87171;border-color:#7f1d1d;background:rgba(127,29,29,.35)}
 /* Right panel — activity feed */
 #right-panel{position:absolute;right:20px;top:70px;width:260px;max-height:calc(100vh - 160px);display:flex;flex-direction:column;gap:8px}
 #right-panel h3{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:#64748b;padding:0 4px}
@@ -173,9 +169,9 @@ body{overflow:hidden;background:#000;font-family:'Segoe UI',system-ui,sans-serif
   </div>
 
   <div id="bottom-bar">
-    <div id="mic-toggle" title="Switch audio source"><span class="icon">💻</span><span class="label active" id="lbl-laptop">Laptop Mic</span><div class="track" id="toggle-track"><div class="thumb" id="toggle-thumb"></div></div><span class="label" id="lbl-pi">Pi Mic</span><span class="icon">🍓</span></div>
-<div id="status-text">🟢 Always listening — say <b>"Hey Gaia"</b></div>
+    <div id="status-text">🟢 Always listening — say <b>"Hey Gaia"</b></div>
     <div id="wake-transcript"></div>
+    <div id="asr-status">○ ASR — waiting</div>
     <button id="mic-btn" title="Pause / resume always-on listening">🎤</button>
   </div>
 </div>
@@ -184,6 +180,7 @@ body{overflow:hidden;background:#000;font-family:'Segoe UI',system-ui,sans-serif
 {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"}}
 </script>
 <script type="module">
+// VERSION: 2026-10-05T12:00:00Z - ASR robustness fixes
 import * as THREE from 'three';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 
@@ -578,6 +575,10 @@ function speak(text){
   }
   try{
     if('speechSynthesis' in window){
+      // DO NOT stop ASR during TTS — ttsPlaying gate handles it so it doesn't transcribe Gaia's own voice.
+      // The ASR is restarted by rearmAfterTts() -> rearmWake() ->
+      // ensureWakeRecognition() after TTS finishes.
+              // (removed: stopping ASR triggers Chrome abort→create race)
       window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text);
       u.rate = 1.05; u.pitch = 1.1; u.volume = 1.0;
@@ -589,8 +590,11 @@ function speak(text){
       u.onend = ()=>{ ttsPlaying = false; };
       u.onerror = ()=>{ ttsPlaying = false; };
       window.speechSynthesis.speak(u);
-      // Safety: if onend never fires (Chrome bug), force-clear after 8s
-      setTimeout(()=>{ ttsPlaying = false; }, 8000);
+      // Safety: if onend never fires (Chrome bug), force-clear after adaptive timeout.
+      // ~80ms per character at rate 1.05, minimum 10s. Prevents the old 8s cap
+      // from clearing ttsPlaying mid-speech on long responses (weather, etc.).
+      const ttsTimeoutMs = Math.max(10000, text.length * 80);
+      setTimeout(()=>{ ttsPlaying = false; }, ttsTimeoutMs);
     }
   }catch(e){ ttsPlaying = false; }
 }
@@ -832,65 +836,80 @@ function handleWakeFrame(f32){
   // The window expiry is handled by the silence timer in rearmWake().
 }
 
-// ─── Secure-context-safe getUserMedia ───────────────────────────────────────
-// navigator.mediaDevices is undefined on plain-HTTP origins (e.g. http://172.20.10.3:8901).
-// Browsers only expose it on https:// or http://localhost.
-// This wrapper detects the missing API and shows actionable instructions.
-async function getUserMediaSafe(){
-  if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
-    return navigator.mediaDevices.getUserMedia({
-      audio:{sampleRate:16000, channelCount:1, echoCancellation:true, noiseSuppression:true}
-    });
-  }
-  if(navigator.webkitGetUserMedia){
-    return new Promise((resolve,reject)=>{
-      navigator.webkitGetUserMedia({
-        audio:{sampleRate:16000, channelCount:1, echoCancellation:true, noiseSuppression:true}
-      }, resolve, reject);
-    });
-  }
-  const hint = 'Mic blocked: browser requires HTTPS or localhost for mic access.\n\n'
-    + 'FIX (Chrome/Edge):\n'
-    + '1. Go to chrome://flags/#unsafely-treat-insecure-origin-as-secure\n'
-    + '2. Add: http://' + location.hostname + ':' + location.port + '\n'
-    + '3. Set to Enabled → Relaunch Chrome\n\n'
-    + 'Or open this page via http://localhost:8901 (SSH tunnel):\n'
-    + '  ssh -L 8901:localhost:8901 kentjustincanja@PI_IP';
-  alert(hint);
-  throw new Error('getUserMedia unavailable — non-secure context');
-}
-
 async function startWakeMic(){
+  // ── Phase 1: NOT READY → red ──
+  micBtn.classList.remove('wake','listening','neutral');
+  micBtn.classList.add('error');
+  micBtn.title = 'Starting mic…';
+  statusText.innerHTML = '🔴 Starting microphone…';
   try{
     if(!audioCtx) audioCtx = new AudioContext({sampleRate:16000});
     if(audioCtx.state === 'suspended') await audioCtx.resume();
     // If we already have a stream, just resume the AudioContext
     if(wakeStream){
       wakeActive = true;
-      micBtn.classList.add('wake');
-      statusText.innerHTML = 'Listening… say <b>"Hey Gaia"</b>';
+      // ── Phase 2: STREAM EXISTS → verify audio, then green ──
+      verifyMicAudio();
       return;
     }
-    wakeStream = await getUserMediaSafe();
+    wakeStream = await navigator.mediaDevices.getUserMedia({
+      audio:{sampleRate:16000, channelCount:1, echoCancellation:true, noiseSuppression:true}
+    });
+    // Watch for track death (device unplugged, permission revoked, etc.)
+    wakeStream.getTracks().forEach(track=>{
+      track.addEventListener('ended', ()=>{
+        console.warn('[gaia] Mic track ended — resetting to red');
+        micBtn.classList.remove('wake');
+        micBtn.classList.add('error');
+        statusText.textContent = 'Mic disconnected — tap to retry';
+        wakeActive = false;
+        wakeStream = null;
+        if(wakeSrc){ try{wakeSrc.disconnect();}catch(e){} wakeSrc=null; }
+        if(wakeProc){ try{wakeProc.disconnect();}catch(e){} wakeProc=null; }
+      });
+    });
     wakeSrc = audioCtx.createMediaStreamSource(wakeStream);
     wakeProc = audioCtx.createScriptProcessor(4096, 1, 1);
+    // ── Audio level tracker: proves the mic is delivering real frames ──
+    let micPeak = 0, micFramesReceived = 0, micVerified = false;
+    const verifyTimer = setTimeout(()=>{
+      if(!micVerified){
+        console.warn('[gaia] Mic verification timeout — no audio frames received');
+        micBtn.classList.remove('wake');
+        micBtn.classList.add('error');
+        statusText.textContent = 'Mic not capturing — tap to retry';
+        addFeed('⚠️ Mic not delivering audio — tap mic to retry', '');
+      }
+    }, 5000);
     wakeProc.onaudioprocess = (e)=>{
       const f = new Float32Array(e.inputBuffer.getChannelData(0));
+      // Track peak amplitude to verify real audio is coming in
+      let peak = 0;
+      for(let i = 0; i < f.length; i++){
+        const v = Math.abs(f[i]);
+        if(v > peak) peak = v;
+      }
+      if(peak > 0.001) micPeak = Math.max(micPeak, peak);
+      micFramesReceived++;
+      // ── Phase 2: AUDIO CONFIRMED → green ──
+      if(!micVerified && micFramesReceived >= 3){
+        micVerified = true;
+        clearTimeout(verifyTimer);
+        addFeed('🟢 Mic confirmed — audio level ' + micPeak.toFixed(3), '');
+        console.log('[gaia] Mic verified: peak=' + micPeak.toFixed(4) + ' frames=' + micFramesReceived);
+        // Green ONLY if the ASR is also live. If the speech engine isn't up yet,
+        // stay red ("not ready to accept the wake word") until asrPillUpdate /
+        // the 1s interval flips us green the moment ASR starts.
+        if(asrReady()){
+          micSetState('ready', 'Listening — say "Hey Gaia"');
+          statusText.innerHTML = '🟢 Listening… say <b>"Hey Gaia"</b>';
+        } else {
+          micSetState('error', 'Not ready — ASR connecting…');
+          statusText.innerHTML = '🔴 Mic ready · speech engine connecting…';
+        }
+      }
       // BUGFIX: commandArmed MUST be checked BEFORE the wakeActive guard.
-      // If wakeActive is false (tab suspend, pause) but commandArmed is
-      // true, we still need to capture command audio. Previously the early
-      // return dropped ALL frames -> commandChunks stayed empty ->
-      // sendCommand([]) -> no command heard after the first command.
-      if(ttsPlaying) return;
-if(commandArmed){
-        // BUGFIX: Passive accumulator only. The ASR transcript path
-        // (commandSilenceTimer in onWakeDetected) is the primary trigger
-        // for sending the command. Previously this block ALSO called
-        // sendCommand() when COMMAND_WINDOW_MS expired, racing with the
-        // ASR path. Both could fire, causing double-sends or the audio
-        // path firing with empty/garbage chunks while the ASR had the
-        // real text. Now we just accumulate; the ASR path decides when
-        // to send.
+      if(commandArmed){
         commandChunks.push(f);
         const maxSamples = 16000 * 3;
         while(commandChunks.length && commandChunks.reduce((s,c)=>s+c.length,0) > maxSamples){
@@ -903,32 +922,46 @@ if(commandArmed){
       // Normal mode: feed into wake-word detection
       if(!isRecording) handleWakeFrame(f);
     };
-    // AGC (Automatic Gain Control): boost quieter voices so other people
-    // in the room can trigger the wake word. Chrome's ASR is calibrated
-    // for the primary user's distance/volume; others are typically 6-12dB
-    // quieter. A gain of 2.0 (+6dB) lifts them into the ASR's sweet spot
-    // without clipping the primary user (who's already near max).
-    wakeGain = audioCtx.createGain();
-    wakeGain.gain.value = 2.0;  // +6dB boost
-    wakeSrc.connect(wakeGain);
-    wakeGain.connect(wakeProc);
+    wakeSrc.connect(wakeProc);
     wakeProc.connect(audioCtx.destination);
     wakeActive = true;
     wakeChunks = [];
-    // BUGFIX: wakeArmed = true on startup so the audio accumulator is
-    // active from the very first frame. Previously it was false, meaning
-    // handleWakeFrame() returned immediately and no audio was ever
-    // collected — the ASR transcript was the only path, and if it missed
-    // "hey gaia" (e.g. music playing) there was no fallback.
     wakeArmed = true;
     wakeWindowStart = performance.now();
-    micBtn.classList.add('wake');
-    statusText.innerHTML = 'Listening… say <b>"Hey Gaia"</b>';
-    addFeed('🟢 Gaia is listening — say "Hey Gaia"', '');
+    // NOTE: micBtn stays RED (.error) until verifyTimer confirms audio.
+    // The onaudioprocess callback flips it to GREEN (.wake) on first frames.
   }catch(err){
+    // ── Phase 3: FAILED → red with error message ──
     micBtn.classList.remove('wake');
+    micBtn.classList.add('error');
+    micBtn.title = 'Mic error — tap to retry';
     statusText.textContent = 'Mic unavailable: ' + err.message;
+    addFeed('❌ Mic error: ' + err.message, '');
+    console.error('[gaia] startWakeMic failed:', err);
   }
+}
+
+// Re-verify audio on an existing stream (called when resuming from pause)
+function verifyMicAudio(){
+  let frames = 0, peak = 0;
+  const check = ()=>{
+    if(!wakeStream || !wakeActive) return;
+    frames++;
+    if(frames >= 3){
+      addFeed('🟢 Mic resumed — audio confirmed', '');
+      // Green only if ASR is live; otherwise stay red until it connects.
+      if(asrReady()){
+        micSetState('ready', 'Listening — say "Hey Gaia"');
+        statusText.innerHTML = '🟢 Listening… say <b>"Hey Gaia"</b>';
+      } else {
+        micSetState('error', 'Not ready — ASR connecting…');
+        statusText.innerHTML = '🔴 Mic ready · speech engine connecting…';
+      }
+      return;
+    }
+    setTimeout(check, 100);
+  };
+  check();
 }
 
 function stopWakeMic(){
@@ -938,7 +971,7 @@ function stopWakeMic(){
   commandArmed = false;
   clearTimeout(wakeSilenceTimer);
   clearTimeout(commandSilenceTimer);
-  micBtn.classList.remove('wake');
+  micSetState('neutral', 'Paused — tap to resume listening');
 }
 
 function toggleWake(){
@@ -962,6 +995,7 @@ function toggleWake(){
 // voice → onend fired → recognizer respawned → user's next "Hey Gaia"
 // landed in the dead window and was never detected.
 function onWakeDetected(){
+  console.log('[gaia] onWakeDetected: arming command window, commandArmed=true, ttsPlaying=' + ttsPlaying);
   playWakeBeep();
   // BUGFIX: Keep wakeArmed = true. The audio path is now passive
   // (handleWakeFrame just accumulates), so it won't re-trigger a wake
@@ -985,6 +1019,7 @@ function onWakeDetected(){
   clearTimeout(commandSilenceTimer);
   commandSilenceTimer = setTimeout(()=>{
     if(commandArmed){
+      console.log('[gaia] command window expired: txt="' + commandTranscriptBuf.trim() + '" chunks=' + commandChunks.length + ' ttsPlaying=' + ttsPlaying);
       commandArmed = false;
       const cmd = commandChunks; commandChunks = [];
       const txt = commandTranscriptBuf.trim(); commandTranscriptBuf = '';
@@ -1002,15 +1037,9 @@ function onWakeDetected(){
 }
 
 function rearmWake(){
+  console.log('[gaia] rearmWake: clearing transcript, wakeArmed=true, ensuring ASR');
   wakeTranscriptBuf = '';
-  const _el = document.getElementById('wake-transcript');
-  if(_el) _el.textContent = '';
-  // BUGFIX: wakeArmed MUST be true so handleWakeFrame() processes audio frames.
   wakeArmed = true;
-  // BUGFIX: Reset the cooldown so the next "hey gaia" isn't blocked
-  // by the WAKE_COOLDOWN_MS from the previous detection. Without this,
-  // the mic appears dead for 2.5s after every command.
-  wakeLastFire = 0;
   wakeWindowStart = performance.now();
   clearTimeout(wakeSilenceTimer);
   wakeSilenceTimer = setTimeout(()=>{
@@ -1019,9 +1048,13 @@ function rearmWake(){
     }
   }, WAKE_SILENCE_MS);
   statusText.innerHTML = '\ud83d\udfe2 Always listening \u2014 say <b>"Hey Gaia"</b>';
+  // The ASR was stopped by speak() during TTS. Restart it now.
+  // ensureWakeRecognition() will start it if asrReady() is false.
+  // If asrReady() is true (ASR still alive), we're good.
   ensureWakeRecognition();
 }
 function rearmAfterTts(){
+  console.log('[gaia] rearmAfterTts: ttsPlaying=' + ttsPlaying + ' isRecording=' + isRecording);
   if(ttsPlaying){ setTimeout(rearmAfterTts, 150); return; }
   setTimeout(()=>{ if(!isRecording) rearmWake(); }, 200);
 }
@@ -1032,13 +1065,8 @@ function rearmAfterTts(){
 // "heigh ayah" across two). Matching each chunk in isolation failed. We now
 // keep a rolling window of recent transcript text and fuzzy-match every word
 // against the wake-word phonemes, so mis-hearings and split chunks still land.
-const WAKE_TARGETS = ['gaia','gaiya','gaiaa','gaja','gayah','heygaia','heigaia'];
-const WAKE_MAX_DIST = 1;   // Levenshtein tolerance (1 edit = one dropped/swapped letter)
-// Words that are TOO SHORT to be a valid wake-word candidate.
-// With WAKE_MAX_DIST=1, a 3-letter word can match a 3-letter target with 1 edit,
-// causing false positives ("the" → "gaj", "nah" → "gay", "yay" → "jay").
-// Minimum 4 letters ensures only plausible wake-word attempts are considered.
-const WAKE_MIN_WORD_LEN = 4;
+const WAKE_TARGETS = ['gaia','gaiya','gaiaa','gaja','gayah','gaya','jaya','jayaa','jaja','heigaia','heygaia'];
+const WAKE_MAX_DIST = 2;   // Levenshtein tolerance (2 edits ≈ one dropped/swapped letter)
 const WAKE_COOLDOWN_MS = 1500;
 let wakeLastFire = 0;
 let wakeTranscriptBuf = '';   // rolling recent transcript (last ~6s of speech)
@@ -1061,9 +1089,13 @@ function levenshtein(a, b){
 }
 
 function fuzzyWakeHit(text){
-  const words = text.toLowerCase().replace(/[^a-z\s]/g,' ').split(/\s+/).filter(Boolean);
+  const lower = text.toLowerCase().replace(/[^a-z\s]/g,' ');
+  // Primary: substring match — catches "hey gaia", "heygaia", "hey gaia, turn on lights"
+  if(lower.includes('gaia')) return true;
+  // Secondary: fuzzy word match for garbled transcriptions ("gaiya", "gaja", "gayah")
+  const words = lower.split(/\s+/).filter(Boolean);
   for(const w of words){
-    if(w.length < WAKE_MIN_WORD_LEN) continue;  // skip "the", "and", "nah", "yay" — too short to be wake word
+    if(w.length < 3) continue;
     for(const t of WAKE_TARGETS){
       if(w === t) return true;
       if(Math.abs(w.length - t.length) <= WAKE_MAX_DIST && levenshtein(w, t) <= WAKE_MAX_DIST) return true;
@@ -1077,23 +1109,76 @@ function pushWakeTranscript(txt){
   if(wakeTranscriptBuf.length > 120) wakeTranscriptBuf = wakeTranscriptBuf.slice(-120);
   const el = document.getElementById('wake-transcript');
   if(el) el.textContent = wakeTranscriptBuf ? ('“' + wakeTranscriptBuf + '”') : '';
+  console.log('[gaia] ASR text: "' + txt + '" | buf="' + wakeTranscriptBuf + '" | armed=' + commandArmed + ' active=' + wakeActive + ' match=' + fuzzyWakeHit(wakeTranscriptBuf));
+  // BUGFIX: Actually trigger wake detection. Previously this function
+  // logged the match but never called tryWakeDetect(), so the wake word
+  // was detected (match=true) but nothing acted on it.
+  if(!commandArmed) tryWakeDetect();
+}
+
+// ── Central mic-button state ─────────────────────────────────────────────
+// GREEN (.wake)  = mic delivering audio AND ASR actively recognizing (ready
+//                  to accept the wake word). RED (.error) = mic not ready:
+//                  starting, no audio, OR ASR down/idle. NEUTRAL = paused.
+// Previously the button went green the moment audio frames arrived, even when
+// the ASR (the thing that actually hears "Hey Gaia") was dead — so the icon
+// lied. Now green means "actually ready to hear you."
+function micSetState(state, title){
+  if(!micBtn) return;
+  micBtn.classList.remove('wake','error','neutral','listening');
+  if(state === 'ready'){ micBtn.classList.add('wake'); }
+  else if(state === 'error'){ micBtn.classList.add('error'); }
+  else { micBtn.classList.add('neutral'); }
+  if(title) micBtn.title = title;
+}
+// True when the ASR instance exists and has no permanent error.
+// An idle ASR is STILL ready - Chrome's continuous recognizer keeps
+// listening until onend fires. We do NOT require recent activity.
+// BUT: if the instance was created >5s ago and has ZERO activity (no onstart
+// ever fired), Chrome likely killed the backend silently. Treat as dead.
+function asrReady(){
+  if(!wakeRec) return false;
+  if(wakeRecLastError === 'not-allowed' || wakeRecLastError === 'service-not-allowed') return false;
+  // Staleness check: instance exists but never started (or died silently)
+  if(wakeRecLastActivity === 0 && wakeRecGen > 0){
+    const age = performance.now() - (wakeRecSpawnTime || 0);
+    if(age > 5000){
+      console.warn('[gaia] asrReady: stale instance (age=' + Math.floor(age/1000) + 's, no activity) — treating as dead');
+      return false;
+    }
+  }
+  return true;
+}
+// Sync the button to reality: ready (green) iff mic active + audio + ASR live.
+function micSyncState(){
+  if(!wakeActive || isRecording){
+    micSetState('neutral', 'Paused — tap to resume listening');
+    return;
+  }
+  if(asrReady()){
+    micSetState('ready', 'Listening — say "Hey Gaia"');
+    statusText.innerHTML = '\ud83d\udfe2 Listening… say <b>"Hey Gaia"</b>';
+  } else {
+    micSetState('error', 'Not ready — ASR connecting…');
+    statusText.innerHTML = '\ud83d\udd34 Connecting speech engine…';
+  }
 }
 
 function tryWakeDetect(){
   if(!wakeActive || isRecording) return;
-  if(ttsPlaying){
-wakeTranscriptBuf = '';
-const _el2 = document.getElementById('wake-transcript');
-if(_el2) _el2.textContent = '';
-return;
-}
-if(performance.now() - wakeLastFire < WAKE_COOLDOWN_MS) return;
+  if(performance.now() - wakeLastFire < WAKE_COOLDOWN_MS){
+    console.log('[gaia] wake detect: in cooldown (' + Math.round(WAKE_COOLDOWN_MS - (performance.now() - wakeLastFire)) + 'ms left)');
+    return;
+  }
   if(fuzzyWakeHit(wakeTranscriptBuf)){
+    console.log('[gaia] WAKE WORD HIT: "' + wakeTranscriptBuf + '"');
     wakeLastFire = performance.now();
     wakeTranscriptBuf = '';
     const el = document.getElementById('wake-transcript');
     if(el) el.textContent = '';
     onWakeDetected();
+  } else if(wakeTranscriptBuf.length > 0){
+    console.log('[gaia] wake detect: no match for "' + wakeTranscriptBuf + '"');
   }
 }
 
@@ -1108,117 +1193,136 @@ if(performance.now() - wakeLastFire < WAKE_COOLDOWN_MS) return;
 let wakeRec = null;          // current SpeechRecognition instance
 let wakeRecGen = 0;          // bumped every time we (re)spawn
 let wakeRecLastActivity = 0; // timestamp of last onresult/onstart — watchdog uses it
+let wakeRecEnds = 0;         // lifetime onend count — churn detector
+let asrEndTimestamps = [];   // rolling window of onend timestamps for churn backoff
+let asrRespawnBackoff = 500; // current backoff delay (exponential: 500→1000→2000→4000→8000 cap)
+let wakeRecSpawnTime = 0;    // when the current instance was created (staleness check)
+let wakeRecLastError = '';   // last onerror event (surfaced in pill + feed)
+// asrPill is declared at the top of the module (DOM refs block)
+function asrPillUpdate(state, detail){
+  if(!asrPill) return;
+  asrPill.classList.remove('live','dead');
+  if(state==='live'){ asrPill.classList.add('live'); asrPill.textContent = '● listening' + (detail?' · '+detail:''); }
+  else if(state==='dead'){ asrPill.classList.add('dead'); asrPill.textContent = '○ ASR down' + (detail?' · '+detail:''); }
+  else { asrPill.textContent = '○ ASR — ' + (detail||'waiting'); }
+  // The mic button mirrors ASR readiness (green = ready to hear the wake word).
+  micSyncState();
+}
+setInterval(()=>{
+  if(!wakeRec || !wakeActive){ return; }
+  const idle = Math.floor((performance.now() - wakeRecLastActivity)/1000);
+  asrPillUpdate('live', idle + 's idle');
+}, 1000);
 function startWakeRecognition(){
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if(!SR){
     statusText.innerHTML = 'Tap the mic to record manually (wake word needs Chrome)';
     return;
   }
-  // Kill any previous instance so we never have two loops alive at once
   if(wakeRec){
-    try{ wakeRec.onresult = null; wakeRec.onerror = null; wakeRec.onend = null; wakeRec.abort(); }catch(e){}
+    try{ wakeRec.onresult=null; wakeRec.onerror=null; wakeRec.onend=null; wakeRec.onstart=null; wakeRec.abort(); }catch(e){}
     wakeRec = null;
   }
   const gen = ++wakeRecGen;
-  // BUGFIX: Clear the transcript buffer so a fresh recognizer doesn't
-  // inherit stale text from the previous session. Without this, the old
-  // command text ("turn on the lights") stays in the buffer, and the
-  // first onresult from the new recognizer appends to it. tryWakeDetect()
-  // then fuzzy-matches on polluted text, potentially firing a false
-  // wake detection that swallows the user's real "hey gaia".
-  wakeTranscriptBuf = '';
-  const _wtEl = document.getElementById('wake-transcript');
-  if(_wtEl) _wtEl.textContent = '';
   const rec = new SR();
   wakeRec = rec;
+  wakeRecSpawnTime = performance.now();
+  wakeRecLastError = '';
+  wakeRecEnds = 0;
   rec.continuous = true;
   rec.interimResults = true;
   rec.lang = 'en-US';
-  rec.maxAlternatives = 3;   // more candidates = more chances to catch a mis-hearing
-  rec.onstart = ()=>{ if(gen === wakeRecGen) wakeRecLastActivity = performance.now(); };
+  rec.maxAlternatives = 3;
 
-
-
-
-
-  // BUGFIX: Priming guard. After a respawn, the first ~1.5s of ASR
-  // results are unreliable (residual TTS audio, room noise, the
-  // recognizer warming up). Ignore them to prevent the transcript
-  // buffer from being polluted before the user actually speaks.
-  const recStartTime = performance.now();
-  rec.onresult = (ev)=>{
-    if(gen !== wakeRecGen || isRecording) return;
-    wakeRecLastActivity = performance.now();
-    // BUGFIX (self-listen): Gate on TTS. While Gaia is speaking, the ASR
-    // transcribes HER voice. Chrome's ASR uses its own mic path, so the
-    // onaudioprocess gate doesn't help. Without this, her words pollute
-    // commandTranscriptBuf or wakeTranscriptBuf.
-    if(ttsPlaying) return;
-    // Skip the first 0.8s of results (priming period)
-    // Reduced from 1.5s: the old value made Gaia feel "laggy" after every
-    // respawn — 1.5s + 2.5s cooldown = 4s dead zone. Now 0.8s + 1.5s = 2.3s.
-    if(performance.now() - recStartTime < 800) return;
-    for(let i = ev.resultIndex; i < ev.results.length; i++){
-      const res = ev.results[i];
-      const isFinal = res.isFinal;
-      for(let alt = 0; alt < res.length; alt++){
-        const txt = res[alt].transcript;
-        if(!txt) continue;
-        if(commandArmed){
-          commandTranscriptBuf += ' ' + txt;
-          if(isFinal) commandHadFinal = true;
-          const el = document.getElementById('wake-transcript');
-          if(el) el.textContent = '“' + commandTranscriptBuf.trim() + '”';
-          if(isFinal && commandTranscriptBuf.trim().length > 3){
-            clearTimeout(commandSilenceTimer);
-            commandSilenceTimer = setTimeout(()=>{
-              if(commandArmed){
-                commandArmed = false;
-                const cmd = commandChunks; commandChunks = [];
-                const t = commandTranscriptBuf.trim(); commandTranscriptBuf = '';
-                if(t.length > 2){ addFeed('✍️ Heard: "' + t + '"', ''); sendCommandWithText(cmd, t); }
-                else if(cmd.length){ sendCommand(cmd); }
-                else { statusText.innerHTML = 'No command heard — listening again…'; addFeed('⏱️ No command after wake word — back to listening', ''); rearmWake(); }
-              }
-            }, 800);
-          }
-          continue;
-        }
-        if(wakeActive) pushWakeTranscript(txt);
-      }
-    }
-    if(!commandArmed) tryWakeDetect();
-  };
-  rec.onerror = (e)=>{ /* transient — onend respawns a fresh instance */ };
-  rec.onend = ()=>{
-    // Only respawn if THIS instance is still the current one and we're idle
+  rec.onstart = ()=>{
     if(gen !== wakeRecGen) return;
-    if(wakeActive && !isRecording){
-      // BUGFIX: Wait for TTS to finish before respawning.
-      // Previously a fixed 200ms setTimeout fired while TTS was still
-      // playing → the new recognizer picked up Gaia's own voice →
-      // garbage transcripts → "hey gaia" never matched → wake word
-      // appeared dead. Now we poll until ttsPlaying is false, then
-      // add a 500ms grace period for the audio to fully settle.
-      const tryRespawn = ()=>{
-        if(gen !== wakeRecGen || !wakeActive || isRecording) return;
-        if(ttsPlaying){ setTimeout(tryRespawn, 200); return; }
-        setTimeout(()=>{
-          if(gen === wakeRecGen && wakeActive && !isRecording){
-            // Clear stale transcript before spawning a fresh recognizer
-            wakeTranscriptBuf = '';
-            const _e = document.getElementById('wake-transcript');
-            if(_e) _e.textContent = '';
-            startWakeRecognition();
-          }
-        }, 500);
-      };
-      tryRespawn();
+    wakeRecLastActivity = performance.now();
+    console.log('[gaia] ASR STARTED (gen=' + gen + ')');
+    asrPillUpdate('live', 'started');
+    micSyncState();
+  };
+
+  rec.onresult = (ev)=>{
+    if(gen !== wakeRecGen) return;
+    // Ignore transcripts while TTS is playing — Gaia's own voice.
+    if(ttsPlaying) return;
+    wakeRecLastActivity = performance.now();
+    let interim = '', fin = '';
+    for(let i = ev.resultIndex; i < ev.results.length; i++){
+      const t = ev.results[i][0].transcript;
+      if(ev.results[i].isFinal) fin += t; else interim += t;
+    }
+    const text = (fin || interim).trim();
+    if(!text) return;
+    console.log('[gaia] ASR (' + (fin?'final':'interim') + '): "' + text + '"');
+    if(commandArmed){
+      commandTranscriptBuf += (commandTranscriptBuf ? ' ' : '') + text;
+      if(fin) commandHadFinal = true;
+      statusText.innerHTML = '\u23f3 <b>Hearing:</b> ' + commandTranscriptBuf;
+    } else {
+      pushWakeTranscript(text, !!fin);
     }
   };
+
+  rec.onerror = (e)=>{
+    if(gen !== wakeRecGen) return;
+    wakeRecLastError = e.error || 'unknown';
+    console.warn('[gaia] ASR ERROR (gen=' + gen + '): ' + e.error);
+    asrPillUpdate('dead', 'error: ' + e.error);
+    micSyncState();
+    if(e.error === 'not-allowed' || e.error === 'service-not-allowed') return;
+  };
+
+  rec.onend = ()=>{
+    if(gen !== wakeRecGen) return;
+    wakeRecEnds++;
+    // ── Churn detection: track onend timestamps, exponential backoff ──
+    const now = Date.now();
+    asrEndTimestamps = asrEndTimestamps.filter(t => now - t < 10000);
+    asrEndTimestamps.push(now);
+    const churnCount = asrEndTimestamps.length;
+    if(churnCount >= 3){
+      asrRespawnBackoff = Math.min(asrRespawnBackoff * 2, 8000);
+      console.warn('[gaia] ASR churn detected (' + churnCount + ' ends in 10s) — backoff ' + asrRespawnBackoff + 'ms');
+    } else if(churnCount <= 1){
+      asrRespawnBackoff = 500;
+    }
+    console.warn('[gaia] ASR ENDED (gen=' + gen + ', ends=' + wakeRecEnds +
+      (wakeRecLastError ? ', err=' + wakeRecLastError : '') + (churnCount > 2 ? ', churn=' + churnCount : '') + ')');
+    asrPillUpdate('connecting', 'ended #' + wakeRecEnds + (churnCount > 2 ? ' ⚠churn' : ''));
+    micSyncState();
+    if(!(wakeActive && !isRecording)) return;
+    if(wakeRecLastError === 'not-allowed' || wakeRecLastError === 'service-not-allowed') return;
+    let ttsTries = 0;
+    const tryRespawn = ()=>{
+      if(gen !== wakeRecGen || !wakeActive || isRecording) return;
+      if(ttsPlaying){
+        if(++ttsTries > 75){
+          console.warn('[gaia] TTS stuck - forcing respawn');
+          ttsPlaying = false;
+          try{ speechSynthesis.cancel(); }catch(e2){}
+        } else { setTimeout(tryRespawn, 200); return; }
+      }
+      setTimeout(()=>{
+        if(gen !== wakeRecGen || !wakeActive || isRecording) return;
+        console.log('[gaia] ASR respawning (gen=' + gen + ', backoff=' + asrRespawnBackoff + 'ms)');
+        startWakeRecognition();
+      }, asrRespawnBackoff);
+    };
+    tryRespawn();
+  };
+
   try{ rec.start(); }catch(e){
-    // Some Chrome versions throw if start() is called too fast after abort()
-    setTimeout(()=>{ if(gen === wakeRecGen && wakeActive && !isRecording) startWakeRecognition(); }, 300);
+    console.error('[gaia] ASR start() threw:', e);
+    if(gen === wakeRecGen){
+      setTimeout(()=>{
+        if(gen !== wakeRecGen || !wakeActive || isRecording) return;
+        try{ rec.start(); }catch(e2){
+          console.error('[gaia] ASR retry also threw:', e2);
+          asrPillUpdate('dead', 'start failed twice');
+        }
+      }, 1000);
+    }
   }
 }
 
@@ -1246,6 +1350,7 @@ function textToIntent(text){
   return null;
 }
 function sendCommandWithText(chunks, text){
+  console.log('[gaia] sendCommandWithText: text="' + text + '" chunks=' + chunks.length);
   // Strip wake word + filler from the front of the transcript.
   // The continuous ASR often includes "hey gaia" (or variants) at the start
   // of the command window because the recognizer was already running.
@@ -1276,6 +1381,7 @@ function sendCommandWithText(chunks, text){
   }
 }
 function sendCommand(chunks){
+  console.log('[gaia] sendCommand: chunks=' + chunks.length + ' samples=' + (chunks.reduce((s,c)=>s+c.length,0)));
   if(!chunks.length){
     statusText.innerHTML = '🟢 Always listening — say <b>"Hey Gaia"</b>';
     return;
@@ -1317,6 +1423,32 @@ function sendCommand(chunks){
   });
 }
 
+// ── DOM refs (MUST be declared before any code that uses them) ──
+const micBtn = document.getElementById('mic-btn');
+const statusText = document.getElementById('status-text');
+const asrPill = document.getElementById('asr-status');
+let audioCtx = null, mediaStream = null, recorder = null;
+let isRecording = false;
+
+// DEBUG: expose internals so the capture pipeline can be inspected live
+// (F12 console: window.__gaia.debug())
+window.__gaia = {
+  get debug(){
+    const st = (o)=> (o && typeof o.state==='string') ? o.state : String(o);
+    return {
+      audioCtx: st(audioCtx),
+      stream: !!wakeStream,
+      tracks: wakeStream ? wakeStream.getTracks().map(t=>({kind:t.kind, ready:t.readyState, label:t.label, enabled:t.enabled})) : [],
+      wakeActive, wakeArmed, commandArmed, isRecording, ttsPlaying,
+      asr: !!wakeRec, asrGen: wakeRecGen, asrEnds: wakeRecEnds, asrLastError: wakeRecLastError,
+      asrIdleMs: wakeRecLastActivity ? Math.round(performance.now()-wakeRecLastActivity) : null,
+      transcript: wakeTranscriptBuf, commandTranscript: commandTranscriptBuf,
+      commandChunks: commandChunks.length,
+      permission: (navigator.permissions && navigator.permissions.query({name:'microphone'}).then(r=>r.state).catch(()=>'n/a'))
+    };
+  }
+};
+
 // Boot: ALWAYS-ON wake-word listening. Starts immediately on page load and
 // self-heals: if the tab was hidden (Chrome suspends mic + SpeechRecognition)
 // or the recognizer died, we resume the moment the tab is visible again.
@@ -1330,12 +1462,8 @@ document.addEventListener('visibilitychange', ()=>{
 window.addEventListener('pageshow', ()=>{
   if(!isRecording){ startWakeMic(); ensureWakeRecognition(); }
 });
-const micBtn = document.getElementById('mic-btn');
-const statusText = document.getElementById('status-text');
-let audioCtx = null, mediaStream = null, recorder = null;
-let isRecording = false;
 // ── Wake-word state ──────────────────────────────────────────────────────────
-let wakeActive = false, wakeStream = null, wakeSrc = null, wakeProc = null, wakeGain = null;
+let wakeActive = false, wakeStream = null, wakeSrc = null, wakeProc = null;
 let wakeChunks = [], wakeArmed = false, wakeWindowStart = 0, wakeSilenceTimer = null;
 // ── Command capture state (on the SAME persistent stream) ──
 let commandArmed = false, commandChunks = [], commandWindowStart = 0, commandSilenceTimer = null;
@@ -1349,7 +1477,9 @@ async function startRecording(){
   try{
     if(!audioCtx) audioCtx = new AudioContext({sampleRate:16000});
     if(audioCtx.state === 'suspended') await audioCtx.resume();
-    mediaStream = await getUserMediaSafe();
+    mediaStream = await navigator.mediaDevices.getUserMedia({
+      audio:{sampleRate:16000, channelCount:1, echoCancellation:true, noiseSuppression:true}
+    });
     const src = audioCtx.createMediaStreamSource(mediaStream);
     const processor = audioCtx.createScriptProcessor(4096, 1, 1);
     const chunks = [];
@@ -1428,133 +1558,46 @@ async function startRecording(){
   }
 }
 
-// BUGFIX helper: make sure the ASR loop is alive whenever we return to idle.
+// Ensure the ASR loop is alive whenever we return to idle.
 // Called from every post-command path so a dead/wedged recognizer can never
 // silently kill the wake word after the first successful command.
 function ensureWakeRecognition(){
   if(!wakeActive || isRecording) return;
-  // BUGFIX: Don't respawn while TTS is playing. The new recognizer would
-  // pick up Gaia's own voice, producing garbage transcripts that poison
-  // the wake-word buffer. Wait until TTS is done.
-  if(ttsPlaying) return;
-  // No instance at all → spawn one
-  if(!wakeRec){ startWakeRecognition(); return; }
-  // Instance exists but hasn't produced activity in >8s while we're idle →
-  // it's likely dead (Chrome sometimes drops the stream silently). Force a
-  // fresh one. 8s is generous: real speech produces interim results fast.
-  if(performance.now() - wakeRecLastActivity > 8000){
-    startWakeRecognition();
-  }
+  if(asrReady()) return;
+  console.log('[gaia] ensureWakeRecognition: ASR not ready - starting');
+  startWakeRecognition();
 }
+
 // Watchdog: every 4s, if we're supposed to be listening but the recognizer
-// is silent, heal it. This is the last line of defense against the
-// "works once, then never again" class of bugs.
-setInterval(()=>{ ensureWakeRecognition(); }, 4000);
-
-// ─── Mic Source Toggle (Laptop ↔ Pi) ─────────────────────────────────────
-let micSource = 'laptop';
-const micToggle = document.getElementById('mic-toggle');
-const lblLaptop = document.getElementById('lbl-laptop');
-const lblPi = document.getElementById('lbl-pi');
-const toggleTrack = document.getElementById('toggle-track');
-const toggleThumb = document.getElementById('toggle-thumb');
-let wsConn = null;
-
-function setMicSourceUI(source) {
-  micSource = source;
-  const isPi = source === 'pi';
-  lblLaptop.classList.toggle('active', !isPi);
-  lblPi.classList.toggle('active', isPi);
-  toggleTrack.classList.toggle('pi-active', isPi);
-  toggleThumb.classList.toggle('pi-active', isPi);
-  // In Pi mode, the mic button is passive (Pi handles audio)
-  micBtn.style.opacity = isPi ? '0.4' : '1';
-  micBtn.style.pointerEvents = isPi ? 'none' : 'auto';
-  if (isPi) {
-    statusText.innerHTML = '🍓 <b>Pi Mic Active</b> — say <b>"Hey Gaia"</b> near the Pi';
-    // Stop browser mic
-    if (wakeActive) stopWakeMic();
-  } else {
-    statusText.innerHTML = '💻 <b>Laptop Mic Active</b> — say <b>"Hey Gaia"</b>';
-    // Resume browser mic
-    setTimeout(() => { if (!isRecording) startWakeMic(); }, 500);
+// is silent, heal it. Also detects idle ASR (no onresult for 12s) and
+// force-respawns — Chrome sometimes starts a recognizer that never connects.
+setInterval(()=>{
+  if(!wakeActive || isRecording) return;
+  if(!asrReady()){
+    console.warn('[gaia] Watchdog: ASR not ready - healing');
+    startWakeRecognition();
+    return;
   }
-}
-
-async function toggleMicSource() {
-  const newSource = micSource === 'laptop' ? 'pi' : 'laptop';
-  try {
-    const res = await fetch('/api/mic-source', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({source: newSource})
-    });
-    const data = await res.json();
-    if (res.ok) {
-      setMicSourceUI(data.source);
-    } else {
-      statusText.innerHTML = '⚠️ ' + (data.error || 'Failed to switch mic source');
-      setTimeout(() => {
-        if (micSource === 'laptop')
-          statusText.innerHTML = '💻 <b>Laptop Mic Active</b> — say <b>"Hey Gaia"</b>';
-        else
-          statusText.innerHTML = '🍓 <b>Pi Mic Active</b> — say <b>"Hey Gaia"</b> near the Pi';
-      }, 3000);
+  // Zombie check: instance exists but Chrome killed the backend (no onstart ever)
+  if(wakeRecLastActivity === 0 && wakeRecSpawnTime > 0){
+    const age = Math.floor((performance.now() - wakeRecSpawnTime)/1000);
+    if(age > 10){
+      console.warn('[gaia] Watchdog: zombie instance (age=' + age + 's, no onstart) — forcing respawn');
+      asrPillUpdate('dead', 'zombie ' + age + 's');
+      startWakeRecognition();
+      return;
     }
-  } catch (e) {
-    statusText.innerHTML = '⚠️ Network error — cannot switch mic source';
   }
-}
-
-micToggle.addEventListener('click', toggleMicSource);
-
-// WebSocket connection for real-time Pi mic updates
-function connectWS() {
-  const proto = location.protocol === 'https:' ? 'wss:' : 'ws:';
-  const wsUrl = `${proto}//${location.host}/ws`;
-  try {
-    wsConn = new WebSocket(wsUrl);
-    wsConn.onopen = () => {
-      console.log('[WS] Connected');
-    };
-    wsConn.onmessage = (event) => {
-      try {
-        const msg = JSON.parse(event.data);
-        if (msg.type === 'init' || msg.type === 'update' || msg.type === 'reset') {
-          // Update state cards
-          if (msg.state) applyState(msg.state);
-          // Show prediction popup
-          if (msg.prediction) {
-            showPrediction(msg.prediction.intent, msg.prediction.confidence, msg.device_intent);
-          }
-          // Update status
-          if (msg.status === 'capturing') {
-            statusText.innerHTML = '🍓 <b>Pi is listening…</b> speak your command';
-          } else if (msg.speak) {
-            statusText.innerHTML = `🔊 ${msg.speak}`;
-          }
-        } else if (msg.type === 'mic_source') {
-          setMicSourceUI(msg.source);
-        }
-      } catch (e) { console.warn('[WS] parse error', e); }
-    };
-    wsConn.onclose = () => {
-      console.log('[WS] Disconnected — retrying in 3s');
-      setTimeout(connectWS, 3000);
-    };
-    wsConn.onerror = () => { wsConn.close(); };
-  } catch (e) {
-    console.warn('[WS] Failed to connect:', e);
-    setTimeout(connectWS, 5000);
+  // Idle nudge: ASR started but completely silent >45s
+  if(wakeRecLastActivity > 0){
+    const idle = Math.floor((performance.now() - wakeRecLastActivity)/1000);
+    if(idle > 45){
+      console.warn('[gaia] Watchdog: ASR idle ' + idle + 's — nudging with fresh spawn');
+      asrPillUpdate('dead', 'idle ' + idle + 's');
+      startWakeRecognition();
+    }
   }
-}
-
-// Fetch initial mic source state
-fetch('/api/mic-source').then(r => r.json()).then(d => {
-  if (d.source) setMicSourceUI(d.source);
-}).catch(() => {});
-
-connectWS();
+}, 3000);
 
 micBtn.addEventListener('click', toggleWake);
 // Manual recording finished — resume wake-word listening
