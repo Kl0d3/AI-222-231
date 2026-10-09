@@ -1429,6 +1429,10 @@ const statusText = document.getElementById('status-text');
 const asrPill = document.getElementById('asr-status');
 let audioCtx = null, mediaStream = null, recorder = null;
 let isRecording = false;
+let wakeActive = false, wakeStream = null, wakeSrc = null, wakeProc = null;
+let wakeChunks = [], wakeArmed = false, wakeWindowStart = 0, wakeSilenceTimer = null;
+let commandArmed = false, commandChunks = [], commandWindowStart = 0, commandSilenceTimer = null;
+let commandTranscriptBuf = '', commandHadFinal = false;
 
 // DEBUG: expose internals so the capture pipeline can be inspected live
 // (F12 console: window.__gaia.debug())
@@ -1463,11 +1467,7 @@ window.addEventListener('pageshow', ()=>{
   if(!isRecording){ startWakeMic(); ensureWakeRecognition(); }
 });
 // ── Wake-word state ──────────────────────────────────────────────────────────
-let wakeActive = false, wakeStream = null, wakeSrc = null, wakeProc = null;
-let wakeChunks = [], wakeArmed = false, wakeWindowStart = 0, wakeSilenceTimer = null;
-// ── Command capture state (on the SAME persistent stream) ──
-let commandArmed = false, commandChunks = [], commandWindowStart = 0, commandSilenceTimer = null;
-let commandTranscriptBuf = '', commandHadFinal = false;
+
 const COMMAND_WINDOW_MS = 3000;  // how long to capture the command after wake word
 const WAKE_WINDOW_MS = 2500;   // how long to listen for "hey gaia"
 const WAKE_SILENCE_MS = 6000;  // auto-return to idle if nothing said
