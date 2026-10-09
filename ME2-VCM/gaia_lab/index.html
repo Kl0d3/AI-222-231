@@ -837,6 +837,18 @@ function handleWakeFrame(f32){
 }
 
 async function startWakeMic(){
+  // FIX: Guard against double-init. The boot section calls startWakeMic()
+  // twice (once at module level, once in the boot block). The second call
+  // created a duplicate ScriptProcessorNode + MediaStreamSource on the same
+  // stream, causing audio glitches and potential resource leaks.
+  if(wakeProc && wakeStream){
+    // Already initialized — just ensure the AudioContext is running
+    if(audioCtx && audioCtx.state === 'suspended'){
+      audioCtx.resume().catch(()=>{});
+    }
+    wakeActive = true;
+    return;
+  }
   // ── Phase 1: NOT READY → red ──
   micBtn.classList.remove('wake','listening','neutral');
   micBtn.classList.add('error');
@@ -1139,6 +1151,21 @@ function micSetState(state, title){
 function asrReady(){
   if(!wakeRec) return false;
   if(wakeRecLastError === 'not-allowed' || wakeRecLastError === 'service-not-allowed') return false;
+  // FIX: Detect stopped recognizers. Chrome's continuous ASR auto-stops
+  // after ~8s of silence. The instance still exists (wakeRec != null) but
+  // is no longer listening. Without this check, asrReady() returns true
+  // for a dead recognizer and the watchdog never heals it.
+  // Heuristic: if the recognizer has been alive for >12s with no onresult
+  // activity AND we're not in TTS (which suppresses results), it's likely
+  // stopped. The onend handler will respawn it, but if onend didn't fire
+  // (Chrome bug), this catches it.
+  if(wakeRecLastActivity > 0 && !ttsPlaying){
+    const idle = performance.now() - wakeRecLastActivity;
+    if(idle > 12000){
+      console.warn('[gaia] asrReady: ASR idle ' + Math.floor(idle/1000) + 's — treating as stopped');
+      return false;
+    }
+  }
   // Staleness check: instance exists but never started (or died silently)
   if(wakeRecLastActivity === 0 && wakeRecGen > 0){
     const age = performance.now() - (wakeRecSpawnTime || 0);
@@ -1244,9 +1271,12 @@ function startWakeRecognition(){
 
   rec.onresult = (ev)=>{
     if(gen !== wakeRecGen) return;
+    // FIX: Update activity timestamp BEFORE the TTS gate. Otherwise during
+    // TTS the watchdog sees "idle ASR" and force-respawns the recognizer
+    // mid-speech, killing the session.
+    wakeRecLastActivity = performance.now();
     // Ignore transcripts while TTS is playing — Gaia's own voice.
     if(ttsPlaying) return;
-    wakeRecLastActivity = performance.now();
     let interim = '', fin = '';
     for(let i = ev.resultIndex; i < ev.results.length; i++){
       const t = ev.results[i][0].transcript;
@@ -1277,12 +1307,17 @@ function startWakeRecognition(){
     if(gen !== wakeRecGen) return;
     wakeRecEnds++;
     // ── Churn detection: track onend timestamps, exponential backoff ──
+    // FIX: Don't count onend during TTS as churn. Chrome's continuous ASR
+    // auto-stops during TTS (mic picks up Gaia's voice → confusion → stop).
+    // Counting these inflates the backoff to 8s, creating long dead windows.
     const now = Date.now();
-    asrEndTimestamps = asrEndTimestamps.filter(t => now - t < 10000);
-    asrEndTimestamps.push(now);
+    if(!ttsPlaying){
+      asrEndTimestamps = asrEndTimestamps.filter(t => now - t < 10000);
+      asrEndTimestamps.push(now);
+    }
     const churnCount = asrEndTimestamps.length;
     if(churnCount >= 3){
-      asrRespawnBackoff = Math.min(asrRespawnBackoff * 2, 8000);
+      asrRespawnBackoff = Math.min(asrRespawnBackoff * 2, 4000);
       console.warn('[gaia] ASR churn detected (' + churnCount + ' ends in 10s) — backoff ' + asrRespawnBackoff + 'ms');
     } else if(churnCount <= 1){
       asrRespawnBackoff = 500;
@@ -1568,11 +1603,19 @@ function ensureWakeRecognition(){
   startWakeRecognition();
 }
 
-// Watchdog: every 4s, if we're supposed to be listening but the recognizer
-// is silent, heal it. Also detects idle ASR (no onresult for 12s) and
+// Watchdog: every 3s, if we're supposed to be listening but the recognizer
+// is silent, heal it. Also detects idle ASR (no onresult for 20s) and
 // force-respawns — Chrome sometimes starts a recognizer that never connects.
+// FIX: Also monitors AudioContext state. If the context suspends (tab
+// hidden, system sleep, Bluetooth disconnect), onaudioprocess stops firing
+// and the mic goes dead. Resuming the context brings it back.
 setInterval(()=>{
   if(!wakeActive || isRecording) return;
+  // FIX: Resume suspended AudioContext
+  if(audioCtx && audioCtx.state === 'suspended'){
+    console.warn('[gaia] Watchdog: AudioContext suspended — resuming');
+    audioCtx.resume().catch(()=>{});
+  }
   if(!asrReady()){
     console.warn('[gaia] Watchdog: ASR not ready - healing');
     startWakeRecognition();
@@ -1588,10 +1631,13 @@ setInterval(()=>{
       return;
     }
   }
-  // Idle nudge: ASR started but completely silent >45s
+  // Idle nudge: ASR started but completely silent >20s
+  // FIX: Reduced from 45s to 20s. Chrome's continuous ASR auto-stops after
+  // ~8s of silence. If onend didn't fire (Chrome bug), the old 45s threshold
+  // left the mic dead for nearly a minute. 20s catches it faster.
   if(wakeRecLastActivity > 0){
     const idle = Math.floor((performance.now() - wakeRecLastActivity)/1000);
-    if(idle > 45){
+    if(idle > 20){
       console.warn('[gaia] Watchdog: ASR idle ' + idle + 's — nudging with fresh spawn');
       asrPillUpdate('dead', 'idle ' + idle + 's');
       startWakeRecognition();
