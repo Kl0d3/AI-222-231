@@ -176,8 +176,35 @@ body{overflow:hidden;background:#000;font-family:'Segoe UI',system-ui,sans-serif
   </div>
 </div>
 
+<script>
+// Global load-error surface: if the 3D module (or any resource) fails to load,
+// show a visible banner instead of hanging on a blank spinner forever.
+(function(){
+  function show(msg){
+    var d=document.createElement('div');
+    d.id='loaderr';
+    d.style.cssText='position:fixed;top:0;left:0;right:0;z-index:9999;padding:14px 20px;background:#7f1d1d;color:#fecaca;font:14px/1.5 monospace;border-bottom:2px solid #ef4444';
+    d.textContent='⚠ Gaia failed to load: '+msg+'  (open F12 → Console for details)';
+    document.body.appendChild(d);
+  }
+  window.addEventListener('error', function(e){
+    if(e.target && (e.target.tagName==='SCRIPT'||e.target.tagName==='LINK')){
+      show('resource failed: '+(e.target.src||e.target.href||e.target));
+    }
+  });
+  window.addEventListener('unhandledrejection', function(e){
+    show('module rejected: '+((e.reason&&e.reason.message)||e.reason));
+  });
+  // If nothing rendered within 12s, the 3D module almost certainly never ran.
+  setTimeout(function(){
+    if(!document.getElementById('canvas3d')||!window.__gaiaBooted){
+      show('3D scene did not initialize in 12s — check that /static/vendor/three.module.js is being served');
+    }
+  },12000);
+})();
+</script>
 <script type="importmap">
-{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"}}
+{"imports":{"three":"/static/vendor/three.module.js","three/addons/":"/static/vendor/"}}
 </script>
 <script type="module">
 // VERSION: 2026-10-05T12:00:00Z - ASR robustness fixes
@@ -1800,6 +1827,7 @@ function animate(){
 animate();
 
 // Hide loading
+window.__gaiaBooted = true;
 setTimeout(()=>document.getElementById('loading').classList.add('hide'), 800);
 
 // Initial feed
