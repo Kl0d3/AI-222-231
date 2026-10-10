@@ -18,7 +18,26 @@ from crnn_model import CRNN
 HERE = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_CKPT = os.path.join(HERE, "models", "tiny_vcm.pth")
 CRNN_CKPT = os.path.join(HERE, "models", "crnn_ai231_42.pth")
-HF_CKPT = os.path.join(HERE, "..", "models", "crnn_hf_20_gen.pth")
+
+
+def _resolve_ckpt(candidates):
+    """Return the first existing checkpoint path, else raise with a clear hint."""
+    for p in candidates:
+        if os.path.isfile(p):
+            return p
+    tried = "\n  ".join(os.path.normpath(p) for p in candidates)
+    raise FileNotFoundError(
+        "Model checkpoint not found. Looked for:\n  " + tried +
+        "\nCopy crnn_hf_20_gen.pth next to the app (see README)."
+    )
+
+
+# The HF 20-class checkpoint lives in ../models/ in the repo layout but in
+# ./models/ when the gaia_lab folder is copied flat onto the Pi. Accept both.
+HF_CKPT = _resolve_ckpt([
+    os.path.join(HERE, "models", "crnn_hf_20_gen.pth"),        # flat (Pi)
+    os.path.join(HERE, "..", "models", "crnn_hf_20_gen.pth"),  # repo
+])
 
 
 class VCMPredictor:
