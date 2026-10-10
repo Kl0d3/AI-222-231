@@ -560,6 +560,65 @@ function setMusicVolume(){
   if(musicAudio) musicAudio.volume = Math.max(0, Math.min(0.35, state.volume/100));
 }
 let voiceBannerTimer = null;
+
+// ─── MIC DIAGNOSTIC LOG ─────────────────────────────────────────────────────
+// Records every mic/ASR/wake/command/TTS state transition with a timestamp and
+// the exact reason, so a "2nd command doesn't trigger" failure is diagnosable
+// in seconds instead of by guesswork. Visible three ways:
+//   • On-screen panel (bottom-right, click ▸ to expand) — no F12 needed
+//   • F12 console: window.__gaia.log()  → full event array
+//   • F12 console: window.__gaia.snapshot() → current state + last 20 events
+// Each entry: {t: ms-since-load, tag, msg}. Tag colors: asr=blue, wake=purple,
+// cmd=amber, tts=pink, err=red, info=gray.
+const __GLOG_MAX = 220;
+const __glogEvents = [];
+function glog(tag, msg){
+  const e = { t: Math.round(performance.now()), tag, msg };
+  __glogEvents.push(e);
+  if(__glogEvents.length > __GLOG_MAX) __glogEvents.shift();
+  console.log('%c[gaia:%s]%s %s', 'color:'+({asr:'#4da3ff',wake:'#c084fc',cmd:'#fbbf24',tts:'#f472b6',err:'#ef4444',info:'#94a3b8'}[tag]||'#94a3b8')+';font-weight:bold', tag.toUpperCase(), tag==='err'?'✖':'·', msg);
+  _renderGlogPanel();
+}
+function _renderGlogPanel(){
+  const p = document.getElementById('glog-panel');
+  if(!p) return;
+  const body = document.getElementById('glog-body');
+  if(body && p.dataset.open === '1'){
+    const last = __glogEvents.slice(-40).reverse();
+    body.innerHTML = last.map(e=>{
+      const c = {asr:'#4da3ff',wake:'#c084fc',cmd:'#fbbf24',tts:'#f472b6',err:'#ef4444',info:'#94a3b8'}[e.tag]||'#94a3b8';
+      return '<div class="gl-row"><span class="gl-t">'+(e.t/1000).toFixed(1)+'s</span><span class="gl-tag" style="color:'+c+'">'+e.tag+'</span><span class="gl-m">'+String(e.msg).replace(/</g,'&lt;')+'</span></div>';
+    }).join('');
+  }
+  const head = document.getElementById('glog-head');
+  if(head && __glogEvents.length){
+    const e = __glogEvents[__glogEvents.length-1];
+    head.childNodes[0].textContent = (p.dataset.open==='1'?'▾ ':'▸ ') + 'mic-log · ' + e.tag + ': ' + (e.msg.length>30 ? e.msg.slice(0,30)+'…' : e.msg);
+  }
+}
+function _injectGlogPanel(){
+  if(document.getElementById('glog-panel')) return;
+  const css = document.createElement('style');
+  css.textContent = '#glog-panel{position:fixed;right:16px;bottom:16px;z-index:50;width:300px;max-width:80vw;background:rgba(6,10,20,.92);border:1px solid rgba(77,163,255,.4);border-radius:10px;font:11px/1.4 ui-monospace,Menlo,Consolas,monospace;backdrop-filter:blur(6px);box-shadow:0 8px 30px rgba(0,0,0,.5);overflow:hidden}'+
+    '#glog-head{padding:8px 12px;cursor:pointer;color:#7dd3fc;font-weight:700;letter-spacing:.5px;display:flex;justify-content:space-between;align-items:center;user-select:none}'+
+    '#glog-head:hover{background:rgba(77,163,255,.1)}'+
+    '#glog-body{max-height:0;overflow-y:auto;transition:max-height .2s ease;border-top:1px solid rgba(77,163,255,.15)}'+
+    '#glog-panel[data-open="1"] #glog-body{max-height:320px;border-top-color:rgba(77,163,255,.3)}'+
+    '.gl-row{display:flex;gap:8px;padding:3px 12px;border-bottom:1px solid rgba(255,255,255,.04)}'+
+    '.gl-t{color:#64748b;min-width:42px}'+
+    '.gl-tag{min-width:34px;font-weight:700}'+
+    '.gl-m{color:#cbd5e1;word-break:break-word;flex:1}';
+  document.head.appendChild(css);
+  const p = document.createElement('div');
+  p.id = 'glog-panel'; p.dataset.open = '0';
+  p.innerHTML = '<div id="glog-head"><span>▸ mic-log</span><span id="glog-count" style="color:#64748b"></span></div><div id="glog-body"></div>';
+  document.body.appendChild(p);
+  document.getElementById('glog-head').addEventListener('click', ()=>{
+    p.dataset.open = p.dataset.open === '1' ? '0' : '1';
+    _renderGlogPanel();
+  });
+  setInterval(()=>{ const c=document.getElementById('glog-count'); if(c) c.textContent=__glogEvents.length; }, 1000);
+}
 // TTS playback state — used to gate wake-word re-arm so the ASR doesn't
 // pick up Gaia's own voice and wedge the recognizer.
 let ttsPlaying = false;
@@ -587,9 +646,21 @@ function speak(text){
                  || voices.find(v=>/^en/i.test(v.lang));
       if(pref) u.voice = pref;
       ttsPlaying = true;
-      u.onend = ()=>{ ttsPlaying = false; };
-      u.onerror = ()=>{ ttsPlaying = false; };
+      u.onend = ()=>{
+        ttsPlaying = false;
+        glog('tts', 'TTS ended — re-arming wake listener');
+        // FIX: re-arm DIRECTLY here instead of relying on the fetch-chain
+        // rearmAfterTts(). If the fetch response is slow or the promise chain
+        // is interrupted, the re-arm never fires and the mic stays dead.
+        if(typeof rearmAfterTts === 'function') rearmAfterTts();
+      };
+      u.onerror = ()=>{
+        ttsPlaying = false;
+        glog('tts', 'TTS error — re-arming wake listener');
+        if(typeof rearmAfterTts === 'function') rearmAfterTts();
+      };
       window.speechSynthesis.speak(u);
+      glog('tts', 'TTS playing: "' + text.slice(0,40) + '"');
       // Safety: if onend never fires (Chrome bug), force-clear after adaptive timeout.
       // ~80ms per character at rate 1.05, minimum 10s. Prevents the old 8s cap
       // from clearing ttsPlaying mid-speech on long responses (weather, etc.).
@@ -1007,7 +1078,7 @@ function toggleWake(){
 // voice → onend fired → recognizer respawned → user's next "Hey Gaia"
 // landed in the dead window and was never detected.
 function onWakeDetected(){
-  console.log('[gaia] onWakeDetected: arming command window, commandArmed=true, ttsPlaying=' + ttsPlaying);
+  glog('wake', 'DETECTED — arming command window (tts=' + ttsPlaying + ')');
   // FIX (Oct10): Reset the cooldown so the user can immediately say "Hey Gaia"
   // again after the command completes. Without this, the 600ms cooldown from
   // the CURRENT fire would block the NEXT wake if the user speaks quickly.
@@ -1037,7 +1108,7 @@ function onWakeDetected(){
   clearTimeout(commandSilenceTimer);
   commandSilenceTimer = setTimeout(()=>{
     if(commandArmed){
-      console.log('[gaia] command window expired: txt="' + commandTranscriptBuf.trim() + '" chunks=' + commandChunks.length + ' ttsPlaying=' + ttsPlaying);
+      glog('cmd', 'window expired: txt="' + commandTranscriptBuf.trim() + '" chunks=' + commandChunks.length + ' tts=' + ttsPlaying);
       commandArmed = false;
       const cmd = commandChunks; commandChunks = [];
       const txt = commandTranscriptBuf.trim(); commandTranscriptBuf = '';
@@ -1055,7 +1126,7 @@ function onWakeDetected(){
 }
 
 function rearmWake(){
-  console.log('[gaia] rearmWake: clearing transcript, wakeArmed=true, ensuring ASR');
+  glog('wake', 'rearmWake: clearing transcript, ensuring ASR');
   wakeTranscriptBuf = '';
   wakeArmed = true;
   wakeWindowStart = performance.now();
@@ -1072,13 +1143,8 @@ function rearmWake(){
   ensureWakeRecognition();
 }
 function rearmAfterTts(){
-  console.log('[gaia] rearmAfterTts: ttsPlaying=' + ttsPlaying + ' isRecording=' + isRecording);
+  glog('tts', 'rearmAfterTts: tts=' + ttsPlaying + ' recording=' + isRecording);
   if(ttsPlaying){ setTimeout(rearmAfterTts, 80); return; }
-  // FIX (Oct10): Was `setTimeout(()=>rearmWake(), 200)`. The 200ms delay meant
-  // the ASR wasn't restarted until 200ms after TTS ended. Combined with the
-  // 2500ms respawnLock and Chrome's ~100-300ms recognizer startup, the total
-  // dead window was 2.5-4s. Now we call rearmWake() synchronously — the
-  // ensureWakeRecognition() inside it will start a fresh recognizer immediately.
   if(!isRecording) rearmWake();
 }
 
@@ -1177,7 +1243,7 @@ function asrReady(){
   if(wakeRecLastActivity > 0){
     const idle = performance.now() - wakeRecLastActivity;
     if(idle > 8000){
-      console.warn('[gaia] asrReady: ASR idle ' + Math.floor(idle/1000) + 's — treating as stopped');
+      glog('asr', 'DEAD-WINDOW: idle ' + Math.floor(idle/1000) + 's (tts=' + ttsPlaying + ') — treating as stopped');
       return false;
     }
   }
@@ -1185,7 +1251,7 @@ function asrReady(){
   if(wakeRecLastActivity === 0 && wakeRecGen > 0){
     const age = performance.now() - (wakeRecSpawnTime || 0);
     if(age > 5000){
-      console.warn('[gaia] asrReady: stale instance (age=' + Math.floor(age/1000) + 's, no activity) — treating as dead');
+      glog('asr', 'STALE: no onstart for ' + Math.floor(age/1000) + 's (gen=' + wakeRecGen + ') — treating as dead');
       return false;
     }
   }
@@ -1209,18 +1275,18 @@ function micSyncState(){
 function tryWakeDetect(){
   if(!wakeActive || isRecording) return;
   if(performance.now() - wakeLastFire < WAKE_COOLDOWN_MS){
-    console.log('[gaia] wake detect: in cooldown (' + Math.round(WAKE_COOLDOWN_MS - (performance.now() - wakeLastFire)) + 'ms left)');
+    glog('wake', 'cooldown — ' + Math.round(WAKE_COOLDOWN_MS - (performance.now() - wakeLastFire)) + 'ms left, buf="' + wakeTranscriptBuf + '"');
     return;
   }
   if(fuzzyWakeHit(wakeTranscriptBuf)){
-    console.log('[gaia] WAKE WORD HIT: "' + wakeTranscriptBuf + '"');
+    glog('wake', 'HIT: "' + wakeTranscriptBuf + '" → arming command window');
     wakeLastFire = performance.now();
     wakeTranscriptBuf = '';
     const el = document.getElementById('wake-transcript');
     if(el) el.textContent = '';
     onWakeDetected();
   } else if(wakeTranscriptBuf.length > 0){
-    console.log('[gaia] wake detect: no match for "' + wakeTranscriptBuf + '"');
+    glog('wake', 'no match: "' + wakeTranscriptBuf + '"');
   }
 }
 
@@ -1257,7 +1323,7 @@ setInterval(()=>{
   asrPillUpdate('live', idle + 's idle');
 }, 1000);
 function startWakeRecognition(){
-if(respawnLock){ console.log('[gaia] startWakeRecognition: respawn in flight — deferring'); return; } respawnLock = true; setTimeout(()=>{ respawnLock = false; }, 1200);
+if(respawnLock){ glog('asr', 'startWakeRecognition: DEFERRED (respawn in flight)'); return; } respawnLock = true; setTimeout(()=>{ respawnLock = false; }, 1200);
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if(!SR){
     statusText.innerHTML = 'Tap the mic to record manually (wake word needs Chrome)';
@@ -1281,19 +1347,20 @@ if(respawnLock){ console.log('[gaia] startWakeRecognition: respawn in flight —
   rec.onstart = ()=>{
     if(gen !== wakeRecGen) return;
     wakeRecLastActivity = performance.now();
-    console.log('[gaia] ASR STARTED (gen=' + gen + ')');
+    glog('asr', 'STARTED (gen=' + gen + ')');
     asrPillUpdate('live', 'started');
     micSyncState();
   };
 
   rec.onresult = (ev)=>{
     if(gen !== wakeRecGen) return;
-    // FIX: Update activity timestamp BEFORE the TTS gate. Otherwise during
-    // TTS the watchdog sees "idle ASR" and force-respawns the recognizer
-    // mid-speech, killing the session.
     wakeRecLastActivity = performance.now();
-    // Ignore transcripts while TTS is playing — Gaia's own voice.
-    if(ttsPlaying) return;
+    if(ttsPlaying){
+      // Still log so we can see Gaia's own voice being heard during TTS
+      let _t=''; for(let i=ev.resultIndex;i<ev.results.length;i++){ _t+=ev.results[i][0].transcript; }
+      if(_t.trim()) glog('tts', 'ASR heard Gaia (ignored): "' + _t.trim().slice(0,30) + '"');
+      return;
+    }
     let interim = '', fin = '';
     for(let i = ev.resultIndex; i < ev.results.length; i++){
       const t = ev.results[i][0].transcript;
@@ -1301,7 +1368,7 @@ if(respawnLock){ console.log('[gaia] startWakeRecognition: respawn in flight —
     }
     const text = (fin || interim).trim();
     if(!text) return;
-    console.log('[gaia] ASR (' + (fin?'final':'interim') + '): "' + text + '"');
+    glog('asr', (fin?'final':'interim') + ': "' + text + '" (armed=' + commandArmed + ')');
     if(commandArmed){
       commandTranscriptBuf += (commandTranscriptBuf ? ' ' : '') + text;
       if(fin) commandHadFinal = true;
@@ -1314,7 +1381,7 @@ if(respawnLock){ console.log('[gaia] startWakeRecognition: respawn in flight —
   rec.onerror = (e)=>{
     if(gen !== wakeRecGen) return;
     wakeRecLastError = e.error || 'unknown';
-    console.warn('[gaia] ASR ERROR (gen=' + gen + '): ' + e.error);
+    glog('err', 'ASR ERROR (gen=' + gen + '): ' + e.error);
     asrPillUpdate('dead', 'error: ' + e.error);
     micSyncState();
     if(e.error === 'not-allowed' || e.error === 'service-not-allowed') return;
@@ -1323,10 +1390,16 @@ if(respawnLock){ console.log('[gaia] startWakeRecognition: respawn in flight —
   rec.onend = ()=>{
     if(gen !== wakeRecGen) return;
     wakeRecEnds++;
-    // ── Churn detection: track onend timestamps, exponential backoff ──
-    // FIX: Don't count onend during TTS as churn. Chrome's continuous ASR
-    // auto-stops during TTS (mic picks up Gaia's voice → confusion → stop).
-    // Counting these inflates the backoff to 8s, creating long dead windows.
+    const idleMs = wakeRecLastActivity ? performance.now() - wakeRecLastActivity : 0;
+    glog('asr', 'ENDED (gen=' + gen + ', ends=' + wakeRecEnds + ', idle=' + Math.round(idleMs/1000) + 's, tts=' + ttsPlaying + (wakeRecLastError?', err='+wakeRecLastError:'') + ')');
+    // FIX: stale ttsPlaying detection — if TTS flag is set but ASR idle >2s,
+    // the TTS finished without firing onend (Chrome bug) or was cancelled.
+    if(ttsPlaying && idleMs > 2000){
+      glog('tts', 'STALE ttsPlaying (idle ' + Math.round(idleMs/1000) + 's) — force-clearing');
+      ttsPlaying = false;
+      try{ speechSynthesis.cancel(); }catch(e2){}
+    }
+    // Churn detection
     const now = Date.now();
     if(!ttsPlaying && (performance.now() - wakeRecSpawnTime) > 3000){
       asrEndTimestamps = asrEndTimestamps.filter(t => now - t < 10000);
@@ -1335,43 +1408,35 @@ if(respawnLock){ console.log('[gaia] startWakeRecognition: respawn in flight —
     const churnCount = asrEndTimestamps.length;
     if(churnCount >= 3){
       asrRespawnBackoff = Math.min(asrRespawnBackoff * 2, 2000);
-      console.warn('[gaia] ASR churn detected (' + churnCount + ' ends in 10s) — backoff ' + asrRespawnBackoff + 'ms');
+      glog('asr', 'CHURN: ' + churnCount + ' ends/10s — backoff ' + asrRespawnBackoff + 'ms');
     } else if(churnCount <= 1){
       asrRespawnBackoff = 500;
     }
-    // FIX (Oct10): If the recognizer stopped DURING TTS, reset backoff to
-    // minimum. TTS-caused stops are expected (Chrome auto-stops when it hears
-    // Gaia's voice) and should NOT accumulate backoff. Without this, repeated
-    // TTS cycles inflate the backoff to 2s, creating a dead window where the
-    // user's next "Hey Gaia" is missed.
     if(ttsPlaying){
       asrRespawnBackoff = 500;
-      console.log('[gaia] ASR stopped during TTS — resetting backoff to 500ms');
+      glog('asr', 'stopped during TTS — backoff reset to 500ms');
     }
-    console.warn('[gaia] ASR ENDED (gen=' + gen + ', ends=' + wakeRecEnds +
-      (wakeRecLastError ? ', err=' + wakeRecLastError : '') + (churnCount > 2 ? ', churn=' + churnCount : '') + ')');
-    asrPillUpdate('connecting', 'ended #' + wakeRecEnds + (churnCount > 2 ? ' ⚠churn' : ''));
+    asrPillUpdate('connecting', 'ended #' + wakeRecEnds + (churnCount > 2 ? ' \u26a0churn' : ''));
     micSyncState();
-    if(!(wakeActive && !isRecording)) return;
-    if(wakeRecLastError === 'not-allowed' || wakeRecLastError === 'service-not-allowed') return;
+    if(!(wakeActive && !isRecording)){ glog('asr', 'not respawning (wakeActive=' + wakeActive + ', recording=' + isRecording + ')'); return; }
+    if(wakeRecLastError === 'not-allowed' || wakeRecLastError === 'service-not-allowed'){ glog('err', 'permission denied — not respawning'); return; }
     let ttsTries = 0;
     const tryRespawn = ()=>{
       if(gen !== wakeRecGen || !wakeActive || isRecording) return;
       if(ttsPlaying){
         if(++ttsTries > 75){
-          console.warn('[gaia] TTS stuck - forcing respawn');
+          glog('tts', 'TTS stuck >15s — forcing respawn');
           ttsPlaying = false;
           try{ speechSynthesis.cancel(); }catch(e2){}
         } else { setTimeout(tryRespawn, 200); return; }
       }
       setTimeout(()=>{
         if(gen !== wakeRecGen || !wakeActive || isRecording) return;
-        console.log('[gaia] ASR respawning (gen=' + gen + ', backoff=' + asrRespawnBackoff + 'ms)');
+        glog('asr', 'RESPAWN (gen=' + gen + ', backoff=' + asrRespawnBackoff + 'ms)');
         startWakeRecognition();
       }, asrRespawnBackoff);
     };
-    tryRespawn();
-  };
+    tryRespawn();  };
 
   try{ rec.start(); }catch(e){
     console.error('[gaia] ASR start() threw:', e);
@@ -1411,7 +1476,7 @@ function textToIntent(text){
   return null;
 }
 function sendCommandWithText(chunks, text){
-  console.log('[gaia] sendCommandWithText: text="' + text + '" chunks=' + chunks.length);
+  glog('cmd', 'sendCommandWithText: "' + text.slice(0,40) + '" chunks=' + chunks.length);
   // Strip wake word + filler from the front of the transcript.
   // The continuous ASR often includes "hey gaia" (or variants) at the start
   // of the command window because the recognizer was already running.
@@ -1442,7 +1507,7 @@ function sendCommandWithText(chunks, text){
   }
 }
 function sendCommand(chunks){
-  console.log('[gaia] sendCommand: chunks=' + chunks.length + ' samples=' + (chunks.reduce((s,c)=>s+c.length,0)));
+  glog('cmd', 'sendCommand: chunks=' + chunks.length + ' samples=' + (chunks.reduce((s,c)=>s+c.length,0)));
   if(!chunks.length){
     statusText.innerHTML = '🟢 Always listening — say <b>"Hey Gaia"</b>';
     return;
@@ -1511,12 +1576,26 @@ window.__gaia = {
       commandChunks: commandChunks.length,
       permission: (navigator.permissions && navigator.permissions.query({name:'microphone'}).then(r=>r.state).catch(()=>'n/a'))
     };
-  }
+  },
+  // Full diagnostic event log (most recent last)
+  log: ()=> __glogEvents.slice(),
+  // Compact snapshot: current state + last 20 events
+  snapshot: ()=> {
+    const d = this.debug;
+    return {
+      state: d,
+      lastEvents: __glogEvents.slice(-20).map(e=> e.t/1000+'s ['+e.tag+'] '+e.msg)
+    };
+  },
+  // Clear the log
+  clearLog: ()=>{ __glogEvents.length = 0; _renderGlogPanel(); }
 };
 
 // Boot: ALWAYS-ON wake-word listening. Starts immediately on page load and
 // self-heals: if the tab was hidden (Chrome suspends mic + SpeechRecognition)
 // or the recognizer died, we resume the moment the tab is visible again.
+_injectGlogPanel();
+glog('info', 'BOOT: Gaia Lab loaded — starting mic + ASR');
 startWakeMic();
 startWakeRecognition();
 document.addEventListener('visibilitychange', ()=>{
@@ -1624,8 +1703,8 @@ async function startRecording(){
 // silently kill the wake word after the first successful command.
 function ensureWakeRecognition(){
   if(!wakeActive || isRecording) return;
-  if(asrReady()) return;
-  console.log('[gaia] ensureWakeRecognition: ASR not ready - starting');
+  if(asrReady()){ glog('asr', 'ensureWake: already ready (gen=' + wakeRecGen + ')'); return; }
+  glog('asr', 'ensureWake: NOT ready — starting fresh recognizer');
   startWakeRecognition();
 }
 
@@ -1639,11 +1718,11 @@ setInterval(()=>{
   if(!wakeActive || isRecording) return;
   // FIX: Resume suspended AudioContext
   if(audioCtx && audioCtx.state === 'suspended'){
-    console.warn('[gaia] Watchdog: AudioContext suspended — resuming');
+    glog('err', 'Watchdog: AudioContext suspended — resuming');
     audioCtx.resume().catch(()=>{});
   }
   if(!asrReady()){
-    console.warn('[gaia] Watchdog: ASR not ready - healing');
+    glog('asr', 'Watchdog: ASR not ready — healing (gen=' + wakeRecGen + ')');
     startWakeRecognition();
     return;
   }
@@ -1651,21 +1730,16 @@ setInterval(()=>{
   if(wakeRecLastActivity === 0 && wakeRecSpawnTime > 0){
     const age = Math.floor((performance.now() - wakeRecSpawnTime)/1000);
     if(age > 10){
-      console.warn('[gaia] Watchdog: zombie instance (age=' + age + 's, no onstart) — forcing respawn');
+      glog('asr', 'Watchdog: ZOMBIE (age=' + age + 's, no onstart) — forcing respawn');
       asrPillUpdate('dead', 'zombie ' + age + 's');
       startWakeRecognition();
       return;
     }
   }
-  // Idle nudge: ASR started but completely silent >8s
-  // FIX (Oct10): Reduced from 15s to 8s. Chrome's continuous ASR auto-stops
-  // after ~8s of silence. If onend didn't fire (Chrome bug), the old 15s
-  // threshold left the mic dead for 7s after Chrome stopped the recognizer.
-  // 8s matches Chrome's auto-stop window and heals within one watchdog tick.
   if(wakeRecLastActivity > 0){
     const idle = Math.floor((performance.now() - wakeRecLastActivity)/1000);
     if(idle > 8){
-      console.warn('[gaia] Watchdog: ASR idle ' + idle + 's — nudging with fresh spawn');
+      glog('asr', 'Watchdog: IDLE ' + idle + 's (tts=' + ttsPlaying + ') — forcing respawn');
       asrPillUpdate('dead', 'idle ' + idle + 's');
       startWakeRecognition();
     }
