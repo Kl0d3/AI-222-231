@@ -1,0 +1,105 @@
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+credentials/
+
+# IDE
+.vscode/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs
+*.log
+
+# Model files
+*.onnx
+*.pt
+*.pth
+*.safetensors
+
+# Generated audio outputs (keep tests/audio fixtures)
+outputs/*.wav
+tests/output/*.wav
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+credentials/
+
+# IDE
+.vscode/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs
+*.log
+
+# Model files
+*.onnx
+*.pt
+*.pth
+*.safetensors
+
+# Generated audio outputs (keep tests/audio fixtures)
+outputs/*.wav
+tests/output/*.wav
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+credentials/
+
+# IDE
+.vscode/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs
+*.log
+
+# Model files
+*.onnx
+*.pt
+*.pth
+*.safetensors
+
+# Generated audio outputs (keep tests/audio fixtures)
+outputs/*.wav
+tests/output/*.wav

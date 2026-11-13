@@ -1,0 +1,28 @@
+# Core MCP
+mcp==2.3.0
+
+# Speech recognition and synthesis
+deepgram-sdk==7.17.0
+kokoro-onnx==0.6.1
+pipecat-ai==1.13.0
+silero-vad==6.2.3
+
+# Audio processing and playback
+numpy==2.5.4
+sounddevice==0.5.6
+soundfile==0.13.1
+soxr==1.0.0
+torch==2.15.0
+
+# LLM and Google integrations
+google-genai==3.0.0
+google-api-python-client==2.201.0
+google-auth==2.62.1
+google-auth-oauthlib==1.5.0
+
+# Utilities and external services
+psutil==7.2.2
+python-dotenv==1.2.4
+requests==2.34.2
+speedtest-cli==2.1.3
+tavily-python==0.8.5

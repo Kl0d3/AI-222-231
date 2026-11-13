@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Isolation Forest: Anomaly Detection Explained</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="hero">
+        <nav class="navbar">
+            <div class="logo">🌲 Isolation Forest</div>
+            <ul class="nav-links">
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#advantages">Advantages</a></li>
+                <li><a href="#demo">Interactive Demo</a></li>
+            </ul>
+        </nav>
+        <div class="hero-content">
+            <h1>Isolate the Unknown</h1>
+            <p>Discover how Isolation Forest efficiently detects anomalies in high-dimensional datasets without distance or density measures.</p>
+            <a href="#how-it-works" class="btn primary">Learn More</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="overview" class="section">
+            <h2>What is Isolation Forest?</h2>
+            <p>Isolation Forest is an unsupervised machine learning algorithm for anomaly detection. Unlike clustering or distance-based methods that profile *normal* data points, Isolation Forest explicitly isolates *anomalies* (outliers).</p>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Fast & Scalable</h3>
+                    <p>Linear time complexity $O(n)$ makes it exceptionally fast for massive datasets.</p>
+                </div>
+                <div class="card">
+                    <h3>No Distance Metrics</h3>
+                    <p>Relies on tree partitioning instead of Euclidean distance, avoiding the curse of dimensionality.</p>
+                </div>
+                <div class="card">
+                    <h3>Unsupervised</h3>
+                    <p>Requires no prior labeling of normal versus anomalous data points.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="how-it-works" class="section bg-light">
+            <h2>How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <h3>Random Partitioning</h3>
+                    <p>Feature values are randomly selected and split between the minimum and maximum values, creating isolation trees (iTrees).</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <h3>Shorter Paths for Anomalies</h3>
+                    <p>Because anomalies are few and distinct, they require fewer random splits to isolate, resulting in shorter path lengths in the tree.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <h3>Anomaly Score</h3>
+                    <p>An average path length across an ensemble of trees is computed to assign a definitive anomaly score close to 1.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="advantages" class="section">
+            <h2>Key Advantages</h2>
+            <ul class="feature-list">
+                <li>✅ Handles high-dimensional data with many irrelevant attributes.</li>
+                <li>✅ Low memory footprint and parallelizable training.</li>
+                <li>✅ Effective even when the contamination rate (ratio of anomalies) is extremely low.</li>
+            </ul>
+        </section>
+
+        <section id="demo" class="section bg-light text-center">
+            <h2>Interactive Anomaly Tester</h2>
+            <p>Test data points against simulated Isolation Forest thresholds.</p>
+            <div class="demo-box">
+                <div class="input-group">
+                    <label for="featureX">Feature X Value:</label>
+                    <input type="number" id="featureX" value="1.5" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label for="featureY">Feature Y Value:</label>
+                    <input type="number" id="featureY" value="2.0" step="0.1">
+                </div>
+                <button id="testBtn" class="btn primary">Evaluate Point</button>
+                <div id="resultOutput" class="result-display">Enter values and evaluate.</div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Isolation Forest Insights. Built with web agent tools.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

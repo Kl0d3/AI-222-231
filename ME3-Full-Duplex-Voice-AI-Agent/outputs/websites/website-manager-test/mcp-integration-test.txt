@@ -1,0 +1,2 @@
+Website MCP integration test passed.
+File writing through the central manager works.

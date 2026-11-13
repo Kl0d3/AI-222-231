@@ -1,0 +1,22 @@
+{
+    "projects": {
+        "python_intro": {
+            "owner": "Kl0d3",
+            "repository": "python-programming-intro",
+            "branch": "main",
+            "repository_url": "https://github.com/Kl0d3/python-programming-intro",
+            "pages_url": "https://Kl0d3.github.io/python-programming-intro/",
+            "created_by_agent": true,
+            "created_at": "2026-11-08T15:01:53.876603+00:00"
+        },
+        "isolation_forest": {
+            "owner": "Kl0d3",
+            "repository": "isolation-forest-guide",
+            "branch": "main",
+            "repository_url": "https://github.com/Kl0d3/isolation-forest-guide",
+            "pages_url": "https://Kl0d3.github.io/isolation-forest-guide/",
+            "created_by_agent": true,
+            "created_at": "2026-11-10T14:35:09.779655+00:00"
+        }
+    }
+}
