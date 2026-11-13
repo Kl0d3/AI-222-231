@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover Python Programming</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="hero">
+        <nav class="navbar">
+            <div class="logo-container">
+                <img src="assets/python-logo.png" alt="Python Logo" class="nav-logo">
+                <span class="brand-name">PythonGuide</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#example">Code Example</a></li>
+                <li><a href="#interactive">Try It</a></li>
+            </ul>
+        </nav>
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Welcome to <span class="highlight">Python</span></h1>
+                <p class="tagline">A powerful, easy-to-learn programming language that lets you work quickly and integrate systems more effectively.</p>
+                <div class="cta-buttons">
+                    <a href="#about" class="btn btn-primary">Learn More</a>
+                    <a href="#interactive" class="btn btn-secondary">Interactive Code</a>
+                </div>
+            </div>
+            <div class="hero-logo">
+                <img src="assets/python-logo.png" alt="Python Official Logo" class="floating-logo">
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="about" class="section about-section">
+            <div class="container">
+                <h2>What is Python?</h2>
+                <p class="lead">Python is a high-level, interpreted programming language created by Guido van Rossum and first released in 1991.</p>
+                <div class="about-grid">
+                    <div class="card">
+                        <div class="card-icon">📖</div>
+                        <h3>Readable & Clean</h3>
+                        <p>Python's design emphasizes code readability with its notable use of significant indentation, making programs clear and concise.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🚀</div>
+                        <h3>Versatile</h3>
+                        <p>Used everywhere from web development and data science to artificial intelligence, automation, and embedded systems.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🤝</div>
+                        <h3>Vibrant Community</h3>
+                        <p>A massive, welcoming global community provides countless libraries, frameworks, tutorials, and packages.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="section features-section">
+            <div class="container">
+                <h2>Why Choose Python?</h2>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <span class="check">✓</span>
+                        <div>
+                            <h4>Beginner Friendly</h4>
+                            <p>Easy to pick up for newcomers while offering advanced features for experienced software engineers.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="check">✓</span>
+                        <div>
+                            <h4>Extensive Libraries</h4>
+                            <p>Batteries included! Standard library supports internet protocols, string operations, web services, and file I/O.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="check">✓</span>
+                        <div>
+                            <h4>Cross-Platform</h4>
+                            <p>Runs seamlessly on Windows, macOS, Linux, Raspberry Pi, and many other operating systems.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="example" class="section code-section">
+            <div class="container">
+                <h2>Simple & Expressive Syntax</h2>
+                <p>Compare how clean Python is compared to other languages. Here is a simple greeting and list filtering example:</p>
+                <div class="code-container">
+                    <div class="code-header">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                        <span class="filename">hello.py</span>
+                    </div>
+                    <pre><code class="language-python"># A simple Python greeting and number filtering example
+def greet_user(name):
+    return f"Hello, {name}! Welcome to Python programming."
+
+# List comprehension: get squares of even numbers
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+even_squares = [n ** 2 for n in numbers if n % 2 == 0]
+
+print(greet_user("Developer"))
+print("Even squares:", even_squares)</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="interactive" class="section interactive-section">
+            <div class="container">
+                <h2>Interactive Playground</h2>
+                <p>Test out python concepts or run sample snippets right here in your browser.</p>
+                <div class="playground-box">
+                    <div class="editor-pane">
+                        <textarea id="code-input" rows="8">def factorial(n):
+    return 1 if n == 0 else n * factorial(n - 1)
+
+print("Factorial of 5 is:", factorial(5))</textarea>
+                        <button id="run-btn" class="btn btn-primary">Run Code Simulation</button>
+                    </div>
+                    <div class="output-pane">
+                        <h4>Output Console:</h4>
+                        <pre id="console-output">Click "Run Code Simulation" to see results...</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2025 PythonGuide. Created with Python inspiration.</p>
+            <p class="disclaimer">Python and the Python logo are trademarks of the Python Software Foundation.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
